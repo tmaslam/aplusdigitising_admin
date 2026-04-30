@@ -21,6 +21,18 @@ jobs:
           coverage: none
           tools: composer
 
+      - name: Prepare required directories
+        run: |
+          mkdir -p storage/framework/cache/data
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          mkdir -p storage/framework/testing
+          mkdir -p storage/framework/legacy-sessions
+          mkdir -p storage/app/public
+          mkdir -p storage/app/private
+          mkdir -p storage/logs
+          mkdir -p bootstrap/cache
+
       - name: Get Composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -35,17 +47,6 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
-
-      - name: Prepare storage directories
-        run: |
-          mkdir -p storage/framework/cache/data
-          mkdir -p storage/framework/sessions
-          mkdir -p storage/framework/views
-          mkdir -p storage/framework/testing
-          mkdir -p storage/framework/legacy-sessions
-          mkdir -p storage/app/public
-          mkdir -p storage/logs
-          mkdir -p bootstrap/cache
 
       - name: Deploy to cPanel via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
