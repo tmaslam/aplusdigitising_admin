@@ -133,3 +133,6 @@ The GitHub Actions workflow will trigger automatically.
 
 ---
 Deployment triggered: 2026-04-30 21:38:00 UTC
+
+
+Updated FTP credentials for subdomain deployment.
