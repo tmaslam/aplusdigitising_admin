@@ -129,3 +129,7 @@ The GitHub Actions workflow will trigger automatically.
 - Verify the subdomain document root in cPanel
 - If document root is `public_html/user/`, the app should work with the root `index.php`
 - If document root is `public_html/user/public/`, update the workflow `server-dir` to `public_html/user/public/`
+
+
+---
+Deployment triggered: 2026-04-30 21:38:00 UTC
