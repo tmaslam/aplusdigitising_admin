@@ -1,0 +1,86 @@
+name: Deploy Admin Portal to cPanel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, json, openssl, pdo, pdo_mysql, bcmath, zip, gd
+          coverage: none
+          tools: composer
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+      - name: Prepare storage directories
+        run: |
+          mkdir -p storage/framework/cache/data
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          mkdir -p storage/framework/testing
+          mkdir -p storage/framework/legacy-sessions
+          mkdir -p storage/app/public
+          mkdir -p storage/logs
+          mkdir -p bootstrap/cache
+
+      - name: Deploy to cPanel via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./
+          server-dir: ${{ secrets.ADMIN_FTP_SERVER_DIR || 'public_html/user/' }}
+          exclude: |
+            **/.git*
+            **/.github/**
+            **/.env*
+            **/storage/framework/cache/data/**
+            **/storage/framework/sessions/**
+            **/storage/framework/views/**
+            **/storage/framework/testing/**
+            **/storage/framework/legacy-sessions/**
+            **/storage/logs/**
+            **/storage/pail/**
+            **/bootstrap/cache/*.php
+            **/node_modules/**
+            **/tests/**
+            **/docs/**
+            **/scripts/deploy/**
+            **/database/sql/**
+            .editorconfig
+            .gitattributes
+            .gitignore
+            phpunit.xml
+            README.md
+            composer.phar
+            vite.config.js
+            package.json
+            package-lock.json
+            public/hot
+            deploy-init.php
