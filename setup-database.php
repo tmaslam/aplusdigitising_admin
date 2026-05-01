@@ -11,8 +11,14 @@ use Illuminate\Support\Facades\Schema;
 
 echo "=== SETUP DATABASE ===\n\n";
 
-echo "1. Running migrations...\n";
-Artisan::call('migrate', ['--force' => true]);
+echo "1. Resetting migrations table...\n";
+if (Schema::hasTable('migrations')) {
+    DB::table('migrations')->delete();
+    echo "Cleared migrations table\n";
+}
+
+echo "\n2. Running migrations...\n";
+Artisan::call('migrate:fresh', ['--force' => true]);
 echo Artisan::output();
 
 echo "\n2. Adding site configuration...\n";
