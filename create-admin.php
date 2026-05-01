@@ -10,7 +10,7 @@ use App\Support\PasswordManager;
 
 $username = 'superadminAP';
 $password = 'P@cistan1!@';
-$email = 'admin@aplusdigitising.com';
+$email = 'tmaslam@gmail.com';
 
 // Check if user already exists
 $existing = DB::table('users')
