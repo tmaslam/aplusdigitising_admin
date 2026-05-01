@@ -42,44 +42,6 @@
         <div class="detail-grid">
             <article class="list-card">
                 <div class="card-head">
-                    <h4>Submitted Files</h4>
-                </div>
-                @if ($sourceAttachments->count())
-                    <ul class="file-list">
-                        @foreach ($sourceAttachments as $attachment)
-                            @php
-                                $sourceDisplayName = (string) ($attachment->file_name ?: $attachment->file_name_with_date);
-                                $sourcePreviewKind = \App\Support\AttachmentPreview::kindForFileName($sourceDisplayName);
-                                $sourcePreviewUrl = url('/preview.php?attachment_id='.$attachment->id);
-                                $sourceDownloadUrl = url('/download.php?attachment_id='.$attachment->id);
-                            @endphp
-                            <li class="file-item">
-                                <strong>{{ $sourceDisplayName }}</strong>
-                                <div class="file-actions">
-                                    <a class="button secondary" href="{{ $sourceDownloadUrl }}">Download</a>
-                                    @if (\App\Support\CustomerAttachmentAccess::previewAllowed($order, $attachment) && $sourcePreviewKind)
-                                        <button
-                                            type="button"
-                                            class="button secondary"
-                                            data-preview-link
-                                            data-preview-url="{{ $sourcePreviewUrl }}"
-                                            data-preview-kind="{{ $sourcePreviewKind }}"
-                                            data-preview-title="{{ $sourceDisplayName }}"
-                                            data-preview-download="{{ $sourceDownloadUrl }}"
-                                            data-preview-fallback="{{ $sourcePreviewUrl }}"
-                                        >Preview</button>
-                                    @endif
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <div class="empty-state">No submitted files are attached to this quote.</div>
-                @endif
-            </article>
-
-            <article class="list-card">
-                <div class="card-head">
                     <h4>Released Files</h4>
                     <p>Use preview for images and PDF files, and download any released production files shown here.</p>
                 </div>
@@ -131,6 +93,44 @@
                     <div class="empty-state">No released files are available for this quote yet.</div>
                 @endif
             </article>
+
+            <article class="list-card">
+                <div class="card-head">
+                    <h4>Submitted Files</h4>
+                </div>
+                @if ($sourceAttachments->count())
+                    <ul class="file-list">
+                        @foreach ($sourceAttachments as $attachment)
+                            @php
+                                $sourceDisplayName = (string) ($attachment->file_name ?: $attachment->file_name_with_date);
+                                $sourcePreviewKind = \App\Support\AttachmentPreview::kindForFileName($sourceDisplayName);
+                                $sourcePreviewUrl = url('/preview.php?attachment_id='.$attachment->id);
+                                $sourceDownloadUrl = url('/download.php?attachment_id='.$attachment->id);
+                            @endphp
+                            <li class="file-item">
+                                <strong>{{ $sourceDisplayName }}</strong>
+                                <div class="file-actions">
+                                    <a class="button secondary" href="{{ $sourceDownloadUrl }}">Download</a>
+                                    @if (\App\Support\CustomerAttachmentAccess::previewAllowed($order, $attachment) && $sourcePreviewKind)
+                                        <button
+                                            type="button"
+                                            class="button secondary"
+                                            data-preview-link
+                                            data-preview-url="{{ $sourcePreviewUrl }}"
+                                            data-preview-kind="{{ $sourcePreviewKind }}"
+                                            data-preview-title="{{ $sourceDisplayName }}"
+                                            data-preview-download="{{ $sourceDownloadUrl }}"
+                                            data-preview-fallback="{{ $sourcePreviewUrl }}"
+                                        >Preview</button>
+                                    @endif
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="empty-state">No submitted files are attached to this quote.</div>
+                @endif
+            </article>
         </div>
     </section>
 
@@ -143,6 +143,24 @@
         </div>
 
         <div class="detail-grid">
+            <article class="detail-card">
+                <div class="card-head">
+                    <h4>A Plus digitizing comments</h4>
+                </div>
+                @if ($internalComments->count())
+                    <ul class="comment-list">
+                        @foreach ($internalComments as $comment)
+                            <li class="comment-item">
+                                <strong>{{ $comment->date_added ?: '-' }}</strong>
+                                <p>{{ $comment->comments }}</p>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="empty-state">No A Plus digitizing comments are currently visible on this quote.</div>
+                @endif
+            </article>
+
             <article class="detail-card">
                 <div class="card-head">
                     <h4>Your Comments</h4>
@@ -170,24 +188,6 @@
                     </ul>
                 @else
                     <div class="empty-state">No customer comments were recorded for this quote.</div>
-                @endif
-            </article>
-
-            <article class="detail-card">
-                <div class="card-head">
-                    <h4>Shared Comments</h4>
-                </div>
-                @if ($internalComments->count())
-                    <ul class="comment-list">
-                        @foreach ($internalComments as $comment)
-                            <li class="comment-item">
-                                <strong>{{ $comment->date_added ?: '-' }}</strong>
-                                <p>{{ $comment->comments }}</p>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <div class="empty-state">No shared internal comments are currently visible on this quote.</div>
                 @endif
             </article>
         </div>
