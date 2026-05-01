@@ -104,7 +104,7 @@
                                             @foreach (request()->query() as $key => $value)
                                                 <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                                             @endforeach
-                                            <button type="submit" style="background:linear-gradient(135deg,#a24d2a,#7f2e14);color:#fff;">Remove</button>
+                                            <button type="submit" style="background:#F26522;color:#fff;border:0;">Remove</button>
                                         </form>
                                     @else
                                         <form method="post" action="{{ url('/v/teams/'.$team->user_id.'/unlock') }}" onsubmit="return confirm('Unlock this team account and restore access?');">
@@ -112,7 +112,7 @@
                                             @foreach (request()->query() as $key => $value)
                                                 <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                                             @endforeach
-                                            <button type="submit" style="background:linear-gradient(135deg,#1f7a53,#145c3c);">Unlock</button>
+                                            <button type="submit" style="background:#22C55E;color:#fff;border:0;">Unlock</button>
                                         </form>
                                     @endif
                                 </div>
