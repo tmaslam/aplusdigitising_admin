@@ -9,18 +9,18 @@
         $orderQueues = \App\Support\AdminOrderQueues::navigation($navCounts, 'orders');
         $quoteQueues = \App\Support\AdminOrderQueues::navigation($navCounts, 'quotes');
         $workflowCards = [
-            ['label' => 'New Orders', 'count' => $navCounts['new_orders'], 'url' => \App\Support\AdminOrderQueues::url('new-orders')],
-            ['label' => 'Designer Orders', 'count' => $navCounts['designer_orders'], 'url' => \App\Support\AdminOrderQueues::url('designer-orders')],
-            ['label' => 'Designer Completed', 'count' => $navCounts['designer_completed_orders'], 'url' => \App\Support\AdminOrderQueues::url('designer-completed')],
-            ['label' => 'Disapproved Orders', 'count' => $navCounts['disapproved_orders'], 'url' => \App\Support\AdminOrderQueues::url('disapproved-orders')],
-            ['label' => 'New Quotes', 'count' => $navCounts['new_quotes'], 'url' => \App\Support\AdminOrderQueues::url('new-quotes')],
-            ['label' => 'Assigned Quotes', 'count' => $navCounts['assigned_quotes'], 'url' => \App\Support\AdminOrderQueues::url('assigned-quotes')],
-            ['label' => 'Designer Completed Quotes', 'count' => $navCounts['designer_completed_quotes'], 'url' => \App\Support\AdminOrderQueues::url('designer-completed-quotes')],
-            ['label' => 'Quote Negotiations', 'count' => $navCounts['quote_negotiations'], 'url' => \App\Support\AdminOrderQueues::url('quote-negotiations')],
-            ['label' => 'Pending Customers', 'count' => $navCounts['pending_customer_approvals'], 'url' => url('/v/customer-approvals.php')],
-            ['label' => 'Active Customers', 'count' => $navCounts['customers'], 'url' => url('/v/customer_list.php')],
-            ['label' => 'Inactive Customers', 'count' => $navCounts['blocked_customers'], 'url' => url('/v/block-customer_list.php')],
-            ['label' => 'Teams', 'count' => $navCounts['teams'], 'url' => url('/v/show-all-teams.php')],
+            ['label' => 'New Orders', 'count' => $navCounts['new_orders'], 'url' => \App\Support\AdminOrderQueues::url('new-orders'), 'color' => 'stat-blue'],
+            ['label' => 'Designer Orders', 'count' => $navCounts['designer_orders'], 'url' => \App\Support\AdminOrderQueues::url('designer-orders'), 'color' => 'stat-blue'],
+            ['label' => 'Designer Completed', 'count' => $navCounts['designer_completed_orders'], 'url' => \App\Support\AdminOrderQueues::url('designer-completed'), 'color' => 'stat-green'],
+            ['label' => 'Disapproved Orders', 'count' => $navCounts['disapproved_orders'], 'url' => \App\Support\AdminOrderQueues::url('disapproved-orders'), 'color' => 'stat-red'],
+            ['label' => 'New Quotes', 'count' => $navCounts['new_quotes'], 'url' => \App\Support\AdminOrderQueues::url('new-quotes'), 'color' => 'stat-blue'],
+            ['label' => 'Assigned Quotes', 'count' => $navCounts['assigned_quotes'], 'url' => \App\Support\AdminOrderQueues::url('assigned-quotes'), 'color' => 'stat-blue'],
+            ['label' => 'Designer Completed Quotes', 'count' => $navCounts['designer_completed_quotes'], 'url' => \App\Support\AdminOrderQueues::url('designer-completed-quotes'), 'color' => 'stat-green'],
+            ['label' => 'Quote Negotiations', 'count' => $navCounts['quote_negotiations'], 'url' => \App\Support\AdminOrderQueues::url('quote-negotiations'), 'color' => 'stat-yellow'],
+            ['label' => 'Pending Customers', 'count' => $navCounts['pending_customer_approvals'], 'url' => url('/v/customer-approvals.php'), 'color' => 'stat-yellow'],
+            ['label' => 'Active Customers', 'count' => $navCounts['customers'], 'url' => url('/v/customer_list.php'), 'color' => 'stat-green'],
+            ['label' => 'Inactive Customers', 'count' => $navCounts['blocked_customers'], 'url' => url('/v/block-customer_list.php'), 'color' => 'stat-red'],
+            ['label' => 'Teams', 'count' => $navCounts['teams'], 'url' => url('/v/show-all-teams.php'), 'color' => 'stat-purple'],
         ];
 
         $quickActions = [
@@ -35,7 +35,7 @@
     <section class="stats">
         @foreach (array_slice($workflowCards, 0, 8) as $card)
             <a class="stat-link" href="{{ $card['url'] }}">
-                <article class="stat">
+                <article class="stat {{ $card['color'] }}">
                     <span class="muted">{{ $card['label'] }}</span>
                     <strong>{{ $card['count'] }}</strong>
                 </article>
@@ -45,7 +45,7 @@
     <section class="stats" style="margin-top:16px;">
         @foreach (array_slice($workflowCards, 8) as $card)
             <a class="stat-link" href="{{ $card['url'] }}">
-                <article class="stat">
+                <article class="stat {{ $card['color'] }}">
                     <span class="muted">{{ $card['label'] }}</span>
                     <strong>{{ $card['count'] }}</strong>
                 </article>
@@ -118,7 +118,7 @@
 
             <div class="stats">
                 <a class="stat-link" href="{{ url('/v/customer_list.php') }}">
-                    <article class="stat">
+                    <article class="stat stat-green">
                         <span class="muted">Active Customers</span>
                         <strong>{{ $operationsSnapshot['active_customers'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Current active customer accounts.</div>
@@ -126,7 +126,7 @@
                     </article>
                 </a>
                 <a class="stat-link" href="{{ url('/v/block-customer_list.php') }}">
-                    <article class="stat">
+                    <article class="stat stat-red">
                         <span class="muted">Inactive Customers</span>
                         <strong>{{ $operationsSnapshot['blocked_customers'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Previously active customer accounts that are currently inactive or blocked.</div>
@@ -134,7 +134,7 @@
                     </article>
                 </a>
                 <a class="stat-link" href="{{ url('/v/show-all-teams.php') }}">
-                    <article class="stat">
+                    <article class="stat stat-purple">
                         <span class="muted">Team / Supervisors</span>
                         <strong>{{ $operationsSnapshot['team_accounts'] }} / {{ $operationsSnapshot['supervisors'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Active production accounts and supervisor accounts.</div>
@@ -142,7 +142,7 @@
                     </article>
                 </a>
                 <a class="stat-link" href="{{ \App\Support\AdminOrderQueues::url('all-orders') }}">
-                    <article class="stat">
+                    <article class="stat stat-blue">
                         <span class="muted">All Open Work</span>
                         <strong>{{ $operationsSnapshot['all_open_work'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Active items still in the working pipeline.</div>
@@ -164,7 +164,7 @@
 
             <div class="stats workflow-focus-grid">
                 <a class="stat-link" href="{{ \App\Support\AdminOrderQueues::url('designer-completed') }}">
-                    <article class="stat">
+                    <article class="stat stat-green">
                         <span class="muted">Review Ready</span>
                         <strong>{{ $workflowFocus['review_ready'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Designer-completed orders and quotes waiting on admin review.</div>
@@ -172,7 +172,7 @@
                     </article>
                 </a>
                 <a class="stat-link" href="{{ \App\Support\AdminOrderQueues::url('approval-waiting') }}">
-                    <article class="stat">
+                    <article class="stat stat-yellow">
                         <span class="muted">Approval Waiting</span>
                         <strong>{{ $workflowFocus['approval_waiting'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Work sent out and waiting on customer response.</div>
@@ -180,7 +180,7 @@
                     </article>
                 </a>
                 <a class="stat-link" href="{{ \App\Support\AdminOrderQueues::url('new-orders') }}">
-                    <article class="stat">
+                    <article class="stat stat-blue">
                         <span class="muted">New Orders</span>
                         <strong>{{ $navCounts['new_orders'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Unassigned new orders that need admin review and routing.</div>
@@ -188,7 +188,7 @@
                     </article>
                 </a>
                 <a class="stat-link" href="{{ \App\Support\AdminOrderQueues::url('new-quotes') }}">
-                    <article class="stat">
+                    <article class="stat stat-blue">
                         <span class="muted">New Quotes</span>
                         <strong>{{ $navCounts['new_quotes'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Unassigned new quotes that need admin review and routing.</div>
@@ -196,7 +196,7 @@
                     </article>
                 </a>
                 <a class="stat-link" href="{{ \App\Support\AdminOrderQueues::url('designer-orders') }}">
-                    <article class="stat">
+                    <article class="stat stat-blue">
                         <span class="muted">Assigned Orders</span>
                         <strong>{{ $navCounts['designer_orders'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Orders currently sitting with production.</div>
@@ -204,7 +204,7 @@
                     </article>
                 </a>
                 <a class="stat-link" href="{{ \App\Support\AdminOrderQueues::url('assigned-quotes') }}">
-                    <article class="stat">
+                    <article class="stat stat-blue">
                         <span class="muted">Assigned Quotes</span>
                         <strong>{{ $navCounts['assigned_quotes'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Codes and quotes currently sitting with production.</div>
@@ -228,28 +228,28 @@
 
                 <div class="stats">
                     <a class="stat-link" href="{{ url('/v/security-events.php?txtSeverity=warning') }}">
-                        <article class="stat">
+                        <article class="stat stat-red">
                             <span class="muted">Action Required</span>
                             <strong>{{ $securityWatch['actionable_events'] }}</strong>
                             <div class="muted" style="margin-top:8px;">Warnings or higher that deserve admin review.</div>
                         </article>
                     </a>
                     <a class="stat-link" href="{{ url('/v/security-events.php?txtEventType=auth.login') }}">
-                        <article class="stat">
+                        <article class="stat stat-yellow">
                             <span class="muted">Failed Logins</span>
                             <strong>{{ $securityWatch['failed_logins'] }}</strong>
                             <div class="muted" style="margin-top:8px;">Failed, blocked, rate-limited, or locked login attempts.</div>
                         </article>
                     </a>
                     <a class="stat-link" href="{{ url('/v/security-events.php?txtEventType=files.upload_rejected') }}">
-                        <article class="stat">
+                        <article class="stat stat-red">
                             <span class="muted">Upload Rejections</span>
                             <strong>{{ $securityWatch['upload_rejections'] }}</strong>
                             <div class="muted" style="margin-top:8px;">Rejected file uploads that may indicate risky or invalid input.</div>
                         </article>
                     </a>
                     <a class="stat-link" href="{{ url('/v/security-events.php?txtEventType=bot.turnstile_failed') }}">
-                        <article class="stat">
+                        <article class="stat stat-yellow">
                             <span class="muted">Bot Checks Failed</span>
                             <strong>{{ $securityWatch['turnstile_failures'] }}</strong>
                             <div class="muted" style="margin-top:8px;">Turnstile failures that may indicate scripted probing.</div>

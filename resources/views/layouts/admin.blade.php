@@ -28,18 +28,18 @@ if (!isset($siteContext)) {
     <style>
         :root {
             color-scheme: light;
-            --bg: #f5f5f5;
+            --bg: #F8FAFC;
             --panel: #ffffff;
             --panel-strong: #ffffff;
-            --ink: #1f2937;
-            --muted: #6b7280;
-            --line: rgba(31, 41, 55, 0.12);
-            --line-strong: rgba(31, 41, 55, 0.22);
-            --accent: #64748b;
-            --accent-dark: #475569;
-            --accent-soft: #f1f5f9;
-            --warning: #64748b;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --ink: #0F172A;
+            --muted: #64748B;
+            --line: #E2E8F0;
+            --line-strong: #CBD5E1;
+            --accent: #F26522;
+            --accent-dark: #D94E0F;
+            --accent-soft: #FFF7ED;
+            --warning: #F59E0B;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
         }
 
 @include('shared.file-preview-styles')
@@ -52,7 +52,7 @@ if (!isset($siteContext)) {
             font-family: "Avenir Next", "Segoe UI", sans-serif;
             color: var(--ink);
             overflow-x: hidden;
-            background: #f5f5f5;
+            background: #F8FAFC;
         }
         body.nav-open { overflow: hidden; }
         a { color: inherit; text-decoration: none; }
@@ -183,14 +183,14 @@ if (!isset($siteContext)) {
             color: #475569;
             transition: background 0.2s ease;
         }
-        .nav-card a:hover, .nav-card a.active { background: #64748b; color: #ffffff; }
+        .nav-card a:hover, .nav-card a.active { background: #F26522; color: #ffffff; }
         .nav-card a:hover .count, .nav-card a.active .count { color: #ffffff; }
         .count {
             min-width: 32px;
             padding: 4px 8px;
             border-radius: 999px;
-            background: rgba(100, 116, 139, 0.15);
-            color: #64748b;
+            background: rgba(242, 101, 34, 0.12);
+            color: #F26522;
             text-align: center;
             font-size: 0.82rem;
             font-weight: 800;
@@ -247,10 +247,9 @@ if (!isset($siteContext)) {
         }
         .card {
             background: var(--panel);
-            border: 1px solid rgba(255,255,255,0.66);
-            border-radius: 26px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(14px);
+            border: 1px solid #E2E8F0;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             overflow: hidden;
         }
         .card-body { padding: clamp(16px, 2vw, 22px); }
@@ -327,25 +326,34 @@ if (!isset($siteContext)) {
             box-shadow: 0 18px 34px rgba(0, 0, 0, 0.08);
         }
         .stat {
-            padding: 18px;
-            border-radius: 22px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.56));
+            padding: 18px 18px 18px 22px;
+            border-radius: 14px;
+            background: #ffffff;
             border: 1px solid var(--line);
+            border-left: 4px solid var(--line);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
+        .stat-blue { border-left-color: #2563EB; }
+        .stat-green { border-left-color: #22C55E; }
+        .stat-yellow { border-left-color: #F59E0B; }
+        .stat-red { border-left-color: #EF4444; }
+        .stat-orange { border-left-color: #F26522; }
+        .stat-purple { border-left-color: #8B5CF6; }
         .stat > .muted:first-child {
             display: block;
-            font-size: 0.78rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--muted);
         }
         .stat strong {
             display: block;
             margin-top: 10px;
-            font-size: 1.45rem;
-            line-height: 1.08;
-            letter-spacing: -0.04em;
+            font-size: 1.8rem;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            color: var(--ink);
         }
         .stat > .muted:not(:first-child) {
             font-size: 0.9rem;
@@ -419,8 +427,8 @@ if (!isset($siteContext)) {
             padding: 6px 10px;
             min-height: 36px;
             border-radius: 999px;
-            background: var(--accent-soft);
-            color: var(--accent-dark);
+            background: #F26522;
+            color: #ffffff;
             font-size: 0.82rem;
             font-weight: 800;
             line-height: 1;
