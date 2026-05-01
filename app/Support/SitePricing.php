@@ -159,13 +159,10 @@ class SitePricing
                     continue;
                 }
 
-                $description = '$'.number_format($rate, 2).' / hour';
-                if ($minHours > 0) {
-                    $description .= ' (Min. '.$minHours.' hours)';
-                }
-                if ($upcharge > 0) {
-                    $description .= ' (+$'.number_format($upcharge, 2).' flat fee)';
-                }
+                // New customer-friendly format: $X (up to Y hours) above $Z/hour
+                $effectiveMinHours = max(1, $minHours);
+                $totalMinPrice = round(($effectiveMinHours * $rate) + $upcharge, 2);
+                $description = '$'.number_format($totalMinPrice, 2).' (up to '.$effectiveMinHours.' hours) above $'.number_format($rate, 2).'/hour';
 
                 $schedule[$turnaroundCode] = [
                     'amount' => round($rate, 2),
@@ -191,10 +188,11 @@ class SitePricing
                 continue;
             }
 
-            $description = '$'.number_format($rate, 2).'/1k stitches, (Min. charge $'.number_format($minimum, 2).')';
-            if ($upcharge > 0) {
-                $description .= ' (+$'.number_format($upcharge, 2).' flat fee)';
-            }
+            // New customer-friendly format: $X (up to Yk stitches) above $Z/1k stitches
+            $stitchesIncluded = $rate > 0 ? round(($minimum / $rate) * 1000, 0) : 0;
+            $stitchesIncluded = round($stitchesIncluded / 1000) * 1000; // round to nearest thousand
+            $stitchesK = number_format($stitchesIncluded / 1000, 0).'k';
+            $description = '$'.number_format($minimum + $upcharge, 2).' (up to '.$stitchesK.' stitches) above $'.number_format($rate, 2).'/1k stitches';
 
             $schedule[$turnaroundCode] = [
                 'amount' => round($rate, 2),
