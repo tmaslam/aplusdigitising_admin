@@ -19,7 +19,7 @@
                 <div class="alert">{{ $errors->first() }}</div>
             @endif
 
-            <form method="post" action="/login.php" data-validate-form novalidate>
+            <form method="post" action="/login" data-validate-form novalidate>
                 @csrf
                 <label class="form-field" data-form-field>
                     <span class="field-label">Email or User Name <span class="field-meta required" aria-hidden="true">*</span></span>
