@@ -2029,10 +2029,10 @@
                             </details>
                             @php
                                 $sidebarPlans = [
-                                    ['name'=>'Starter','amount'=>79.99,'designs'=>'10 Designs/Month'],
-                                    ['name'=>'Plus','amount'=>199.99,'designs'=>'25 Designs/Month'],
+                                    ['name'=>'Enterprise','amount'=>799.99,'designs'=>'100 Designs/Month'],
                                     ['name'=>'Pro','amount'=>399.99,'designs'=>'50 Designs/Month'],
-                                    ['name'=>'Enterprise','amount'=>799.99,'designs'=>'100 Designs/Month']
+                                    ['name'=>'Plus','amount'=>199.99,'designs'=>'25 Designs/Month'],
+                                    ['name'=>'Starter','amount'=>79.99,'designs'=>'10 Designs/Month']
                                 ];
                                 $sidebarCustomer = request()->attributes->get('customerUser');
                                 $sidebarSubscription = null;
