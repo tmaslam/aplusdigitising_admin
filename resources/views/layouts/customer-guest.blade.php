@@ -719,7 +719,7 @@
                 <div class="footer-card">
                     <h3>Get in Touch</h3>
                     <ul>
-                        <li>support@aplusdigitizing.com</li>
+                        <li>support@aplusdigitising.com</li>
                         <li>24/7 Support Available</li>
                     </ul>
                     <a href="https://aplusdigitising.com/#quote" class="button" style="margin-top: 14px; min-height: 36px; padding: 8px 18px; font-size: 0.9rem; border-radius: 999px;">Book a Meeting</a>

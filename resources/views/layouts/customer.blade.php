@@ -2111,7 +2111,7 @@
 
         <footer class="footer">
             <div class="container footer-bottom">
-                <span>Copyrights &copy; 2010-{{ date('Y') }} All Rights Reserved by aplusdigitizing.com</span>
+                <span>Copyrights &copy; 2010-{{ date('Y') }} All Rights Reserved by aplusdigitising.com</span>
                 <a href="mailto:support@aplusdigitizng.com" style="color: #ffffff; text-decoration: none;">support@aplusdigitizng.com</a>
             </div>
         </footer>
