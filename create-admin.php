@@ -6,6 +6,7 @@ $app = require_once __DIR__ . '/bootstrap/app.php';
 $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Support\PasswordManager;
 
 $username = 'superadminAP';
@@ -27,6 +28,7 @@ $payload = PasswordManager::payload($password);
 
 $userId = DB::table('users')->insertGetId([
     'user_name' => $username,
+    'security_key' => Str::random(40),
     'first_name' => 'Super',
     'last_name' => 'Admin',
     'user_email' => $email,
