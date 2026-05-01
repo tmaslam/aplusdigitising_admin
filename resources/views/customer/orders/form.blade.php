@@ -81,8 +81,8 @@
                 <div class="paired-field">
                     <span>Colors</span>
                     <div class="paired-field-inputs">
-                        <input type="number" name="no_of_colors" min="0" step="1" value="{{ old('no_of_colors', $order?->no_of_colors) }}" placeholder="No. of Colors">
-                        <input type="text" name="color_names" value="{{ old('color_names', $order?->color_names) }}" placeholder="Color Names">
+                        <input type="number" name="no_of_colors" min="0" step="1" value="{{ old('no_of_colors', $order?->no_of_colors) }}" placeholder="No. of Colors" data-colors-count>
+                        <input type="text" name="color_names" value="{{ old('color_names', $order?->color_names) }}" placeholder="Color Names" data-colors-names>
                     </div>
                 </div>
 
@@ -204,7 +204,10 @@
                 appliqueDetails.hidden = !enabled;
                 appliqueInputs.forEach((input) => {
                     input.disabled = !enabled;
-                    if (!enabled) {
+                    if (enabled) {
+                        input.required = true;
+                    } else {
+                        input.required = false;
                         input.value = '';
                     }
                 });
@@ -214,6 +217,22 @@
                 radio.addEventListener('change', syncAppliqueDetails);
             });
             syncAppliqueDetails();
+
+            const colorsCountInput = document.querySelector('input[data-colors-count]');
+            const colorsNamesInput = document.querySelector('input[data-colors-names]');
+
+            const syncColorNamesRequired = () => {
+                if (!colorsCountInput || !colorsNamesInput) {
+                    return;
+                }
+                const count = parseInt(colorsCountInput.value, 10) || 0;
+                colorsNamesInput.required = count > 0;
+            };
+
+            if (colorsCountInput) {
+                colorsCountInput.addEventListener('input', syncColorNamesRequired);
+                syncColorNamesRequired();
+            }
 
             document.querySelectorAll('[data-customer-upload-input]').forEach((input) => {
                 const errorTarget = input.closest('label')?.querySelector('[data-upload-error]');

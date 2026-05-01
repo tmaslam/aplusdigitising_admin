@@ -341,6 +341,8 @@ class CustomerOrderEntryController extends Controller
     {
         $commentsRule = ['nullable', 'string', 'max:5000'];
         $sourceFilesRule = $editing ? ['nullable', 'array'] : ['required', 'array', 'min:1'];
+        $colorsCount = (int) ($request->input('no_of_colors') ?? 0);
+        $appliquesYes = strtolower(trim((string) $request->input('appliques'))) === 'yes';
 
         return $request->validate([
             'design_name' => ['required', 'string', 'max:255'],
@@ -351,10 +353,10 @@ class CustomerOrderEntryController extends Controller
             'height' => ['nullable', 'numeric', 'min:0'],
             'measurement' => ['nullable', 'in:'.implode(',', self::MEASUREMENT_OPTIONS)],
             'no_of_colors' => ['nullable', 'integer', 'min:0'],
-            'color_names' => ['nullable', 'string', 'max:1000'],
+            'color_names' => $colorsCount > 0 ? ['required', 'string', 'max:1000'] : ['nullable', 'string', 'max:1000'],
             'appliques' => ['nullable', 'in:yes,no'],
-            'no_of_appliques' => ['nullable', 'integer', 'min:0'],
-            'applique_colors' => ['nullable', 'string', 'max:255'],
+            'no_of_appliques' => $appliquesYes ? ['required', 'integer', 'min:1'] : ['nullable', 'integer', 'min:0'],
+            'applique_colors' => $appliquesYes ? ['required', 'string', 'max:255'] : ['nullable', 'string', 'max:255'],
             'starting_point' => ['nullable', 'in:'.implode(',', self::STARTING_POINTS)],
             'turn_around_time' => ['required', 'in:'.implode(',', self::TURNAROUND_OPTIONS)],
             'comments' => $commentsRule,
@@ -364,6 +366,9 @@ class CustomerOrderEntryController extends Controller
             'source_files.required' => 'Please upload at least one file.',
             'source_files.min' => 'Please upload at least one file.',
             'source_files.*.max' => 'Each uploaded file must be 5 MB or smaller.',
+            'color_names.required' => 'Please enter the color names since you specified a number of colors.',
+            'no_of_appliques.required' => 'Please enter the number of appliques since appliques is set to Yes.',
+            'applique_colors.required' => 'Please enter the applique colors since appliques is set to Yes.',
         ]);
     }
 
