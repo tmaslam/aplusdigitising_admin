@@ -27,17 +27,17 @@
     <style>
         :root {
             color-scheme: light;
-            --page-bg: #FAF7F2;
+            --page-bg: #F8FAFC;
             --surface: #ffffff;
-            --surface-soft: #FFF8F0;
-            --ink: #1f252d;
-            --muted: #6b6b6b;
+            --surface-soft: #FFF7ED;
+            --ink: #0F172A;
+            --muted: #64748B;
             --brand: {{ $siteContext->cssPrimaryColor() }};
             --brand-dark: {{ $siteContext->cssPrimaryDarkColor() }};
             --accent: {{ $siteContext->cssAccentColor() }};
-            --line: #E8E0D8;
-            --line-strong: #D4CCC4;
-            --shadow: 0 18px 38px rgba(17, 31, 45, 0.12);
+            --line: #E2E8F0;
+            --line-strong: #CBD5E1;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             --footer: #f8fafc;
             --max: 1180px;
         }
@@ -50,7 +50,7 @@
             margin: 0;
             font-family: "Inter", "Roboto", "Segoe UI", sans-serif;
             color: var(--ink);
-            background: #F4F6F8;
+            background: #F8FAFC;
             line-height: 1.6;
         }
 
@@ -65,7 +65,7 @@
         .site-frame {
             width: min(100%, 1280px);
             margin: 0 auto;
-            background: #F4F6F8;
+            background: #F8FAFC;
         }
 
         .topbar {
@@ -150,7 +150,7 @@
             position: relative;
             z-index: 50;
             background: #ffffff;
-            border-bottom: 1px solid #dde4ea;
+            border-bottom: 1px solid #E2E8F0;
         }
 
         .nav-shell {
@@ -246,7 +246,7 @@
             left: 0;
             min-width: 260px;
             background: #fff;
-            box-shadow: 0 18px 38px rgba(17, 31, 45, 0.18);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             z-index: 60;
         }
 
@@ -261,7 +261,7 @@
 
         .sub-nav a:hover,
         .sub-nav a.active {
-            background: #f4f9fd;
+            background: #F8FAFC;
             color: var(--brand-dark);
         }
 
@@ -306,7 +306,7 @@
             background: #FFFFFF;
             border-radius: 12px;
             border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
         }
 
         .customer-hero {
@@ -526,7 +526,7 @@
             border-radius: 18px;
             border: 1px solid var(--line);
             background: rgba(255,255,255,0.98);
-            box-shadow: 0 18px 36px rgba(17, 31, 45, 0.16);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
             display: grid;
             gap: 6px;
             z-index: 30;
@@ -667,7 +667,7 @@
             text-decoration: none;
             color: inherit;
             transition: transform .18s ease, box-shadow .18s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
             flex: 0 0 auto;
             min-width: 160px;
         }
@@ -733,7 +733,7 @@
             border-radius: 12px;
             background: #fff;
             border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
         }
 
         .metric-link {
@@ -771,7 +771,7 @@
             border-radius: 12px;
             border: none;
             background: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
             flex: 0 0 auto;
             min-width: 220px;
         }
@@ -949,7 +949,7 @@
             overflow-x: auto;
             border-radius: 12px;
             border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
         }
 
         table {
@@ -1027,7 +1027,7 @@
             border-radius: 12px;
             border: none;
             background: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
         }
 
         .info-card span {
@@ -1420,7 +1420,7 @@
             border: none;
             border-radius: 12px;
             background: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
         }
 
         .invoice-filterbar .filter-field {
@@ -1699,7 +1699,7 @@
         .footer-bottom {
             margin-top: 0;
             padding: 14px 24px;
-            background: #f1f5f9;
+            background: #F8FAFC;
             border-radius: 12px;
             color: #ffffff;
             display: flex;
