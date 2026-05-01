@@ -38,11 +38,12 @@ class SitePricing
         if ($maximumUnits > 0) {
             $billable = min($stitchCount, $maximumUnits);
             $amount = $billable * ($rate / 1000);
-
-            return round(max($minimum, $amount), 2);
+            $basePrice = round(max($minimum, $amount), 2);
+        } else {
+            $basePrice = round(max($minimum, $stitchCount * ($rate / 1000)), 2);
         }
 
-        return round(max($minimum, $stitchCount * ($rate / 1000)), 2);
+        return $basePrice + self::flatUpchargeFromProfile($profile);
     }
 
     public static function vector(?string $website, ?int $siteId, string $turnaroundTime, string $totalHours): float
@@ -141,9 +142,12 @@ class SitePricing
         $schedule = [];
 
         foreach (['standard', 'priority', 'superrush'] as $turnaroundCode) {
+            $upcharge = 0.0;
+
             if (in_array($normalizedWorkType, ['vector', 'color'], true)) {
                 $profile = self::profileFor($site, [$normalizedWorkType], $turnaroundCode);
                 $rate = self::hourlyRateFromProfile($profile);
+                $upcharge = self::flatUpchargeFromProfile($profile);
 
                 if ($rate === null) {
                     $schedule[$turnaroundCode] = [
@@ -154,9 +158,14 @@ class SitePricing
                     continue;
                 }
 
+                $description = '$'.number_format($rate, 2).' / hour';
+                if ($upcharge > 0) {
+                    $description .= ' (+$'.number_format($upcharge, 2).' flat fee)';
+                }
+
                 $schedule[$turnaroundCode] = [
                     'amount' => round($rate, 2),
-                    'description' => '$'.number_format($rate, 2).' / hour',
+                    'description' => $description,
                 ];
 
                 continue;
@@ -166,6 +175,7 @@ class SitePricing
             $customerRate = $useCustomerOverrides ? self::customerRateOverride($customer, $turnaroundCode) : null;
             $rate = $customerRate ?? self::embroideryRateFromProfile($profile, $turnaroundCode);
             $minimum = self::minimumCharge($profile, $turnaroundCode, $rate ?? 0.0, $customerRate !== null);
+            $upcharge = self::flatUpchargeFromProfile($profile);
 
             if ($rate === null || $minimum === null) {
                 $schedule[$turnaroundCode] = [
@@ -177,10 +187,15 @@ class SitePricing
                 continue;
             }
 
+            $description = '$'.number_format($rate, 2).'/1k stitches, (Min. charge $'.number_format($minimum, 2).')';
+            if ($upcharge > 0) {
+                $description .= ' (+$'.number_format($upcharge, 2).' flat fee)';
+            }
+
             $schedule[$turnaroundCode] = [
                 'amount' => round($rate, 2),
                 'minimum' => round($minimum, 2),
-                'description' => '$'.number_format($rate, 2).'/1k stitches, (Min. charge $'.number_format($minimum, 2).')',
+                'description' => $description,
             ];
         }
 
@@ -205,8 +220,9 @@ class SitePricing
         }
 
         $hourlyRate = self::hourlyRateFromProfile($profile);
+        $basePrice = round(($hours * (float) $hourlyRate) + ($minutes * ((float) $hourlyRate / 60)), 2);
 
-        return round(($hours * (float) $hourlyRate) + ($minutes * ((float) $hourlyRate / 60)), 2);
+        return $basePrice + self::flatUpchargeFromProfile($profile);
     }
 
     public static function configurationError(
@@ -415,6 +431,19 @@ class SitePricing
         $rate = (float) ($profile->overage_rate ?: $profile->fixed_price ?: $profile->per_thousand_rate ?: 0);
 
         return $rate > 0 ? $rate : null;
+    }
+
+    private static function flatUpchargeFromProfile(?SitePricingProfile $profile): float
+    {
+        if (! $profile) {
+            return 0.0;
+        }
+
+        $config = json_decode((string) ($profile->config_json ?? ''), true);
+
+        return is_array($config) && isset($config['flat_upcharge']) && is_numeric($config['flat_upcharge'])
+            ? (float) $config['flat_upcharge']
+            : 0.0;
     }
 
     private static function maximumUnits(?AdminUser $customer, ?SitePricingProfile $profile): float
