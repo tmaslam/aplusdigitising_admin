@@ -32,6 +32,7 @@ $userId = DB::table('users')->insertGetId([
     'first_name' => 'Super',
     'last_name' => 'Admin',
     'user_email' => $email,
+    'alternate_email' => '',
     'usre_type_id' => 3, // TYPE_ADMIN
     'is_active' => 1,
     'site_id' => 1,
