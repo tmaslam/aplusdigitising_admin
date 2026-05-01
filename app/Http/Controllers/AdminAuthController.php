@@ -9,6 +9,7 @@ use App\Support\PasswordManager;
 use App\Support\SecurityAudit;
 use App\Support\TrustedTwoFactorDevice;
 use App\Support\TurnstileVerifier;
+use App\Support\SiteResolver;
 use App\Support\TwoFactorAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -22,7 +23,9 @@ class AdminAuthController extends Controller
             return redirect('/welcome.php');
         }
 
-        return view('admin.auth.login');
+        return view('admin.auth.login', [
+            'siteContext' => SiteResolver::forRequest($request),
+        ]);
     }
 
     public function login(Request $request)
