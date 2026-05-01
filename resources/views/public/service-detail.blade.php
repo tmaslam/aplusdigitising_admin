@@ -31,7 +31,7 @@
                 <p>{{ $service['meta_description'] }}</p>
                 <div class="theme-header-actions">
                     <a class="button primary" href="{{ session()->has('customer_user_id') ? '/quote.php' : '/sign-up.php' }}">Get Quote</a>
-                    <a class="button secondary" href="/aplus/contact-us.php">Contact Us</a>
+                    <a class="button secondary" href="/contact-us.php">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@
 
                 <div class="theme-header-actions content-actions">
                     <a class="button primary" href="{{ session()->has('customer_user_id') ? '/quote.php' : '/sign-up.php' }}">Get Quote</a>
-                    <a class="button secondary" href="/aplus/contact-us.php">Contact Us</a>
+                    <a class="button secondary" href="/contact-us.php">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -164,7 +164,7 @@
                 <p>Send us your design and we will review the artwork, confirm the turnaround, and provide a quote for this service.</p>
                 <div class="theme-header-actions">
                     <a class="button primary" href="{{ session()->has('customer_user_id') ? '/quote.php' : '/sign-up.php' }}">Get Quote</a>
-                    <a class="button secondary" href="/aplus/contact-us.php">Ask A Question</a>
+                    <a class="button secondary" href="/contact-us.php">Ask A Question</a>
                 </div>
             </div>
         </div>

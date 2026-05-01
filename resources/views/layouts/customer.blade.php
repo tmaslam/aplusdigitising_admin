@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', $siteContext->displayLabel())</title>
-    <link rel="icon" type="image/png" href="/aplus/images/favicon.png?v=2">
+    <link rel="icon" type="image/png" href="/images/favicon.png?v=2">
     @php
         $legacyAssetBase = rtrim(url('/'), '/');
         $publicMenu = [
@@ -1879,18 +1879,18 @@
         $currentPath = request()->path();
         $customerName = request()->attributes->get('customerUser')?->display_name ?? session('customer_user_name');
         $customerNav = [
-            ['label' => 'Dashboard', 'href' => '/aplus/dashboard.php', 'match' => ['dashboard.php']],
-            ['label' => 'Orders', 'href' => '/aplus/view-orders.php', 'match' => ['new-order.php', 'vector-order.php', 'view-orders.php', 'view-order-detail.php', 'edit-order.php', 'disapprove-order.php', 'download.php', 'preview.php']],
-            ['label' => 'Quotes', 'href' => '/aplus/view-quotes.php', 'match' => ['quote.php', 'vector_quote.php', 'vector-quote.php', 'digitizing_quote.php', 'digitizing-quote.php', 'view-quotes.php', 'view-quote-detail.php', 'edit-quote.php']],
-            ['label' => 'Billing', 'href' => '/aplus/view-billing.php', 'match' => ['view-billing.php', 'payment.php', 'payment-proceed.php', 'successpay.php', 'referral-invoice.php']],
-            ['label' => 'Paid Orders', 'href' => '/aplus/view-archive-orders.php', 'match' => ['view-paid-orders.php', 'view-archive-orders.php']],
-            ['label' => 'Invoices', 'href' => '/aplus/view-invoices.php', 'match' => ['view-invoices.php', 'view-invoice-detail.php']],
+            ['label' => 'Dashboard', 'href' => '/dashboard.php', 'match' => ['dashboard.php']],
+            ['label' => 'Orders', 'href' => '/view-orders.php', 'match' => ['new-order.php', 'vector-order.php', 'view-orders.php', 'view-order-detail.php', 'edit-order.php', 'disapprove-order.php', 'download.php', 'preview.php']],
+            ['label' => 'Quotes', 'href' => '/view-quotes.php', 'match' => ['quote.php', 'vector_quote.php', 'vector-quote.php', 'digitizing_quote.php', 'digitizing-quote.php', 'view-quotes.php', 'view-quote-detail.php', 'edit-quote.php']],
+            ['label' => 'Billing', 'href' => '/view-billing.php', 'match' => ['view-billing.php', 'payment.php', 'payment-proceed.php', 'successpay.php', 'referral-invoice.php']],
+            ['label' => 'Paid Orders', 'href' => '/view-archive-orders.php', 'match' => ['view-paid-orders.php', 'view-archive-orders.php']],
+            ['label' => 'Invoices', 'href' => '/view-invoices.php', 'match' => ['view-invoices.php', 'view-invoice-detail.php']],
         ];
         $customerStartLinks = [
-            ['label' => 'Digitizing Order', 'href' => '/aplus/new-order.php', 'description' => 'Start a regular embroidery digitizing order.'],
-            ['label' => 'Vector Order', 'href' => '/aplus/vector-order.php', 'description' => 'Submit a vector-only order directly.'],
-            ['label' => 'Digitizing Quote', 'href' => '/aplus/quote.php', 'description' => 'Get digitizing pricing first before placing the order.'],
-            ['label' => 'Vector Quote', 'href' => '/aplus/vector-quote.php', 'description' => 'Request vector pricing first before placing the order.'],
+            ['label' => 'Digitizing Order', 'href' => '/new-order.php', 'description' => 'Start a regular embroidery digitizing order.'],
+            ['label' => 'Vector Order', 'href' => '/vector-order.php', 'description' => 'Submit a vector-only order directly.'],
+            ['label' => 'Digitizing Quote', 'href' => '/quote.php', 'description' => 'Get digitizing pricing first before placing the order.'],
+            ['label' => 'Vector Quote', 'href' => '/vector-quote.php', 'description' => 'Request vector pricing first before placing the order.'],
         ];
     @endphp
 
@@ -1904,8 +1904,8 @@
                             <strong>{{ $customerName ?: 'Customer' }}</strong>
                         </div>
                         <div class="account-chip-actions">
-                            <a class="account-chip-link" href="/aplus/my-profile.php">My Profile</a>
-                            <a class="account-chip-link" href="/aplus/logout.php">Logout</a>
+                            <a class="account-chip-link" href="/my-profile.php">My Profile</a>
+                            <a class="account-chip-link" href="/logout.php">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -1914,7 +1914,7 @@
 
         <header class="site-header">
             <div class="container nav-shell">
-                <a class="brand" href="/aplus/login.php">
+                <a class="brand" href="/login.php">
                     <img src="{{ $legacyAssetBase }}/images/logo.png" alt="Aplus Digitizing">
                 </a>
 
@@ -2055,13 +2055,13 @@
                                             $isCurrentPlan = $sidebarSubscription && $sidebarSubscription === $plan['name'];
                                             $canSelectPlan = ! $isCurrentPlan;
                                         @endphp
-                                        <form method="post" action="/aplus/buy-subscription.php">
+                                        <form method="post" action="/buy-subscription.php">
                                             @csrf
                                             <input type="hidden" name="amount" value="{{ $plan['amount'] }}">
                                             <button type="submit" @disabled(! $canSelectPlan)>
                                                 <strong>{{ $plan['name'] }} ${{ $plan['amount'] }}/Month</strong>
                                                 <span>{{ $plan['designs'] }}</span>
-                                                <a href="/aplus/price-plan.php" class="benefits-link" onclick="event.stopPropagation();">see benefits</a>
+                                                <a href="/price-plan.php" class="benefits-link" onclick="event.stopPropagation();">see benefits</a>
                                             </button>
                                         </form>
                                     @endforeach

@@ -16,8 +16,8 @@ class CustomerSiteController extends Controller
     private const SERVICE_PAGES = [
         'embroidery-digitizing' => [
             'title' => 'Embroidery Digitizing',
-            'image' => '/aplus/images/embroidery-digitizing-services-1.webp',
-            'banner_image' => '/aplus/images/banner-embroidery-%20digitizing-%20services.webp',
+            'image' => '/images/embroidery-digitizing-services-1.webp',
+            'banner_image' => '/images/banner-embroidery-%20digitizing-%20services.webp',
             'page_heading' => 'Embroidery Digitizing Services',
             'meta_description' => 'Professional embroidery digitizing for logos, caps, jackets, flats, and production-ready files.',
             'paragraphs' => [
@@ -36,8 +36,8 @@ class CustomerSiteController extends Controller
         ],
         '3d-puff-embroidery-digitizing' => [
             'title' => '3D / Puff Embroidery Digitizing',
-            'image' => '/aplus/images/3d-puff-embroidery-digitizing-services-1.webp',
-            'banner_image' => '/aplus/images/banner-3d-puff-embroidery.webp',
+            'image' => '/images/3d-puff-embroidery-digitizing-services-1.webp',
+            'banner_image' => '/images/banner-3d-puff-embroidery.webp',
             'page_heading' => '3D Puff Embroidery Digitizing',
             'meta_description' => '3D puff embroidery digitizing for raised cap designs and bold logo work.',
             'paragraphs' => [
@@ -87,8 +87,8 @@ class CustomerSiteController extends Controller
         ],
         'applique-embroidery-digitizing' => [
             'title' => 'Applique Embroidery Digitizing',
-            'image' => '/aplus/images/applique-embroidery-digitizing-1.webp',
-            'banner_image' => '/aplus/images/banner-applique-embroidery-digitizing%20.webp',
+            'image' => '/images/applique-embroidery-digitizing-1.webp',
+            'banner_image' => '/images/banner-applique-embroidery-digitizing%20.webp',
             'page_heading' => 'Applique Embroidery Digitizing',
             'meta_description' => 'Applique embroidery digitizing with clean placement, tack-down runs, and production-friendly sequencing.',
             'paragraphs' => [
@@ -106,8 +106,8 @@ class CustomerSiteController extends Controller
         ],
         'chain-stitch-embroidery-digitizing' => [
             'title' => 'Chain Stitch Embroidery Digitizing',
-            'image' => '/aplus/images/Chain-Stitch-Embroidery-Digitizing(1).webp',
-            'banner_image' => '/aplus/images/banner-chain-stich-embroidery%20.webp',
+            'image' => '/images/Chain-Stitch-Embroidery-Digitizing(1).webp',
+            'banner_image' => '/images/banner-chain-stich-embroidery%20.webp',
             'page_heading' => 'Chain Stitch Embroidery Digitizing',
             'meta_description' => 'Chain stitch embroidery digitizing for decorative lettering and textured embroidery styles.',
             'paragraphs' => [
@@ -123,8 +123,8 @@ class CustomerSiteController extends Controller
         ],
         'photo-digitizing' => [
             'title' => 'Photo Digitizing',
-            'image' => '/aplus/images/Photo-Digitizing-Services-1.webp',
-            'banner_image' => '/aplus/images/banner-photo%20-digitizing-services.webp',
+            'image' => '/images/Photo-Digitizing-Services-1.webp',
+            'banner_image' => '/images/banner-photo%20-digitizing-services.webp',
             'page_heading' => 'Photo Digitizing Service',
             'meta_description' => 'Photo digitizing service for artwork that needs careful embroidery interpretation and simplification.',
             'paragraphs' => [
@@ -155,8 +155,8 @@ class CustomerSiteController extends Controller
         ],
         'vector-art' => [
             'title' => 'Vector Art Services',
-            'image' => '/aplus/images/vector-art-services-1.webp',
-            'banner_image' => '/aplus/images/banner-vector-art-services%20.webp',
+            'image' => '/images/vector-art-services-1.webp',
+            'banner_image' => '/images/banner-vector-art-services%20.webp',
             'page_heading' => 'Vector Art Services',
             'meta_description' => 'Vector art service for logo redraws, print-ready artwork, and clean scalable production files.',
             'paragraphs' => [

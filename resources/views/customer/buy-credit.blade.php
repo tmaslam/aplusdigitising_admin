@@ -16,7 +16,7 @@
                 <div class="alert" style="margin-top:16px;">{{ $errors->first() }}</div>
             @endif
 
-            <form method="post" action="/aplus/buy-credit.php" style="margin-top:20px;">
+            <form method="post" action="/buy-credit.php" style="margin-top:20px;">
                 @csrf
                 <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
                     @php
@@ -51,7 +51,7 @@
                 </div>
 
                 <button type="submit" class="button primary">Proceed to Payment</button>
-                <a href="/aplus/dashboard.php" class="button secondary" style="margin-left:8px;">Cancel</a>
+                <a href="/dashboard.php" class="button secondary" style="margin-left:8px;">Cancel</a>
             </form>
         </section>
     </div>

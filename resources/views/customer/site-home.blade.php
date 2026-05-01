@@ -19,12 +19,12 @@
             ['number' => '1M+', 'label' => 'Designs Completed'],
         ];
         $services = [
-            ['title' => 'Custom Embroidery Digitizing', 'summary' => 'Clean, production-ready embroidery files built for smoother runs, fewer trims, and reliable results on your machines.', 'image' => url('/images/Embroidery-Digitizings.webp'), 'href' => '/aplus/embroidery-digitizing.php', 'price' => '$1 / 1k stitches', 'image_fit' => 'contain'],
-            ['title' => '3D Puff Embroidery', 'summary' => 'Specialized puff digitizing for structured caps and raised lettering that holds shape and stitches cleanly.', 'image' => url('/images/3D-puff.webp'), 'href' => '/aplus/3d-puff-embroidery-digitizing.php', 'price' => 'Cap embroidery', 'image_fit' => 'contain'],
-            ['title' => 'Applique & Chain Stitch', 'summary' => 'Applique and decorative stitch files planned for accurate placement, secure tackdowns, and clean finishing.', 'image' => url('/images/Applique-Embroidery-Digitizing.webp'), 'href' => '/aplus/applique-embroidery-digitizing.php', 'price' => 'Specialty stitching', 'image_fit' => 'contain'],
-            ['title' => 'Photo Digitizing', 'summary' => 'Photo-based embroidery converted into stitchable artwork with cleaner shapes, smarter density, and readable detail.', 'image' => url('/images/Photo-Digitizing.webp'), 'href' => '/aplus/photo-digitizing.php', 'price' => 'Portrait embroidery', 'image_fit' => 'contain', 'image_class' => 'service-card-image-photo'],
-            ['title' => 'Vector Art Services', 'summary' => 'Accurate vector redraws for logos, artwork, and print production with clean paths and scalable output files.', 'image' => url('/images/Vector-Art.webp'), 'href' => '/aplus/vector-art.php', 'price' => '$6 / hour', 'image_fit' => 'contain'],
-            ['title' => 'Chain Stitch Embroidery', 'summary' => 'Chain stitch digitizing for vintage, western, and specialty embroidery looks with smooth decorative flow.', 'image' => url('/images/Chain-Stitch-Embroidery-Digitizing.webp'), 'href' => '/aplus/chain-stitch-embroidery-digitizing.php', 'price' => 'Vintage embroidery', 'image_fit' => 'contain'],
+            ['title' => 'Custom Embroidery Digitizing', 'summary' => 'Clean, production-ready embroidery files built for smoother runs, fewer trims, and reliable results on your machines.', 'image' => url('/images/Embroidery-Digitizings.webp'), 'href' => '/embroidery-digitizing.php', 'price' => '$1 / 1k stitches', 'image_fit' => 'contain'],
+            ['title' => '3D Puff Embroidery', 'summary' => 'Specialized puff digitizing for structured caps and raised lettering that holds shape and stitches cleanly.', 'image' => url('/images/3D-puff.webp'), 'href' => '/3d-puff-embroidery-digitizing.php', 'price' => 'Cap embroidery', 'image_fit' => 'contain'],
+            ['title' => 'Applique & Chain Stitch', 'summary' => 'Applique and decorative stitch files planned for accurate placement, secure tackdowns, and clean finishing.', 'image' => url('/images/Applique-Embroidery-Digitizing.webp'), 'href' => '/applique-embroidery-digitizing.php', 'price' => 'Specialty stitching', 'image_fit' => 'contain'],
+            ['title' => 'Photo Digitizing', 'summary' => 'Photo-based embroidery converted into stitchable artwork with cleaner shapes, smarter density, and readable detail.', 'image' => url('/images/Photo-Digitizing.webp'), 'href' => '/photo-digitizing.php', 'price' => 'Portrait embroidery', 'image_fit' => 'contain', 'image_class' => 'service-card-image-photo'],
+            ['title' => 'Vector Art Services', 'summary' => 'Accurate vector redraws for logos, artwork, and print production with clean paths and scalable output files.', 'image' => url('/images/Vector-Art.webp'), 'href' => '/vector-art.php', 'price' => '$6 / hour', 'image_fit' => 'contain'],
+            ['title' => 'Chain Stitch Embroidery', 'summary' => 'Chain stitch digitizing for vintage, western, and specialty embroidery looks with smooth decorative flow.', 'image' => url('/images/Chain-Stitch-Embroidery-Digitizing.webp'), 'href' => '/chain-stitch-embroidery-digitizing.php', 'price' => 'Vintage embroidery', 'image_fit' => 'contain'],
         ];
         $features = [
             ['icon' => '💰', 'title' => 'Affordable & Transparent Pricing', 'summary' => '$1 per 1,000 stitches. No hidden fees.'],
@@ -62,7 +62,7 @@
 
                     <div class="hero-buttons">
                         <a href="{{ $ctaUrl }}" class="button primary">Get Your Free Quote</a>
-                        <a href="/aplus/our-services.php" class="button secondary">Explore Our Services</a>
+                        <a href="/our-services.php" class="button secondary">Explore Our Services</a>
                     </div>
 
                     <div class="hero-features">
@@ -262,7 +262,7 @@
                 </div>
 
                 <div class="welcome-offer-actions">
-                    <a class="button primary" href="/aplus/sign-up.php">Claim This Offer</a>
+                    <a class="button primary" href="/sign-up.php">Claim This Offer</a>
                     <button type="button" class="button secondary" data-welcome-offer-close>Maybe Later</button>
                 </div>
             </div>

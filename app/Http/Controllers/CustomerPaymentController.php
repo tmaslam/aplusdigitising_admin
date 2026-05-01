@@ -404,7 +404,7 @@ class CustomerPaymentController extends Controller
             'configuredOutcome' => $configuredOutcome,
             'completeUrl' => url('/simulate-2checkout/'.$transaction->id.'?outcome=success'),
             'failUrl' => url('/simulate-2checkout/'.$transaction->id.'?outcome=failed'),
-            'backUrl' => '/aplus/view-billing.php',
+            'backUrl' => '/view-billing.php',
         ]);
     }
 

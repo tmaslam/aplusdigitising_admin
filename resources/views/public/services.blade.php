@@ -17,7 +17,7 @@
                 ],
                 'price' => 'Starting at $1 per 1,000 stitches',
                 'image' => url('/images/Embroidery-Digitizings.webp'),
-                'href' => '/aplus/embroidery-digitizing.php',
+                'href' => '/embroidery-digitizing.php',
             ],
             [
                 'title' => '<span>3D Puff</span> Embroidery',
@@ -30,7 +30,7 @@
                 ],
                 'price' => 'Starting at $3 per 1,000 stitches',
                 'image' => url('/images/3D-puff.webp'),
-                'href' => '/aplus/3d-puff-embroidery-digitizing.php',
+                'href' => '/3d-puff-embroidery-digitizing.php',
             ],
             [
                 'title' => '<span>Applique & Chain Stitch</span>',
@@ -43,7 +43,7 @@
                 ],
                 'price' => 'Starting at $2 per 1,000 stitches',
                 'image' => url('/images/Applique-Embroidery-Digitizing.webp'),
-                'href' => '/aplus/applique-embroidery-digitizing.php',
+                'href' => '/applique-embroidery-digitizing.php',
             ],
             [
                 'title' => '<span>Photo</span> Digitizing',
@@ -56,7 +56,7 @@
                 ],
                 'price' => 'Custom Quote Required',
                 'image' => url('/images/Photo-Digitizing.webp'),
-                'href' => '/aplus/photo-digitizing.php',
+                'href' => '/photo-digitizing.php',
             ],
             [
                 'title' => '<span>Vector Art</span> Services',
@@ -69,7 +69,7 @@
                 ],
                 'price' => '$6 per hour',
                 'image' => url('/images/Vector-Art.webp'),
-                'href' => '/aplus/vector-art.php',
+                'href' => '/vector-art.php',
             ],
             [
                 'title' => '<span>Chain Stitch</span> Embroidery',
@@ -82,7 +82,7 @@
                 ],
                 'price' => 'Starting at $1.50 per 1,000 stitches',
                 'image' => url('/images/Chain-Stitch-Embroidery-Digitizing.webp'),
-                'href' => '/aplus/chain-stitch-embroidery-digitizing.php',
+                'href' => '/chain-stitch-embroidery-digitizing.php',
             ],
         ];
     @endphp
@@ -125,7 +125,7 @@
                 <h2>Need a Custom Quote?</h2>
                 <p>Upload your design and we&apos;ll provide a detailed quote within hours.</p>
                 <div class="theme-header-actions">
-                    <a href="/aplus/contact-us.php" class="button secondary">Get Your Free Quote</a>
+                    <a href="/contact-us.php" class="button secondary">Get Your Free Quote</a>
                 </div>
             </div>
         </div>

@@ -381,7 +381,7 @@ class CustomerRegistrationController extends Controller
                 'pageTitle' => 'Verification Complete',
                 'activated' => true,
                 'message' => 'Your email has been verified. This account is now waiting for admin approval before you can sign in.',
-                'nextStepUrl' => '/aplus/',
+                'nextStepUrl' => '/',
                 'nextStepLabel' => 'Return To Website',
             ]);
         }
@@ -418,7 +418,7 @@ class CustomerRegistrationController extends Controller
             'pageTitle' => 'Account Activated',
             'activated' => true,
             'message' => 'Your customer account for '.$site->displayLabel().' is now active. You can sign in and continue with quotes, orders, billing, and downloads inside this website.',
-            'nextStepUrl' => '/aplus/login.php',
+            'nextStepUrl' => '/login.php',
             'nextStepLabel' => 'Go to Login',
         ]);
     }

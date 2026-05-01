@@ -39,19 +39,19 @@
         </div>
 
         <div class="portal-stat-grid">
-            <a class="metric-link" href="/aplus/view-orders.php">
+            <a class="metric-link" href="/view-orders.php">
                 <article class="portal-stat">
                     <span>My Orders</span>
                     <strong>{{ $metrics['orders'] }}</strong>
                 </article>
             </a>
-            <a class="metric-link" href="/aplus/view-quotes.php">
+            <a class="metric-link" href="/view-quotes.php">
                 <article class="portal-stat">
                     <span>My Quotes</span>
                     <strong>{{ $metrics['quotes'] }}</strong>
                 </article>
             </a>
-            <a class="metric-link" href="/aplus/view-billing.php">
+            <a class="metric-link" href="/view-billing.php">
                 <article class="portal-stat">
                     <span>Payment Due</span>
                     <strong>${{ number_format($metrics['billing_total'], 2) }}</strong>
@@ -79,22 +79,22 @@
         </div>
 
         <div class="action-grid">
-            <a class="action-card action-card-primary" href="/aplus/new-order.php">
+            <a class="action-card action-card-primary" href="/new-order.php">
                 <span>Digitizing</span>
                 <strong>Place New Order</strong>
                 <p>Upload artwork and start a standard digitizing request.</p>
             </a>
-            <a class="action-card" href="/aplus/quote.php">
+            <a class="action-card" href="/quote.php">
                 <span>Quote</span>
                 <strong>Digitizing Quote</strong>
                 <p>Ask for digitizing pricing first before placing a new order.</p>
             </a>
-            <a class="action-card" href="/aplus/vector-order.php">
+            <a class="action-card" href="/vector-order.php">
                 <span>Vector</span>
                 <strong>Place Vector Order</strong>
                 <p>Start a vector-only job with the existing vector order flow.</p>
             </a>
-            <a class="action-card" href="/aplus/vector-quote.php">
+            <a class="action-card" href="/vector-quote.php">
                 <span>Vector Quote</span>
                 <strong>Request Vector Quote</strong>
                 <p>Ask for vector pricing first before placing a vector order.</p>
@@ -120,11 +120,11 @@
                         @foreach ($recentOrders as $order)
                             <div class="activity-item">
                                 <div class="activity-meta">
-                                    <strong><a class="inline-link" href="/aplus/view-order-detail.php?order_id={{ $order->order_id }}&origin=orders">{{ $order->design_name ?: 'Order #'.$order->order_id }}</a></strong>
+                                    <strong><a class="inline-link" href="/view-order-detail.php?order_id={{ $order->order_id }}&origin=orders">{{ $order->design_name ?: 'Order #'.$order->order_id }}</a></strong>
                                     <span class="status {{ \App\Support\CustomerWorkflowStatus::tone($order) }}">{{ \App\Support\CustomerWorkflowStatus::label($order) }}</span>
                                 </div>
                                 <div class="file-actions">
-                                    <a class="button secondary" href="/aplus/view-order-detail.php?order_id={{ $order->order_id }}&origin=orders">Open Order</a>
+                                    <a class="button secondary" href="/view-order-detail.php?order_id={{ $order->order_id }}&origin=orders">Open Order</a>
                                 </div>
                             </div>
                         @endforeach
@@ -144,11 +144,11 @@
                         @foreach ($recentQuotes as $quote)
                             <div class="activity-item">
                                 <div class="activity-meta">
-                                    <strong><a class="inline-link" href="/aplus/view-quote-detail.php?order_id={{ $quote->order_id }}&origin=quotes">{{ $quote->design_name ?: 'Quote #'.$quote->order_id }}</a></strong>
+                                    <strong><a class="inline-link" href="/view-quote-detail.php?order_id={{ $quote->order_id }}&origin=quotes">{{ $quote->design_name ?: 'Quote #'.$quote->order_id }}</a></strong>
                                     <span class="status {{ \App\Support\CustomerWorkflowStatus::tone($quote, true) }}">{{ \App\Support\CustomerWorkflowStatus::label($quote, true) }}</span>
                                 </div>
                                 <div class="file-actions">
-                                    <a class="button secondary" href="/aplus/view-quote-detail.php?order_id={{ $quote->order_id }}&origin=quotes">Open Quote</a>
+                                    <a class="button secondary" href="/view-quote-detail.php?order_id={{ $quote->order_id }}&origin=quotes">Open Quote</a>
                                 </div>
                             </div>
                         @endforeach
@@ -161,7 +161,7 @@
                                 <span class="status warning">{{ $metrics['billing_count'] }} due</span>
                             </div>
                             <div class="file-actions">
-                                <a class="button secondary" href="/aplus/view-billing.php">Open Billing</a>
+                                <a class="button secondary" href="/view-billing.php">Open Billing</a>
                             </div>
                         </div>
                     @endif

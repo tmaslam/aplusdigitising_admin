@@ -981,11 +981,11 @@ class CustomerPortalController extends Controller
         $origin = trim((string) $request->query('origin', ''));
 
         return match ($origin) {
-            'archive' => ['url' => '/aplus/view-archive-orders.php', 'label' => 'Back to Paid Orders'],
-            'billing' => ['url' => '/aplus/view-billing.php', 'label' => 'Back to Billing'],
-            'invoices' => ['url' => '/aplus/view-invoices.php', 'label' => 'Back to Invoices'],
+            'archive' => ['url' => '/view-archive-orders.php', 'label' => 'Back to Paid Orders'],
+            'billing' => ['url' => '/view-billing.php', 'label' => 'Back to Billing'],
+            'invoices' => ['url' => '/view-invoices.php', 'label' => 'Back to Invoices'],
             default => [
-                'url' => $isQuote ? '/aplus/view-quotes.php' : '/aplus/view-orders.php',
+                'url' => $isQuote ? '/view-quotes.php' : '/view-orders.php',
                 'label' => $isQuote ? 'Back to Quotes' : 'Back to Orders',
             ],
         };

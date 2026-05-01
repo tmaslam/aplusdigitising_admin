@@ -15,8 +15,8 @@
                 <h1>Supported <span>Embroidery And Vector Formats</span></h1>
                 <p>Review the machine embroidery and vector file formats we support for artwork preparation, production, and delivery.</p>
                 <div class="theme-header-actions">
-                    <a class="button primary" href="/aplus/sign-up.php">Get Quote</a>
-                    <a class="button secondary" href="/aplus/contact-us.php">Ask About A Format</a>
+                    <a class="button primary" href="/sign-up.php">Get Quote</a>
+                    <a class="button secondary" href="/contact-us.php">Ask About A Format</a>
                 </div>
                 <div class="formats-jump-nav" aria-label="Format sections">
                     <a href="#embroidery-formats">Machine Embroidery</a>

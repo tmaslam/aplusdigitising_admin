@@ -15,10 +15,10 @@
             <div class="order-detail-actions">
                 <a class="button secondary" href="{{ $backLink['url'] }}">{{ $backLink['label'] }}</a>
                 @if (! in_array((string) $order->status, ['done', 'approved'], true))
-                    <a class="button secondary" href="/aplus/edit-order.php?order_id={{ $order->order_id }}">Edit Order</a>
+                    <a class="button secondary" href="/edit-order.php?order_id={{ $order->order_id }}">Edit Order</a>
                 @endif
                 @if ($showOrderCancelAction)
-                    <form method="post" action="/aplus/orders/{{ $order->order_id }}/cancel" onsubmit="return confirm('Cancel this order?');">
+                    <form method="post" action="/orders/{{ $order->order_id }}/cancel" onsubmit="return confirm('Cancel this order?');">
                         @csrf
                         <button type="submit" class="button danger">Cancel Order</button>
                     </form>
@@ -199,8 +199,8 @@
                 </div>
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap;">
-                <a class="button danger" href="/aplus/disapprove-order.php?order_id={{ $order->order_id }}" style="display: inline-flex; width: auto; padding: 8px 18px; justify-content: center;">Request Edit</a>
-                <form method="post" action="/aplus/orders/{{ $order->order_id }}/approve" style="margin: 0;">
+                <a class="button danger" href="/disapprove-order.php?order_id={{ $order->order_id }}" style="display: inline-flex; width: auto; padding: 8px 18px; justify-content: center;">Request Edit</a>
+                <form method="post" action="/orders/{{ $order->order_id }}/approve" style="margin: 0;">
                     @csrf
                     <button type="submit" style="width: auto; padding: 8px 18px; justify-content: center;">{{ trim(strtolower((string) $order->total_amount)) === 'first order is free' || (float) preg_replace('/[^0-9.\-]/', '', (string) $order->total_amount) <= 0 ? 'Approve Order' : 'Approve for Payment' }}</button>
                 </form>

@@ -14,7 +14,7 @@
             <a class="button ghost" href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}">Download Paid Orders</a>
         </div>
 
-        <form method="get" action="/aplus/view-archive-orders.php" class="filter-bar">
+        <form method="get" action="/view-archive-orders.php" class="filter-bar">
             <input
                 type="text"
                 name="search"
@@ -24,7 +24,7 @@
             >
             <button type="submit">Search</button>
             @if ($search !== '')
-                <a class="button secondary" href="/aplus/view-archive-orders.php">Clear</a>
+                <a class="button secondary" href="/view-archive-orders.php">Clear</a>
             @endif
         </form>
 
@@ -33,7 +33,7 @@
                 <table class="responsive-table">
                     <thead>
                     @php
-                        $sortLink = fn($col) => '/aplus/view-archive-orders.php?'.http_build_query(array_merge(request()->query(), [
+                        $sortLink = fn($col) => '/view-archive-orders.php?'.http_build_query(array_merge(request()->query(), [
                             'sort' => $col,
                             'dir' => ($sort === $col && $dir === 'asc') ? 'desc' : 'asc',
                             'page' => 1,
@@ -60,7 +60,7 @@
                             </td>
                             <td>{{ $order->design_name }}</td>
                             <td>{{ $order->completion_date ?: '-' }}</td>
-                            <td><a class="button secondary" href="/aplus/view-order-detail.php?order_id={{ $order->order_id }}&origin=archive">View Detail</a></td>
+                            <td><a class="button secondary" href="/view-order-detail.php?order_id={{ $order->order_id }}&origin=archive">View Detail</a></td>
                         </tr>
                     @endforeach
                     </tbody>

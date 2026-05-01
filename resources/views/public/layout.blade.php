@@ -59,12 +59,12 @@
             // Public navigation hidden — all traffic routes through login
         ];
         $serviceLinks = [
-            ['label' => 'Embroidery Digitizing', 'href' => '/aplus/embroidery-digitizing.php'],
-            ['label' => '3D / Puff Embroidery', 'href' => '/aplus/3d-puff-embroidery-digitizing.php'],
-            ['label' => 'Applique Embroidery', 'href' => '/aplus/applique-embroidery-digitizing.php'],
-            ['label' => 'Chain Stitch Embroidery', 'href' => '/aplus/chain-stitch-embroidery-digitizing.php'],
-            ['label' => 'Photo Digitizing', 'href' => '/aplus/photo-digitizing.php'],
-            ['label' => 'Vector Art', 'href' => '/aplus/vector-art.php'],
+            ['label' => 'Embroidery Digitizing', 'href' => '/embroidery-digitizing.php'],
+            ['label' => '3D / Puff Embroidery', 'href' => '/3d-puff-embroidery-digitizing.php'],
+            ['label' => 'Applique Embroidery', 'href' => '/applique-embroidery-digitizing.php'],
+            ['label' => 'Chain Stitch Embroidery', 'href' => '/chain-stitch-embroidery-digitizing.php'],
+            ['label' => 'Photo Digitizing', 'href' => '/photo-digitizing.php'],
+            ['label' => 'Vector Art', 'href' => '/vector-art.php'],
         ];
         $companyLinks = [
             ['label' => 'About Us', 'href' => url('/about-us.php')],
@@ -341,7 +341,7 @@
 
         <header class="marketing-header">
             <div class="container marketing-header-shell">
-                <a href="/aplus/login.php" class="marketing-brand">
+                <a href="/login.php" class="marketing-brand">
                     <img class="site-logo" src="{{ $legacyAssetBase }}/images/logo.png" alt="Aplus Digitizing">
                 </a>
 
@@ -349,13 +349,13 @@
 
                 <div class="marketing-actions">
                     @if (session()->has('customer_user_id'))
-                        <a class="button secondary marketing-action-button" href="/aplus/dashboard.php">Dashboard</a>
-                        <a class="button secondary marketing-action-button" href="/aplus/logout.php">Logout</a>
-                        <a class="button primary marketing-action-button" href="/aplus/quote.php">Get Quote</a>
+                        <a class="button secondary marketing-action-button" href="/dashboard.php">Dashboard</a>
+                        <a class="button secondary marketing-action-button" href="/logout.php">Logout</a>
+                        <a class="button primary marketing-action-button" href="/quote.php">Get Quote</a>
                     @else
-                        <a class="button secondary marketing-action-button" href="/aplus/login.php">Login</a>
-                        <a class="button secondary marketing-action-button" href="/aplus/sign-up.php">Sign Up</a>
-                        <a class="button primary marketing-action-button" href="/aplus/sign-up.php">Get Quote</a>
+                        <a class="button secondary marketing-action-button" href="/login.php">Login</a>
+                        <a class="button secondary marketing-action-button" href="/sign-up.php">Sign Up</a>
+                        <a class="button primary marketing-action-button" href="/sign-up.php">Get Quote</a>
                     @endif
                 </div>
 
@@ -418,7 +418,7 @@
                             @endif
                         </ul>
                         <div class="footer-cta-group">
-                            <a class="button secondary footer-button" href="/aplus/login.php">Login</a>
+                            <a class="button secondary footer-button" href="/login.php">Login</a>
                             <a class="button primary footer-button" href="{{ session()->has('customer_user_id') ? '/quote.php' : '/sign-up.php' }}">Get Quote</a>
                         </div>
                     </div>
@@ -431,8 +431,8 @@
                     <div class="footer-bottom" style="margin-top:0;padding-top:0;">
                         <p>&copy; {{ date('Y') }} A Plus Digitizing. All rights reserved.</p>
                         <div class="footer-bottom-links">
-                            <a href="/aplus/login.php">Login</a>
-                            <a href="/aplus/sign-up.php">Sign Up</a>
+                            <a href="/login.php">Login</a>
+                            <a href="/sign-up.php">Sign Up</a>
                         </div>
                     </div>
                 </div>

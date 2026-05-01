@@ -24,7 +24,7 @@ class UploadController extends Controller
                 'requested_path' => $normalized,
             ], 'notice', [
                 'portal' => 'public',
-                'request_path' => '/aplus/uploads/'.$normalized,
+                'request_path' => '/uploads/'.$normalized,
                 'request_method' => 'GET',
             ]);
 
@@ -36,7 +36,7 @@ class UploadController extends Controller
                 'requested_path' => $normalized,
             ], 'warning', [
                 'portal' => 'public',
-                'request_path' => '/aplus/uploads/'.$normalized,
+                'request_path' => '/uploads/'.$normalized,
                 'request_method' => 'GET',
             ]);
 

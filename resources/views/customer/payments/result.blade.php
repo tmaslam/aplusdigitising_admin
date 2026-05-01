@@ -86,7 +86,7 @@
                 {{ $isOffer ? 'Go To Dashboard' : 'Back To Billing' }}
             </a>
             @if (! $isOffer)
-                <a class="button secondary" href="/aplus/dashboard.php">Dashboard</a>
+                <a class="button secondary" href="/dashboard.php">Dashboard</a>
             @endif
         </div>
 

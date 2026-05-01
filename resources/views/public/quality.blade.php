@@ -36,8 +36,8 @@
                 <h1>Our <span>Quality</span></h1>
                 <p>Quality digitizing starts with experienced people, careful file preparation, and dependable turnaround for real embroidery production.</p>
                 <div class="theme-header-actions">
-                    <a class="button primary" href="/aplus/price-plan.php">View Pricing</a>
-                    <a class="button secondary" href="/aplus/contact-us.php">Contact Us</a>
+                    <a class="button primary" href="/price-plan.php">View Pricing</a>
+                    <a class="button secondary" href="/contact-us.php">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -99,8 +99,8 @@
                     <p>Start with a quote, send your artwork, or contact us if you want help choosing the right service before placing an order.</p>
                 </div>
                 <div class="theme-header-actions" style="margin:0;">
-                    <a class="button primary" href="/aplus/sign-up.php">Get Started</a>
-                    <a class="button secondary" href="/aplus/formats.php">View Formats</a>
+                    <a class="button primary" href="/sign-up.php">Get Started</a>
+                    <a class="button secondary" href="/formats.php">View Formats</a>
                 </div>
             </div>
         </div>

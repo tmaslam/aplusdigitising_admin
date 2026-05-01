@@ -23,14 +23,14 @@
                     <strong>{{ $subscription['plan_name'] }}</strong>
                     <p style="margin:4px 0 0;font-size:0.82rem;color:var(--muted);">Next payment: {{ $subscription['next_payment_date'] }}</p>
                     <div style="display:flex; gap:8px; margin-top:10px;">
-                        <form method="post" action="/aplus/my-profile/subscription/pause" onsubmit="return confirm('Are you sure you want to pause your subscription?');">
+                        <form method="post" action="/my-profile/subscription/pause" onsubmit="return confirm('Are you sure you want to pause your subscription?');">
                             @csrf
                             <button type="submit" title="Pause Subscription" style="display:inline-flex; align-items:center; gap:4px; padding:5px 10px; border:1px solid #e2e8f0; border-radius:6px; background:#fff; font-size:0.75rem; font-weight:600; color:#475569; cursor:pointer; transition:all .15s;">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
                                 Pause
                             </button>
                         </form>
-                        <form method="post" action="/aplus/my-profile/subscription/cancel" onsubmit="return confirm('Are you sure you want to cancel your subscription? This cannot be undone.');">
+                        <form method="post" action="/my-profile/subscription/cancel" onsubmit="return confirm('Are you sure you want to cancel your subscription? This cannot be undone.');">
                             @csrf
                             <button type="submit" title="Cancel Subscription" style="display:inline-flex; align-items:center; gap:4px; padding:5px 10px; border:1px solid #fecaca; border-radius:6px; background:#fef2f2; font-size:0.75rem; font-weight:600; color:#dc2626; cursor:pointer; transition:all .15s;">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <form method="post" action="/aplus/my-profile.php" class="stack" data-form-validation novalidate>
+        <form method="post" action="/my-profile.php" class="stack" data-form-validation novalidate>
             @csrf
             <div class="form-grid">
                 <label>
@@ -147,13 +147,13 @@
 
         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
             @if ((int) ($customer->two_factor_enabled ?? 0) === 1)
-                <form method="post" action="/aplus/my-profile/2fa" onsubmit="return confirm('Are you sure you want to disable two-factor authentication? Your account will be less secure.');">
+                <form method="post" action="/my-profile/2fa" onsubmit="return confirm('Are you sure you want to disable two-factor authentication? Your account will be less secure.');">
                     @csrf
                     <input type="hidden" name="action" value="disable">
                     <button type="submit" class="secondary">Disable Two-Factor Authentication</button>
                 </form>
             @else
-                <form method="post" action="/aplus/my-profile/2fa">
+                <form method="post" action="/my-profile/2fa">
                     @csrf
                     <input type="hidden" name="action" value="enable">
                     <button type="submit">Enable Two-Factor Authentication</button>
@@ -170,7 +170,7 @@
             </div>
         </div>
 
-        <form method="post" action="/aplus/my-profile/password" class="stack" data-form-validation novalidate>
+        <form method="post" action="/my-profile/password" class="stack" data-form-validation novalidate>
             @csrf
             <div class="form-grid">
                 <label>

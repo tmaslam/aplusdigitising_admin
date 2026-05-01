@@ -15,7 +15,7 @@
                 <div class="alert">{{ $errors->first() }}</div>
             @endif
 
-            <form method="post" action="/aplus/sign-up.php" data-validate-form novalidate>
+            <form method="post" action="/sign-up.php" data-validate-form novalidate>
                 @csrf
                 <section class="form-section">
                     <div class="section-heading">
@@ -181,7 +181,7 @@
 
                 <div class="actions">
                     <button type="submit" id="register-btn">Register</button>
-                    <a class="button secondary" href="/aplus/login.php">Already Have An Account?</a>
+                    <a class="button secondary" href="/login.php">Already Have An Account?</a>
                 </div>
             </form>
 

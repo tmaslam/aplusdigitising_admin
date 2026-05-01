@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', $siteContext->displayLabel())</title>
-    <link rel="icon" type="image/png" href="/aplus/images/favicon.png?v=2">
+    <link rel="icon" type="image/png" href="/images/favicon.png?v=2">
     @php
         $legacyAssetBase = rtrim(url('/'), '/');
         $publicMenu = [

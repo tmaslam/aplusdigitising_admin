@@ -39,7 +39,7 @@
                 <p>Pay invoices one at a time or together. The largest current invoice is ${{ number_format($billingSummary['largest_invoice'], 2) }}.</p>
             </div>
             @if ($billingRows->count())
-                <form method="post" action="/aplus/view-billing.php/pay-all">
+                <form method="post" action="/view-billing.php/pay-all">
                     @csrf
                     @include('customer.payments.provider-buttons', [
                         'paymentProviders' => $paymentProviders,
@@ -68,7 +68,7 @@
                             <td data-label="Invoice">INV-{{ $billing->bill_id }}</td>
                             <td data-label="Order">
                                 @if ($billing->order)
-                                    <a href="/aplus/view-order-detail.php?order_id={{ $billing->order->order_id }}&origin=billing">Order #{{ $billing->order->order_id }} - {{ $billing->order->design_name ?: 'Design' }}</a>
+                                    <a href="/view-order-detail.php?order_id={{ $billing->order->order_id }}&origin=billing">Order #{{ $billing->order->order_id }} - {{ $billing->order->design_name ?: 'Design' }}</a>
                                 @else
                                     -
                                 @endif
@@ -77,7 +77,7 @@
                             <td data-label="Amount">${{ number_format((float) preg_replace('/[^0-9.\-]/', '', (string) $billing->amount), 2) }}</td>
                             <td data-label="Status"><span class="status warning">Payment Due</span></td>
                             <td data-label="Action">
-                                <form method="post" action="/aplus/view-billing.php/{{ $billing->bill_id }}/pay">
+                                <form method="post" action="/view-billing.php/{{ $billing->bill_id }}/pay">
                                     @csrf
                                     @include('customer.payments.provider-buttons', [
                                         'paymentProviders' => $paymentProviders,
