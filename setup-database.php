@@ -252,62 +252,78 @@ foreach ($migrations as $i => $migration) {
 // 5. Seed site configuration
 echo "\n5. Adding site configuration...\n";
 
-// Add primary site
-$siteId = DB::table('sites')->insertGetId([
-    'legacy_key' => '1dollar',
-    'slug' => 'aplus',
-    'name' => 'A Plus Digitizing',
-    'brand_name' => 'A Plus Digitizing',
-    'primary_domain' => 'aplusdigitising.com',
-    'website_address' => 'https://aplusdigitising.com',
-    'support_email' => 'support@aplusdigitising.com',
-    'from_email' => 'support@aplusdigitising.com',
-    'is_active' => 1,
-    'is_primary' => 1,
-    'created_at' => now()->format('Y-m-d H:i:s'),
-    'updated_at' => now()->format('Y-m-d H:i:s'),
-    'settings_json' => json_encode([
-        'logo' => '/images/logo.png',
-        'favicon' => '/images/favicon.ico',
-        'primary_color' => '#F26522',
-        'primary_dark_color' => '#D94E0F',
-        'accent_color' => '#2563EB',
-    ]),
-]);
+// Add or update primary site
+$existingSite = DB::table('sites')->where('legacy_key', '1dollar')->first();
+if ($existingSite) {
+    DB::table('sites')->where('id', $existingSite->id)->update([
+        'slug' => 'aplus',
+        'name' => 'A Plus Digitizing',
+        'brand_name' => 'A Plus Digitizing',
+        'primary_domain' => 'aplusdigitising.com',
+        'website_address' => 'https://aplusdigitising.com',
+        'support_email' => 'support@aplusdigitising.com',
+        'from_email' => 'support@aplusdigitising.com',
+        'is_active' => 1,
+        'is_primary' => 1,
+        'updated_at' => now()->format('Y-m-d H:i:s'),
+        'settings_json' => json_encode([
+            'logo' => '/images/logo.png',
+            'favicon' => '/images/favicon.ico',
+            'primary_color' => '#F26522',
+            'primary_dark_color' => '#D94E0F',
+            'accent_color' => '#2563EB',
+        ]),
+    ]);
+    $siteId = $existingSite->id;
+    echo "Updated site ID: {$siteId}\n";
+} else {
+    $siteId = DB::table('sites')->insertGetId([
+        'legacy_key' => '1dollar',
+        'slug' => 'aplus',
+        'name' => 'A Plus Digitizing',
+        'brand_name' => 'A Plus Digitizing',
+        'primary_domain' => 'aplusdigitising.com',
+        'website_address' => 'https://aplusdigitising.com',
+        'support_email' => 'support@aplusdigitising.com',
+        'from_email' => 'support@aplusdigitising.com',
+        'is_active' => 1,
+        'is_primary' => 1,
+        'created_at' => now()->format('Y-m-d H:i:s'),
+        'updated_at' => now()->format('Y-m-d H:i:s'),
+        'settings_json' => json_encode([
+            'logo' => '/images/logo.png',
+            'favicon' => '/images/favicon.ico',
+            'primary_color' => '#F26522',
+            'primary_dark_color' => '#D94E0F',
+            'accent_color' => '#2563EB',
+        ]),
+    ]);
+    echo "Created site ID: {$siteId}\n";
+}
 
-echo "Created site ID: {$siteId}\n";
+// Add/update domains
+$domains = [
+    ['host' => 'aplusdigitising.com', 'is_primary' => 1],
+    ['host' => 'user.aplusdigitising.com', 'is_primary' => 0],
+    ['host' => 'aplusdigitizing.com', 'is_primary' => 0],
+];
+foreach ($domains as $domain) {
+    DB::table('site_domains')->updateOrInsert(
+        ['host' => $domain['host']],
+        [
+            'site_id' => $siteId,
+            'is_active' => 1,
+            'is_primary' => $domain['is_primary'],
+            'created_at' => now()->format('Y-m-d H:i:s'),
+            'updated_at' => now()->format('Y-m-d H:i:s'),
+        ]
+    );
+}
+echo "Added/updated domains\n";
 
-// Add domains
-DB::table('site_domains')->insert([
-    'site_id' => $siteId,
-    'host' => 'aplusdigitising.com',
-    'is_active' => 1,
-    'is_primary' => 1,
-    'created_at' => now()->format('Y-m-d H:i:s'),
-    'updated_at' => now()->format('Y-m-d H:i:s'),
-]);
+// Clear old pricing profiles and add correct ones
+DB::table('site_pricing_profiles')->where('site_id', $siteId)->delete();
 
-DB::table('site_domains')->insert([
-    'site_id' => $siteId,
-    'host' => 'user.aplusdigitising.com',
-    'is_active' => 1,
-    'is_primary' => 0,
-    'created_at' => now()->format('Y-m-d H:i:s'),
-    'updated_at' => now()->format('Y-m-d H:i:s'),
-]);
-
-DB::table('site_domains')->insert([
-    'site_id' => $siteId,
-    'host' => 'aplusdigitizing.com',
-    'is_active' => 1,
-    'is_primary' => 0,
-    'created_at' => now()->format('Y-m-d H:i:s'),
-    'updated_at' => now()->format('Y-m-d H:i:s'),
-]);
-
-echo "Added domains\n";
-
-// Add pricing profiles
 $profiles = [
     ['site_id' => $siteId, 'profile_name' => 'Standard Digitizing', 'work_type' => 'digitizing', 'turnaround_code' => 'standard', 'pricing_mode' => 'per_unit', 'per_thousand_rate' => 0.80, 'minimum_charge' => 12.00, 'config_json' => json_encode(['flat_upcharge' => 0])],
     ['site_id' => $siteId, 'profile_name' => 'Priority Digitizing', 'work_type' => 'digitizing', 'turnaround_code' => 'priority', 'pricing_mode' => 'per_unit', 'per_thousand_rate' => 0.80, 'minimum_charge' => 12.00, 'config_json' => json_encode(['flat_upcharge' => 5])],
