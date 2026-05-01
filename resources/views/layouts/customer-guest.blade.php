@@ -8,29 +8,29 @@
     @php
         $legacyAssetBase = rtrim(url('/'), '/');
         $publicMenu = [
-            ['label' => 'Home', 'href' => 'http://localhost/aplusweb/'],
-            ['label' => 'Services', 'href' => 'http://localhost/aplusweb/services'],
-            ['label' => 'Pricing', 'href' => 'http://localhost/aplusweb/pricing'],
-            ['label' => 'Process', 'href' => 'http://localhost/aplusweb/process'],
-            ['label' => 'Blog', 'href' => 'http://localhost/aplusweb/blog'],
-            ['label' => 'About', 'href' => 'http://localhost/aplusweb/about'],
-            ['label' => 'Contact', 'href' => 'http://localhost/aplusweb/contact'],
+            ['label' => 'Home', 'href' => 'https://aplusdigitising.com/'],
+            ['label' => 'Services', 'href' => 'https://aplusdigitising.com/services'],
+            ['label' => 'Pricing', 'href' => 'https://aplusdigitising.com/pricing'],
+            ['label' => 'Process', 'href' => 'https://aplusdigitising.com/process'],
+            ['label' => 'Blog', 'href' => 'https://aplusdigitising.com/blog'],
+            ['label' => 'About', 'href' => 'https://aplusdigitising.com/about'],
+            ['label' => 'Contact', 'href' => 'https://aplusdigitising.com/contact'],
         ];
         $serviceLinks = [
-            ['label' => 'All Services', 'href' => 'http://localhost/aplusweb/services'],
-            ['label' => '3D Puff Digitizing', 'href' => 'http://localhost/aplusweb/services/3d-puff'],
-            ['label' => 'Vector Art Conversion', 'href' => 'http://localhost/aplusweb/services/vector-art'],
-            ['label' => 'Corporate Embroidery', 'href' => 'http://localhost/aplusweb/services/corporate'],
+            ['label' => 'All Services', 'href' => 'https://aplusdigitising.com/services'],
+            ['label' => '3D Puff Digitizing', 'href' => 'https://aplusdigitising.com/services/3d-puff'],
+            ['label' => 'Vector Art Conversion', 'href' => 'https://aplusdigitising.com/services/vector-art'],
+            ['label' => 'Corporate Embroidery', 'href' => 'https://aplusdigitising.com/services/corporate'],
         ];
         $companyLinks = [
-            ['label' => 'About Us', 'href' => 'http://localhost/aplusweb/about'],
-            ['label' => 'Blog', 'href' => 'http://localhost/aplusweb/blog'],
-            ['label' => 'Pricing', 'href' => 'http://localhost/aplusweb/pricing'],
-            ['label' => 'Our Process', 'href' => 'http://localhost/aplusweb/process'],
-            ['label' => 'Contact', 'href' => 'http://localhost/aplusweb/contact'],
+            ['label' => 'About Us', 'href' => 'https://aplusdigitising.com/about'],
+            ['label' => 'Blog', 'href' => 'https://aplusdigitising.com/blog'],
+            ['label' => 'Pricing', 'href' => 'https://aplusdigitising.com/pricing'],
+            ['label' => 'Our Process', 'href' => 'https://aplusdigitising.com/process'],
+            ['label' => 'Contact', 'href' => 'https://aplusdigitising.com/contact'],
         ];
         $legalLinks = [
-            ['label' => 'Terms & Conditions', 'href' => 'http://localhost/aplusweb/terms'],
+            ['label' => 'Terms & Conditions', 'href' => 'https://aplusdigitising.com/terms'],
         ];
     @endphp
     <style>
@@ -664,7 +664,7 @@
     <div class="site-frame">
         <header class="site-header">
             <div class="container nav-shell">
-                <a class="brand" href="http://localhost/aplusweb/">
+                <a class="brand" href="https://aplusdigitising.com/">
                     <img src="{{ $legacyAssetBase }}/images/logo.png" alt="Aplus Digitizing">
                 </a>
 
@@ -722,7 +722,7 @@
                         <li>support@aplusdigitizing.com</li>
                         <li>24/7 Support Available</li>
                     </ul>
-                    <a href="http://localhost/aplusweb/#quote" class="button" style="margin-top: 14px; min-height: 36px; padding: 8px 18px; font-size: 0.9rem; border-radius: 999px;">Book a Meeting</a>
+                    <a href="https://aplusdigitising.com/#quote" class="button" style="margin-top: 14px; min-height: 36px; padding: 8px 18px; font-size: 0.9rem; border-radius: 999px;">Book a Meeting</a>
                 </div>
             </div>
             <div class="container footer-bottom">
