@@ -74,7 +74,6 @@ class AdminQuickQuoteController extends Controller
     public function deleteComment(OrderComment $comment)
     {
         $orderId = $comment->order_id;
-        abort_unless(Order::query()->find($orderId) !== null, 404);
         $comment->delete();
 
         return redirect()->to(url('/v/view-quick-order-detail.php?oid='.$orderId.'&page=qquote'))
@@ -83,8 +82,6 @@ class AdminQuickQuoteController extends Controller
 
     public function downloadAttachment(Attachment $attachment)
     {
-        abort_unless(Order::query()->find($attachment->order_id) !== null, 404);
-
         $path = $this->attachmentAbsolutePath($attachment);
         abort_unless(is_file($path), 404);
 
@@ -93,8 +90,6 @@ class AdminQuickQuoteController extends Controller
 
     public function previewAttachment(Request $request, Attachment $attachment)
     {
-        abort_unless(Order::query()->find($attachment->order_id) !== null, 404);
-
         $path = $this->attachmentAbsolutePath($attachment);
         $displayName = (string) ($attachment->file_name_with_order_id ?: $attachment->file_name ?: basename($path));
         abort_unless(AttachmentPreview::isSupported($displayName), 404);
@@ -119,8 +114,6 @@ class AdminQuickQuoteController extends Controller
 
     public function deleteAttachment(Attachment $attachment)
     {
-        abort_unless(Order::query()->find($attachment->order_id) !== null, 404);
-
         $path = $this->attachmentAbsolutePath($attachment);
         if (is_file($path)) {
             @unlink($path);
