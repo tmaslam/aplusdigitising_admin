@@ -48,6 +48,12 @@ if (extension_loaded('mysqli')) {
     $mysqli = new mysqli($host, $username, $password, $database, $port);
     if (! $mysqli->connect_error) {
         $sql = file_get_contents($sqlFile);
+        // mysqli_multi_query does not understand DELIMITER - strip stored procedure section
+        $sql = preg_replace(
+            '/DROP PROCEDURE IF EXISTS add_index_if_missing;.*?DROP PROCEDURE IF EXISTS add_index_if_missing;/s',
+            '',
+            $sql
+        );
         if ($mysqli->multi_query($sql)) {
             // Drain all results
             do {
