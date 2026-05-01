@@ -480,6 +480,18 @@
             box-shadow: 0 12px 24px rgba(242, 101, 34, 0.18);
         }
 
+        /* New Order = green (matches admin team Unlock button) */
+        .customer-action.primary.new-order {
+            background: linear-gradient(135deg, #22C55E, #16A34A);
+            box-shadow: 0 12px 24px rgba(34, 197, 94, 0.18);
+        }
+
+        /* Add Funds = blue */
+        .customer-action.primary.add-funds {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+        }
+
         .customer-action.secondary {
             background: rgba(242, 101, 34, 0.08);
             color: var(--brand-dark);
@@ -1978,7 +1990,7 @@
                         </div>
                         <div class="customer-nav-actions">
                             <details class="customer-action-menu">
-                                <summary class="customer-action primary">New Order</summary>
+                                <summary class="customer-action primary new-order">New Order</summary>
                                 <div class="customer-action-list">
                                     @foreach ($customerStartLinks as $item)
                                         <a href="{{ $item['href'] }}">
@@ -2006,7 +2018,7 @@
                                 $testFundUrl = 'https://buy.stripe.com/test_00w4gA5vO8bW19Sb9B6Ri05?prefilled_promo_code=AFAPLUS150';
                             @endphp
                             <details class="customer-action-menu">
-                                <summary class="customer-action primary">Add Funds</summary>
+                                <summary class="customer-action primary add-funds">Add Funds</summary>
                                 <div class="customer-action-list">
                                     @foreach ($dashFundOptions as $option)
                                         <a href="{{ $option['url'] }}&client_reference_id=user_{{ $dashUserId }}&prefilled_email={{ $dashEmail }}" target="_blank" rel="noopener">
