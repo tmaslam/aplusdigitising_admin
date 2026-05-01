@@ -1998,10 +1998,6 @@
                                             <span>{{ $item['description'] }}</span>
                                         </a>
                                     @endforeach
-                                    <a href="https://buy.stripe.com/test_aFafZicYgfEo5q8gtV6Ri04" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:2px;padding:10px 14px;text-decoration:none;color:inherit;border-top:1px solid rgba(0,0,0,0.06);">
-                                        <strong>Test Transaction</strong>
-                                        <span style="font-size:0.75rem; color:#64748b; font-weight:600;">Stripe test checkout</span>
-                                    </a>
                                 </div>
                             </details>
                             @php
@@ -2015,7 +2011,6 @@
                                     ['label' => '$100 → $95', 'save' => 'Save 5%', 'url' => 'https://buy.stripe.com/fZu7sM8I09g03i04Ld6Ri0g?prefilled_promo_code=AFAPLUS5'],
                                 ];
                                 $customFundUrl = 'https://buy.stripe.com/3cs6pT2hTc6sa8E5kl';
-                                $testFundUrl = 'https://buy.stripe.com/test_00w4gA5vO8bW19Sb9B6Ri05?prefilled_promo_code=AFAPLUS150';
                             @endphp
                             <details class="customer-action-menu">
                                 <summary class="customer-action primary add-funds">Add Funds</summary>
@@ -2029,10 +2024,6 @@
                                     <a href="{{ $customFundUrl }}?client_reference_id=user_{{ $dashUserId }}&prefilled_email={{ $dashEmail }}" target="_blank" rel="noopener">
                                         <strong>Custom Amount</strong>
                                         <span style="color:{{ $siteContext->cssPrimaryColor() }}">No savings</span>
-                                    </a>
-                                    <a href="{{ $testFundUrl }}&client_reference_id=user_{{ $dashUserId }}&prefilled_email={{ $dashEmail }}" target="_blank" rel="noopener" style="border-top:1px solid rgba(0,0,0,0.06);">
-                                        <strong>Test Transaction</strong>
-                                        <span>Stripe test checkout</span>
                                     </a>
                                 </div>
                             </details>
@@ -2077,10 +2068,6 @@
                                             </button>
                                         </form>
                                     @endforeach
-                                    <a href="https://buy.stripe.com/test_aFafZicYgfEo5q8gtV6Ri04" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:2px;padding:10px 14px;text-decoration:none;color:inherit;border-top:1px solid rgba(0,0,0,0.06);">
-                                        <strong>Test Transaction</strong>
-                                        <span style="font-size:0.75rem; color:#64748b; font-weight:600;">Stripe test checkout</span>
-                                    </a>
                                 </div>
                             </details>
                         </div>
