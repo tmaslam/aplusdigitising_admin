@@ -68,10 +68,9 @@ if (!isset($siteContext)) {
         }
         .sidebar {
             padding: 28px 20px;
-            border-right: 1px solid rgba(0,0,0,0.08);
-            background: #e2e8f0;
+            border-right: 1px solid #E2E8F0;
+            background: #ffffff;
             color: #475569;
-            backdrop-filter: blur(16px);
             position: sticky;
             top: 0;
             align-self: start;
@@ -106,19 +105,19 @@ if (!isset($siteContext)) {
         .brand {
             display: block;
             padding: 18px 18px 22px;
-            border-radius: 24px;
-            background-color: #f1f5f9;
-            background-image: none;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             position: sticky;
             top: -28px;
             z-index: 10;
             cursor: pointer;
-            transition: background-image 0.2s ease, box-shadow 0.2s ease;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
         .brand:hover {
-            background-image: linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
         }
         .brand-logo { display: block; width: 100%; max-width: 160px; height: auto; margin: 0 auto 10px; }
         .brand-label { margin: 0; font-size: 1.3rem; line-height: 1; letter-spacing: 0.02em; color: #000000; font-weight: 800; text-align: center; }
@@ -128,7 +127,7 @@ if (!isset($siteContext)) {
             font-size: 0.72rem;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: #64748b;
+            color: #94A3B8;
             font-weight: 800;
         }
         .section-title-toggle {
@@ -141,12 +140,12 @@ if (!isset($siteContext)) {
             font-size: 0.72rem;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: #64748b;
+            color: #94A3B8;
             font-weight: 800;
             padding: 4px 0;
             transition: color 0.2s ease;
         }
-        .section-title-toggle:hover { color: #334155; }
+        .section-title-toggle:hover { color: #F26522; }
         .section-title-toggle::after {
             content: '▸';
             font-size: 0.9rem;
@@ -168,10 +167,15 @@ if (!isset($siteContext)) {
             opacity: 1;
         }
         .nav-card {
-            background: rgba(0,0,0,0.04);
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 20px;
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 14px;
             padding: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: box-shadow 0.2s ease;
+        }
+        .nav-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
         .nav-card a {
             display: flex;
@@ -205,10 +209,10 @@ if (!isset($siteContext)) {
             gap: 18px;
             align-items: center;
             padding: 18px 22px;
-            background: #e2e8f0;
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 24px;
-            box-shadow: var(--shadow);
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             position: sticky;
             top: 0;
             z-index: 30;
@@ -251,6 +255,10 @@ if (!isset($siteContext)) {
             border-radius: 14px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             overflow: hidden;
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
         .card-body { padding: clamp(16px, 2vw, 22px); }
         .card-body > h3,
@@ -321,9 +329,9 @@ if (!isset($siteContext)) {
             transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
         }
         .stat-link:hover .stat {
-            transform: translateY(-2px);
-            border-color: rgba(100, 116, 139, 0.28);
-            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px);
+            border-color: #CBD5E1;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
         }
         .stat {
             padding: 18px 18px 18px 22px;
@@ -418,7 +426,8 @@ if (!isset($siteContext)) {
             background: rgba(255,255,255,0.34);
         }
         tbody tr:hover td {
-            background: rgba(100, 116, 139, 0.06);
+            background: rgba(242, 101, 34, 0.04);
+            transition: background 0.15s ease;
         }
         .badge {
             display: inline-flex;
@@ -724,12 +733,12 @@ if (!isset($siteContext)) {
             .stats { grid-template-columns: 1fr; }
             .workflow-focus-grid { grid-template-columns: 1fr; }
             .main { padding: 14px; }
-            .topbar { padding: 16px; border-radius: 20px; }
+            .topbar { padding: 16px; border-radius: 14px; }
             .topbar h2 { font-size: 1.45rem; }
             .topbar p { font-size: 0.95rem; }
             .section-head h3 { font-size: 1.12rem; }
             .stat strong { font-size: 1.28rem; }
-            .card { border-radius: 22px; }
+            .card { border-radius: 14px; }
             .card-body { padding: 16px; }
             .field {
                 flex-basis: 100%;
