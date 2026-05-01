@@ -32,9 +32,16 @@ class SitePricing
         }
 
         $minimum = self::minimumCharge($profile, $turnaroundCode, $rate, $hasCustomerOverride);
+        $maximumUnits = self::maximumUnits($customer, $profile);
         $stitchCount = (float) $stitches;
 
-        $basePrice = round(max($minimum, $stitchCount * ($rate / 1000)), 2);
+        if ($maximumUnits > 0) {
+            $billable = min($stitchCount, $maximumUnits);
+            $amount = $billable * ($rate / 1000);
+            $basePrice = round(max($minimum, $amount), 2);
+        } else {
+            $basePrice = round(max($minimum, $stitchCount * ($rate / 1000)), 2);
+        }
 
         return $basePrice + self::flatUpchargeFromProfile($profile);
     }
@@ -454,6 +461,19 @@ class SitePricing
         return is_array($config) && isset($config['minimum_hours']) && is_numeric($config['minimum_hours'])
             ? (int) $config['minimum_hours']
             : 0;
+    }
+
+    private static function maximumUnits(?AdminUser $customer, ?SitePricingProfile $profile): float
+    {
+        $customerCap = trim((string) ($customer?->max_num_stiches ?? ''));
+
+        if ($customerCap !== '' && is_numeric($customerCap) && (float) $customerCap > 0) {
+            return (float) $customerCap;
+        }
+
+        $includedUnits = (float) ($profile?->included_units ?: 0);
+
+        return $includedUnits > 0 ? $includedUnits : 0.0;
     }
 
     private static function timeParts(string $totalHours): array
