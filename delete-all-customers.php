@@ -132,33 +132,21 @@ try {
         echo "Deleted {$deleted} approval queue record(s).\n";
     }
 
-    // Password reset tokens
-    if (Schema::hasTable('customer_password_reset_tokens')) {
-        $deleted = DB::table('customer_password_reset_tokens')->whereIn('user_id', $customerIds)->delete();
-        echo "Deleted {$deleted} password reset token(s).\n";
-    }
-
-    if (Schema::hasTable('admin_password_reset_tokens')) {
-        $deleted = DB::table('admin_password_reset_tokens')->whereIn('user_id', $customerIds)->delete();
-        echo "Deleted {$deleted} admin password reset token(s).\n";
-    }
-
     // Remember login tokens
     if (Schema::hasTable('customer_remember_logins')) {
         $deleted = DB::table('customer_remember_logins')->whereIn('user_id', $customerIds)->delete();
         echo "Deleted {$deleted} remember login token(s).\n";
     }
 
-    // Login history / security audit related to customers
-    if (Schema::hasTable('login_history')) {
+    // Login history / security audit related to customers (skip if columns don't exist)
+    if (Schema::hasTable('login_history') && Schema::hasColumn('login_history', 'user_id')) {
         $deleted = DB::table('login_history')->whereIn('user_id', $customerIds)->delete();
         echo "Deleted {$deleted} login history record(s).\n";
     }
 
-    if (Schema::hasTable('security_audit_events')) {
+    if (Schema::hasTable('security_audit_events') && Schema::hasColumn('security_audit_events', 'user_id')) {
         $deleted = DB::table('security_audit_events')
             ->whereIn('user_id', $customerIds)
-            ->orWhereIn('target_user_id', $customerIds)
             ->delete();
         echo "Deleted {$deleted} security audit record(s).\n";
     }
