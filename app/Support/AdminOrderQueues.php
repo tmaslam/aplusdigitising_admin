@@ -32,7 +32,7 @@ class AdminOrderQueues
             'count_key' => 'disapproved_orders',
         ],
         'designer-orders' => [
-            'label' => 'Designer Orders',
+            'label' => 'Assigned Orders',
             'category' => 'designer_orders',
             'group' => 'orders',
             'summary' => 'Orders currently assigned and in production.',

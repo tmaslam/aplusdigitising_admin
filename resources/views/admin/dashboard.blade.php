@@ -10,7 +10,7 @@
         $quoteQueues = \App\Support\AdminOrderQueues::navigation($navCounts, 'quotes');
         $workflowCards = [
             ['label' => 'New Orders', 'count' => $navCounts['new_orders'], 'url' => \App\Support\AdminOrderQueues::url('new-orders'), 'color' => 'stat-blue'],
-            ['label' => 'Designer Orders', 'count' => $navCounts['designer_orders'], 'url' => \App\Support\AdminOrderQueues::url('designer-orders'), 'color' => 'stat-blue'],
+            ['label' => 'Assigned Orders', 'count' => $navCounts['designer_orders'], 'url' => \App\Support\AdminOrderQueues::url('designer-orders'), 'color' => 'stat-blue'],
             ['label' => 'Designer Completed', 'count' => $navCounts['designer_completed_orders'], 'url' => \App\Support\AdminOrderQueues::url('designer-completed'), 'color' => 'stat-green'],
             ['label' => 'Disapproved Orders', 'count' => $navCounts['disapproved_orders'], 'url' => \App\Support\AdminOrderQueues::url('disapproved-orders'), 'color' => 'stat-red'],
             ['label' => 'New Quotes', 'count' => $navCounts['new_quotes'], 'url' => \App\Support\AdminOrderQueues::url('new-quotes'), 'color' => 'stat-blue'],
@@ -200,7 +200,7 @@
                         <span class="muted">Assigned Orders</span>
                         <strong>{{ $navCounts['designer_orders'] }}</strong>
                         <div class="muted" style="margin-top:8px;">Orders currently sitting with production.</div>
-                        <div class="muted" style="margin-top:10px;font-weight:600;">View: Designer Orders</div>
+                        <div class="muted" style="margin-top:10px;font-weight:600;">View: Assigned Orders</div>
                     </article>
                 </a>
                 <a class="stat-link" href="{{ \App\Support\AdminOrderQueues::url('assigned-quotes') }}">

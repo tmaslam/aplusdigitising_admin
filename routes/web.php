@@ -188,7 +188,7 @@ Route::middleware('admin.auth')->group(function () use ($adminPrefix) {
     Route::get('/v/show-all-orders.php', [AdminOrdersController::class, 'compatibilityListRedirect'])->defaults('page', 'All Orders');
     Route::get('/v/new-orders.php', [AdminOrdersController::class, 'compatibilityListRedirect'])->defaults('page', 'New Orders');
     Route::get('/v/disapproved-orders.php', [AdminOrdersController::class, 'compatibilityListRedirect'])->defaults('page', 'Disapproved Orders');
-    Route::get('/v/assigned-orders.php', [AdminOrdersController::class, 'compatibilityListRedirect'])->defaults('page', 'Designer Orders');
+    Route::get('/v/assigned-orders.php', [AdminOrdersController::class, 'compatibilityListRedirect'])->defaults('page', 'Assigned Orders');
     Route::get('/v/designer-completed-orders.php', [AdminOrdersController::class, 'compatibilityListRedirect'])->defaults('page', 'Designer Completed');
     Route::get('/v/approval-waiting-order.php', [AdminOrdersController::class, 'compatibilityListRedirect'])->defaults('page', 'Customer Approval Waiting');
     Route::get('/v/new-quotes.php', [AdminOrdersController::class, 'compatibilityListRedirect'])->defaults('page', 'New Quotes');
