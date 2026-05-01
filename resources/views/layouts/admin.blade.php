@@ -1,3 +1,23 @@
+@php
+if (!isset($siteContext)) {
+    try {
+        $siteContext = app(\App\Support\SiteContext::class);
+    } catch (\Throwable $e) {
+        $siteContext = new \App\Support\SiteContext(
+            id: null,
+            legacyKey: config('sites.primary_legacy_key', '1dollar'),
+            slug: 'admin',
+            name: 'Admin Portal',
+            brandName: 'Admin Portal',
+            host: parse_url((string) config('app.url', 'http://localhost'), PHP_URL_HOST) ?: 'localhost',
+            supportEmail: (string) config('mail.from.address', ''),
+            fromEmail: (string) config('mail.from.address', ''),
+            websiteAddress: (string) config('app.url', ''),
+            isPrimary: true,
+        );
+    }
+}
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
