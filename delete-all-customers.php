@@ -33,7 +33,7 @@ DB::beginTransaction();
 
 try {
     // 1. Get all customer IDs (usre_type_id = 1)
-    $customerIds = DB::table('admin_users')
+    $customerIds = DB::table('users')
         ->where('usre_type_id', 1)
         ->pluck('user_id')
         ->toArray();
@@ -55,7 +55,7 @@ try {
     echo "Found " . count($orderIds) . " order(s) to delete.\n";
 
     // 3. Delete attachment files from disk
-    $attachments = DB::table('attachments')
+    $attachments = DB::table('attach_files')
         ->whereIn('order_id', $orderIds)
         ->get(['id', 'file_name_with_date', 'file_name_with_order_id']);
 
@@ -77,11 +77,11 @@ try {
     // 4. Delete database records (child tables first)
 
     // Attachments metadata
-    $deleted = DB::table('attachments')->whereIn('order_id', $orderIds)->delete();
+    $deleted = DB::table('attach_files')->whereIn('order_id', $orderIds)->delete();
     echo "Deleted {$deleted} attachment record(s).\n";
 
     // Order comments
-    $deleted = DB::table('order_comments')->whereIn('order_id', $orderIds)->delete();
+    $deleted = DB::table('comments')->whereIn('order_id', $orderIds)->delete();
     echo "Deleted {$deleted} order comment(s).\n";
 
     // Team comments
@@ -109,8 +109,8 @@ try {
     }
 
     // Advance payments
-    if (Schema::hasTable('advance_payments')) {
-        $deleted = DB::table('advance_payments')->whereIn('order_id', $orderIds)->delete();
+    if (Schema::hasTable('advancepayment')) {
+        $deleted = DB::table('advancepayment')->whereIn('order_id', $orderIds)->delete();
         echo "Deleted {$deleted} advance payment record(s).\n";
     }
 
@@ -155,8 +155,8 @@ try {
         echo "Deleted {$deleted} login history record(s).\n";
     }
 
-    if (Schema::hasTable('security_audits')) {
-        $deleted = DB::table('security_audits')
+    if (Schema::hasTable('security_audit_events')) {
+        $deleted = DB::table('security_audit_events')
             ->whereIn('user_id', $customerIds)
             ->orWhereIn('target_user_id', $customerIds)
             ->delete();
@@ -168,7 +168,7 @@ try {
     echo "Deleted {$deleted} order(s).\n";
 
     // Finally, delete customers
-    $deleted = DB::table('admin_users')->whereIn('user_id', $customerIds)->delete();
+    $deleted = DB::table('users')->whereIn('user_id', $customerIds)->delete();
     echo "Deleted {$deleted} customer account(s).\n";
 
     DB::commit();
