@@ -36,7 +36,7 @@ return [
     ],
 
     'twocheckout' => [
-        'seller_id' => env('TWOCHECKOUT_SELLER_ID', env('TWOCO_SELLER_ID', '1359240')),
+        'seller_id' => env('TWOCHECKOUT_SELLER_ID', env('TWOCO_SELLER_ID', '')),
         'secret_word' => env('TWOCHECKOUT_SECRET_WORD', ''),
         'purchase_url' => env('TWOCHECKOUT_PURCHASE_URL', 'https://www.2checkout.com/2co/buyer/purchase'),
         'simulation_enabled' => filter_var(env('TWOCHECKOUT_SIMULATION_ENABLED', false), FILTER_VALIDATE_BOOL),

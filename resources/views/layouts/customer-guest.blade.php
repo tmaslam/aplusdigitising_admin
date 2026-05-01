@@ -963,9 +963,14 @@
                         return;
                     }
 
+                    function escapeHtml(str) {
+                        var div = document.createElement('div');
+                        div.textContent = str;
+                        return div.innerHTML;
+                    }
                     results.innerHTML = matches.map(function (country) {
                         var selected = field.value === country ? ' is-selected' : '';
-                        return '<button type="button" class="country-result' + selected + '" data-country-value="' + country.replace(/"/g, '&quot;') + '">' + country + '</button>';
+                        return '<button type="button" class="country-result' + selected + '" data-country-value="' + escapeHtml(country) + '">' + escapeHtml(country) + '</button>';
                     }).join('');
                     results.hidden = false;
                 }

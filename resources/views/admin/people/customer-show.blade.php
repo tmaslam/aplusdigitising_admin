@@ -65,7 +65,7 @@
                     <label style="display:block;font-size:0.84rem;font-weight:700;margin-bottom:6px;">New Password</label>
                     <input type="text" name="new_password" required minlength="6" maxlength="100" placeholder="Enter new password" style="width:100%;">
                 </div>
-                <button type="submit" onclick="return confirm('Reset the password for {{ addslashes($customer->display_name) }}?')">Reset Password</button>
+                <button type="submit" onclick="return confirm('Reset the password for {{ htmlspecialchars($customer->display_name, ENT_QUOTES, 'UTF-8') }}?')">Reset Password</button>
             </form>
             @error('new_password')
                 <div style="margin-top:8px;color:#9d2d17;font-size:0.88rem;">{{ $message }}</div>

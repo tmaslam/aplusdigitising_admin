@@ -344,6 +344,8 @@ class AdminOrderDetailController extends Controller
         $page = $this->normalizePage((string) $request->query('page', 'order'));
         $back = (string) $request->query('back', '');
 
+        abort_unless(Order::query()->find($comment->order_id) !== null, 404);
+
         $comment->delete();
 
         return $this->redirectToDetail($orderId, $page, $back)
@@ -426,6 +428,8 @@ class AdminOrderDetailController extends Controller
 
     public function downloadAttachment(Attachment $attachment)
     {
+        abort_unless(Order::query()->find($attachment->order_id) !== null, 404);
+
         $path = $this->attachmentAbsolutePath($attachment);
         abort_unless(is_file($path), 404);
 
@@ -434,6 +438,8 @@ class AdminOrderDetailController extends Controller
 
     public function previewAttachment(Request $request, Attachment $attachment)
     {
+        abort_unless(Order::query()->find($attachment->order_id) !== null, 404);
+
         $path = $this->attachmentAbsolutePath($attachment);
         $displayName = (string) ($attachment->file_name_with_order_id ?: $attachment->file_name ?: basename($path));
         abort_unless(AttachmentPreview::isSupported($displayName), 404);
@@ -462,6 +468,8 @@ class AdminOrderDetailController extends Controller
 
     public function deleteAttachment(Request $request, Attachment $attachment)
     {
+        abort_unless(Order::query()->find($attachment->order_id) !== null, 404);
+
         $orderId = (int) $request->query('oid', $attachment->order_id);
         $page = $this->normalizePage((string) $request->query('page', 'order'));
         $back = (string) $request->query('back', '');

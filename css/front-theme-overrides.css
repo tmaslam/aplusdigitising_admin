@@ -187,10 +187,21 @@ body.front-theme input[type="submit"] {
 
 body.front-theme .button.primary,
 body.front-theme button.primary,
-body.front-theme .customer-action.primary,
 body.front-theme .actions button,
 body.front-theme input[type="submit"] {
     background: linear-gradient(135deg, #F26522 0%, #D94E0F 100%) !important;
+    color: #ffffff !important;
+}
+
+/* New Order button = green (matches admin team Unlock button) */
+body.front-theme .customer-nav-actions > .customer-action-menu:nth-child(1) .customer-action.primary {
+    background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%) !important;
+    color: #ffffff !important;
+}
+
+/* Add Funds button = blue */
+body.front-theme .customer-nav-actions > .customer-action-menu:nth-child(2) .customer-action.primary {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
     color: #ffffff !important;
 }
 
@@ -749,6 +760,9 @@ body.front-theme .marketing-testimonial-card,
 body.front-theme .marketing-faq-item,
 body.front-theme .activity-card,
 body.front-theme .action-card,
+body.front-theme .portal-stat,
+body.front-theme .info-card,
+body.front-theme .metric,
 body.front-theme .customer-nav,
 body.front-theme .detail-card,
 body.front-theme .list-card,
@@ -757,7 +771,17 @@ body.front-theme .panel {
     border-radius: 24px !important;
     background: rgba(255,255,255,0.96) !important;
     border: 1px solid rgba(148, 163, 184, 0.16) !important;
-    box-shadow: 0 22px 48px rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+body.front-theme .portal-stat:hover,
+body.front-theme .action-card:hover,
+body.front-theme .info-card:hover,
+body.front-theme .activity-card:hover,
+body.front-theme .metric:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-2px);
 }
 
 body.front-theme .section-card,
