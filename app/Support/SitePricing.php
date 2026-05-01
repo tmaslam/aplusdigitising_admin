@@ -148,6 +148,7 @@ class SitePricing
                 $profile = self::profileFor($site, [$normalizedWorkType], $turnaroundCode);
                 $rate = self::hourlyRateFromProfile($profile);
                 $upcharge = self::flatUpchargeFromProfile($profile);
+                $minHours = self::minimumHoursFromProfile($profile);
 
                 if ($rate === null) {
                     $schedule[$turnaroundCode] = [
@@ -159,6 +160,9 @@ class SitePricing
                 }
 
                 $description = '$'.number_format($rate, 2).' / hour';
+                if ($minHours > 0) {
+                    $description .= ' (Min. '.$minHours.' hours)';
+                }
                 if ($upcharge > 0) {
                     $description .= ' (+$'.number_format($upcharge, 2).' flat fee)';
                 }
@@ -220,7 +224,9 @@ class SitePricing
         }
 
         $hourlyRate = self::hourlyRateFromProfile($profile);
-        $basePrice = round(($hours * (float) $hourlyRate) + ($minutes * ((float) $hourlyRate / 60)), 2);
+        $minHours = self::minimumHoursFromProfile($profile);
+        $effectiveHours = max($hours, $minHours);
+        $basePrice = round(($effectiveHours * (float) $hourlyRate) + ($minutes * ((float) $hourlyRate / 60)), 2);
 
         return $basePrice + self::flatUpchargeFromProfile($profile);
     }
@@ -444,6 +450,19 @@ class SitePricing
         return is_array($config) && isset($config['flat_upcharge']) && is_numeric($config['flat_upcharge'])
             ? (float) $config['flat_upcharge']
             : 0.0;
+    }
+
+    private static function minimumHoursFromProfile(?SitePricingProfile $profile): int
+    {
+        if (! $profile) {
+            return 0;
+        }
+
+        $config = json_decode((string) ($profile->config_json ?? ''), true);
+
+        return is_array($config) && isset($config['minimum_hours']) && is_numeric($config['minimum_hours'])
+            ? (int) $config['minimum_hours']
+            : 0;
     }
 
     private static function maximumUnits(?AdminUser $customer, ?SitePricingProfile $profile): float
