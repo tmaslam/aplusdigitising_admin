@@ -6,115 +6,136 @@ $app = require_once __DIR__ . '/bootstrap/app.php';
 $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use App\Support\PasswordManager;
+use App\Support\CustomerBalance;
 
 echo "=== CREATE CUSTOMER ===\n\n";
 
-// Customer data from old site
+// Customer data from screenshot
 $customerData = [
-    'user_name' => 'elizabeth_monnin',
-    'user_email' => 'dream4catcher61@gmail.com',
-    'user_password' => Hash::make('12Littlegirl'),
-    'first_name' => 'elizabeth',
-    'last_name' => 'monnin',
-    'user_country' => 'United States of America',
-    'user_city' => 'anna',
-    'user_zip' => '45302',
-    'user_phone' => '937-638-9556',
-    'user_address' => '8525 hoying rd',
-    'company' => 'triplemllc',
-    'company_type' => 'Embroiders',
-    'usre_type_id' => 1,
-    'is_active' => 1,
-    'website' => 'aplus',
-    'date_added' => now()->format('Y-m-d H:i:s'),
-    'created_at' => now(),
-    'updated_at' => now(),
+    'user_name'     => 'elizabeth_monnin',
+    'user_email'    => 'dream4catcher61@gmail.com',
+    'first_name'    => 'elizabeth',
+    'last_name'     => 'monnin',
+    'company'       => 'triplemllc',
+    'company_type'  => 'Embroiders',
+    'company_address' => '8525 hoying rd',
+    'zip_code'      => '45302',
+    'user_city'     => 'anna',
+    'user_country'  => 'United States of America',
+    'user_phone'    => '937-638-9556',
+    'contact_person' => 'elizabeth monnin',
+    'usre_type_id'  => 1, // customer
+    'is_active'     => 1,
+    'website'       => '1dollar',
+    'site_id'       => 1,
+    'date_added'    => now()->format('Y-m-d H:i:s'),
 ];
 
-$topupAmount = 20.76;
+$plainPassword = '12Littlegirl';
+$topupAmount   = 20.76;
 
 echo "Creating customer: {$customerData['first_name']} {$customerData['last_name']}\n";
 echo "Email: {$customerData['user_email']}\n";
-echo "Password: 12Littlegirl (hashed)\n";
 echo "TopUp Balance: \${$topupAmount}\n\n";
 
 // Check if customer already exists
 $existing = DB::table('users')->where('user_email', $customerData['user_email'])->first();
 if ($existing) {
     echo "WARNING: Customer with email {$customerData['user_email']} already exists (ID: {$existing->user_id})\n";
-    echo "Type 'UPDATE' to update existing account, or 'SKIP' to cancel: ";
-    $handle = fopen('php://stdin', 'r');
-    $confirm = trim(fgets($handle));
-    if ($confirm !== 'UPDATE') {
-        echo "Cancelled.\n";
-        exit(0);
-    }
-    
-    // Update existing customer
-    DB::table('users')->where('user_id', $existing->user_id)->update($customerData);
+    echo "Updating existing account...\n";
     $customerId = $existing->user_id;
+} else {
+    $customerId = null;
+}
+
+// Build password payload
+$passwordPayload = PasswordManager::payload($plainPassword);
+
+// Build full insert/update array with all required columns
+$insertData = array_merge($customerData, $passwordPayload, [
+    'security_key'    => Str::random(40),
+    'alternate_email' => '',
+    'user_fax'        => '',
+    'normal_fee'      => 1.00,
+    'middle_fee'      => 1.50,
+    'urgent_fee'      => 1.50,
+    'super_fee'       => 1.50,
+    'payment_terms'   => 7,
+    'max_num_stiches' => 0,
+    'customer_approval_limit' => 25.00,
+    'single_approval_limit'   => 15.00,
+    'customer_pending_order_limit' => 3,
+    'userip_addrs'    => '',
+    'digitzing_format' => '',
+    'vertor_format'    => '',
+    'topup'            => '',
+    'exist_customer'   => '0',
+    'user_term'        => '',
+    'package_type'     => '',
+    'real_user'        => '',
+    'ref_code'         => '',
+    'ref_code_other'   => '',
+    'register_by'      => '',
+]);
+
+if ($customerId) {
+    DB::table('users')->where('user_id', $customerId)->update($insertData);
     echo "Updated existing customer ID: {$customerId}\n";
 } else {
-    // Create new customer
-    $customerId = DB::table('users')->insertGetId($customerData);
+    $customerId = DB::table('users')->insertGetId($insertData);
     echo "Created new customer ID: {$customerId}\n";
 }
 
-// Add topup balance
-if ($topupAmount > 0) {
-    // Check if topup already exists for this customer
-    $existingTopup = DB::table('customer_topups')
-        ->where('user_id', $customerId)
-        ->where('amount', $topupAmount)
-        ->first();
-    
-    if (!$existingTopup) {
-        DB::table('customer_topups')->insert([
-            'user_id' => $customerId,
-            'amount' => $topupAmount,
-            'status' => 'completed',
-            'payment_method' => 'migration',
-            'reference' => 'manual_migration',
-            'completed_at' => now(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        echo "Added \${$topupAmount} topup to customer balance.\n";
-    } else {
-        echo "Topup of \${$topupAmount} already exists.\n";
+// Add balance via customer_credit_ledger (the proper way the app tracks balance)
+if ($topupAmount > 0 && Schema::hasTable('customer_credit_ledger')) {
+    $ledgerData = [
+        'user_id'      => $customerId,
+        'website'      => '1dollar',
+        'entry_type'   => 'topup',
+        'amount'       => $topupAmount,
+        'reference_no' => 'migration:' . $customerId . ':' . time(),
+        'notes'        => 'Balance migrated from old website',
+        'created_by'   => 'admin',
+        'date_added'   => now()->format('Y-m-d H:i:s'),
+        'end_date'     => null,
+        'deleted_by'   => null,
+    ];
+
+    if (Schema::hasColumn('customer_credit_ledger', 'site_id')) {
+        $ledgerData['site_id'] = 1;
     }
+
+    DB::table('customer_credit_ledger')->insert($ledgerData);
+    echo "Added \${$topupAmount} to customer_credit_ledger.\n";
 }
 
-// Also add to customerpayments table if needed for balance calculation
-$existingPayment = DB::table('customerpayments')
-    ->where('user_id', $customerId)
-    ->where('amount', $topupAmount)
-    ->first();
-
-if (!$existingPayment) {
-    DB::table('customerpayments')->insert([
-        'user_id' => $customerId,
-        'amount' => $topupAmount,
-        'payment_type' => 'topup',
-        'status' => 'completed',
-        'description' => 'Balance migrated from old website',
+// Also record in customer_topups for audit trail
+if ($topupAmount > 0 && Schema::hasTable('customer_topups')) {
+    $topupData = [
+        'user_id'    => $customerId,
+        'site_id'    => 1,
+        'website'    => '1dollar',
+        'amount'     => $topupAmount,
+        'status'     => 'completed',
+        'completed_at' => now(),
         'created_at' => now(),
         'updated_at' => now(),
-    ]);
-    echo "Added \${$topupAmount} to customerpayments.\n";
-}
+    ];
 
-// Update any customer balance field in users table if it exists
-if (Schema::hasColumn('users', 'available_balance')) {
-    DB::table('users')->where('user_id', $customerId)->update([
-        'available_balance' => $topupAmount,
-    ]);
+    if (Schema::hasColumn('customer_topups', 'plan_option')) {
+        $topupData['plan_option'] = null;
+    }
+
+    DB::table('customer_topups')->insert($topupData);
+    echo "Added \${$topupAmount} to customer_topups.\n";
 }
 
 echo "\n=== CUSTOMER CREATED ===\n";
 echo "ID: {$customerId}\n";
 echo "Login: {$customerData['user_email']}\n";
-echo "Password: 12Littlegirl\n";
+echo "Password: {$plainPassword}\n";
 echo "Balance: \${$topupAmount}\n";
-echo "\nTest login at: https://user.aplusdigitising.com/login\n";
+echo "\nTest login at: https://aplusdigitising.com/login\n";
