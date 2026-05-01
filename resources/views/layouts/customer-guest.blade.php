@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', $siteContext->displayLabel())</title>
-    <link rel="icon" type="image/png" href="/images/favicon.png?v=2">
+    <link rel="icon" type="image/png" href="{{ $siteContext->faviconPath() }}?v=2">
     @php
         $legacyAssetBase = rtrim(url('/'), '/');
         $publicMenu = [
@@ -41,8 +41,8 @@
             --surface-soft: #FFF8F0;
             --ink: #1f252d;
             --muted: #5e6772;
-            --brand: #F26522;
-            --brand-dark: #D94E0F;
+            --brand: {{ $siteContext->cssPrimaryColor() }};
+            --brand-dark: {{ $siteContext->cssPrimaryDarkColor() }};
             --line: #E8E0D8;
             --shadow: 0 18px 38px rgba(17, 31, 45, 0.12);
             --footer: #111821;
@@ -665,7 +665,7 @@
         <header class="site-header">
             <div class="container nav-shell">
                 <a class="brand" href="https://aplusdigitising.com/">
-                    <img src="{{ $legacyAssetBase }}/images/logo.png" alt="Aplus Digitizing">
+                    <img src="{{ $legacyAssetBase }}{{ $siteContext->logoPath() }}" alt="{{ $siteContext->displayLabel() }}">
                 </a>
 
                 <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="public-navigation">Menu</button>

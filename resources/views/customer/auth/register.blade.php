@@ -1,6 +1,6 @@
 @extends('layouts.customer-guest')
 
-@section('title', 'A Plus Digitizing Sign Up')
+@section('title', $siteContext->displayLabel() . ' Sign Up')
 
 @section('footer')
 @endsection

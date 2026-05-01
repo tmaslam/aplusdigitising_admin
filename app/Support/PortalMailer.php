@@ -109,8 +109,25 @@ class PortalMailer
         }
     }
 
+    private static function siteContext(): ?SiteContext
+    {
+        try {
+            return app(SiteContext::class);
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
     private static function resolveFromAddress(): ?string
     {
+        $site = self::siteContext();
+        if ($site && $site->fromEmail !== '') {
+            $recipient = self::normalizeRecipient($site->fromEmail);
+            if ($recipient !== null) {
+                return $recipient;
+            }
+        }
+
         $candidates = [
             (string) config('mail.site_from.address', ''),
             (string) config('mail.from.address', ''),
@@ -130,6 +147,11 @@ class PortalMailer
 
     private static function resolveFromName(): string
     {
+        $site = self::siteContext();
+        if ($site && $site->brandName !== '') {
+            return $site->brandName;
+        }
+
         $candidates = [
             trim((string) config('mail.site_from.name', '')),
             trim((string) config('mail.from.name', '')),

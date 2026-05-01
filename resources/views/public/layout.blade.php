@@ -25,7 +25,7 @@
             '@id' => $siteBaseUrl.'/#organization',
             'name' => $siteContext->displayLabel(),
             'url' => $siteBaseUrl.'/',
-            'logo' => $legacyAssetBase.'/images/logo.png',
+            'logo' => $legacyAssetBase.$siteContext->logoPath(),
         ];
 
         if ($supportEmail !== '') {
@@ -342,7 +342,7 @@
         <header class="marketing-header">
             <div class="container marketing-header-shell">
                 <a href="/login.php" class="marketing-brand">
-                    <img class="site-logo" src="{{ $legacyAssetBase }}/images/logo.png" alt="Aplus Digitizing">
+                    <img class="site-logo" src="{{ $legacyAssetBase }}{{ $siteContext->logoPath() }}" alt="{{ $siteContext->displayLabel() }}">
                 </a>
 
                 <button class="marketing-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="public-navigation">Menu</button>
@@ -381,7 +381,7 @@
             <div class="container">
                 <div class="footer-grid">
                     <div class="footer-brand-block">
-                        <img class="footer-logo" src="{{ $legacyAssetBase }}/images/logo.png" alt="Aplus Digitizing">
+                        <img class="footer-logo" src="{{ $legacyAssetBase }}{{ $siteContext->logoPath() }}" alt="{{ $siteContext->displayLabel() }}">
                         <p>Professional embroidery digitizing services at affordable prices. Quality you can count on.</p>
                         <div class="footer-brand-pills">
                             <span>24 Hour Standard Turnaround</span>

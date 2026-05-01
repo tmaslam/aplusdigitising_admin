@@ -71,6 +71,7 @@ class SiteResolver
     {
         $primaryDomain = $site->primary_domain ?: $site->domains()->primary()->value('host') ?: $resolvedHost;
         $fallbackPrefix = 'sites.fallback_sites.'.$site->legacy_key.'.';
+        $settings = json_decode((string) ($site->settings_json ?? ''), true) ?: [];
 
         return new SiteContext(
             id: $site->getAttribute('id') ? (int) $site->getAttribute('id') : null,
@@ -86,6 +87,11 @@ class SiteResolver
             isPrimary: (bool) $site->is_primary,
             activePaymentProvider: (string) ($site->active_payment_provider ?: ''),
             timezone: (string) ($site->timezone ?: config('app.timezone', 'UTC')),
+            logoUrl: (string) ($settings['logo_url'] ?? ''),
+            faviconUrl: (string) ($settings['favicon_url'] ?? ''),
+            primaryColor: (string) ($settings['primary_color'] ?? ''),
+            accentColor: (string) ($settings['accent_color'] ?? ''),
+            themeSettings: (array) ($settings['theme'] ?? []),
         );
     }
 

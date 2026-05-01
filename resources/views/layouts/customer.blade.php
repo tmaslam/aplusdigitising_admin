@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', $siteContext->displayLabel())</title>
-    <link rel="icon" type="image/png" href="/images/favicon.png?v=2">
+    <link rel="icon" type="image/png" href="{{ $siteContext->faviconPath() }}?v=2">
     @php
         $legacyAssetBase = rtrim(url('/'), '/');
         $publicMenu = [
@@ -32,9 +32,9 @@
             --surface-soft: #FFF8F0;
             --ink: #1f252d;
             --muted: #6b6b6b;
-            --brand: #F26522;
-            --brand-dark: #D94E0F;
-            --accent: #f4b43a;
+            --brand: {{ $siteContext->cssPrimaryColor() }};
+            --brand-dark: {{ $siteContext->cssPrimaryDarkColor() }};
+            --accent: {{ $siteContext->cssAccentColor() }};
             --line: #E8E0D8;
             --line-strong: #D4CCC4;
             --shadow: 0 18px 38px rgba(17, 31, 45, 0.12);
@@ -475,7 +475,7 @@
         }
 
         .customer-action.primary {
-            background: linear-gradient(135deg, #F26522, #D94E0F);
+            background: linear-gradient(135deg, {{ $siteContext->cssPrimaryColor() }}, {{ $siteContext->cssPrimaryDarkColor() }});
             color: #fff;
             box-shadow: 0 12px 24px rgba(242, 101, 34, 0.18);
         }
@@ -820,7 +820,7 @@
         }
 
         .action-card-primary span {
-            color: #D94E0F;
+            color: {{ $siteContext->cssPrimaryDarkColor() }};
         }
 
         a.action-card-primary:hover {
@@ -1915,7 +1915,7 @@
         <header class="site-header">
             <div class="container nav-shell">
                 <a class="brand" href="/login.php">
-                    <img src="{{ $legacyAssetBase }}/images/logo.png" alt="Aplus Digitizing">
+                    <img src="{{ $legacyAssetBase }}{{ $siteContext->logoPath() }}" alt="{{ $siteContext->displayLabel() }}">
                 </a>
 
                 <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="public-navigation">Menu</button>
@@ -2011,12 +2011,12 @@
                                     @foreach ($dashFundOptions as $option)
                                         <a href="{{ $option['url'] }}&client_reference_id=user_{{ $dashUserId }}&prefilled_email={{ $dashEmail }}" target="_blank" rel="noopener">
                                             <strong>{{ $option['label'] }}</strong>
-                                            <span style="color:#F26522;">{{ $option['save'] }}</span>
+                                            <span style="color:{{ $siteContext->cssPrimaryColor() }};">{{ $option['save'] }}</span>
                                         </a>
                                     @endforeach
                                     <a href="{{ $customFundUrl }}?client_reference_id=user_{{ $dashUserId }}&prefilled_email={{ $dashEmail }}" target="_blank" rel="noopener">
                                         <strong>Custom Amount</strong>
-                                        <span style="color:#F26522;">No savings</span>
+                                        <span style="color:{{ $siteContext->cssPrimaryColor() }}">No savings</span>
                                     </a>
                                     <a href="{{ $testFundUrl }}&client_reference_id=user_{{ $dashUserId }}&prefilled_email={{ $dashEmail }}" target="_blank" rel="noopener" style="border-top:1px solid rgba(0,0,0,0.06);">
                                         <strong>Test Transaction</strong>

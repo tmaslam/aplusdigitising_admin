@@ -86,7 +86,7 @@
 <body>
     <form class="panel" method="post" action="{{ url('/team/login') }}">
         @csrf
-        <img src="{{ url('/images/logo.png') }}" alt="A Plus Digitizing" style="max-width: 180px; width: 100%; height: auto; margin-bottom: 10px; display: block;">
+        <img src="{{ url($siteContext->logoPath()) }}" alt="{{ $siteContext->displayLabel() }}" style="max-width: 180px; width: 100%; height: auto; margin-bottom: 10px; display: block;">
         <h1 style="font-size: 1.6rem; margin: 0;">Team Portal</h1>
         <p>Authorized users only.</p>
 

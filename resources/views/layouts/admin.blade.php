@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Digitizing Jobs Admin')</title>
-    <link rel="icon" type="image/png" href="/images/favicon.png?v=2">
+    <link rel="icon" type="image/png" href="{{ $siteContext->faviconPath() }}?v=2">
     <style>
         :root {
             color-scheme: light;
@@ -797,7 +797,7 @@
     <aside class="sidebar">
         <button type="button" class="sidebar-close" data-mobile-nav-close>Close Menu</button>
         <a href="{{ url('/v/welcome.php') }}" class="brand">
-            <img src="{{ url('/images/logo.png') }}" alt="A Plus Digitizing" class="brand-logo">
+            <img src="{{ url($siteContext->logoPath()) }}" alt="{{ $siteContext->displayLabel() }}" class="brand-logo">
             <div class="brand-label">Admin Portal</div>
         </a>
 

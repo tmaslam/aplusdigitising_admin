@@ -148,7 +148,7 @@
 <div class="shell">
     <section class="hero">
         <span>Secure Admin Access</span>
-        <img src="{{ url('/images/logo.png') }}" alt="A Plus Digitizing" style="max-width: 220px; width: 100%; height: auto; margin: 18px 0 12px; display: block;">
+        <img src="{{ url($siteContext->logoPath()) }}" alt="{{ $siteContext->displayLabel() }}" style="max-width: 220px; width: 100%; height: auto; margin: 18px 0 12px; display: block;">
         <p>Authorized access only.</p>
         <ul>
             <li>Admin portal</li>

@@ -280,6 +280,8 @@ class SitePricing
             $site = Site::query()->active()->find($siteId);
 
             if ($site) {
+                $settings = json_decode((string) ($site->settings_json ?? ''), true) ?: [];
+
                 return new SiteContext(
                     id: (int) $site->id,
                     legacyKey: (string) ($site->legacy_key ?: config('sites.primary_legacy_key', '1dollar')),
@@ -293,6 +295,11 @@ class SitePricing
                     companyAddress: (string) ($site->company_address ?: env('SITE_COMPANY_ADDRESS', '')),
                     isPrimary: (bool) $site->is_primary,
                     timezone: (string) ($site->timezone ?: config('app.timezone', 'UTC')),
+                    logoUrl: (string) ($settings['logo_url'] ?? ''),
+                    faviconUrl: (string) ($settings['favicon_url'] ?? ''),
+                    primaryColor: (string) ($settings['primary_color'] ?? ''),
+                    accentColor: (string) ($settings['accent_color'] ?? ''),
+                    themeSettings: (array) ($settings['theme'] ?? []),
                 );
             }
         }
