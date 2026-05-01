@@ -28,6 +28,19 @@ foreach ($tables as $table) {
 DB::statement('SET FOREIGN_KEY_CHECKS = 1');
 echo "All tables dropped.\n";
 
+// Create optional legacy table so SQL file's ALTER statements succeed
+DB::statement("CREATE TABLE IF NOT EXISTS `customerpayments` (
+    `Seq_No` int(11) NOT NULL AUTO_INCREMENT,
+    `Payment_Amount` varchar(255) NOT NULL,
+    `Payment_Source` varchar(255) NOT NULL,
+    `Transaction_ID` varchar(255) NOT NULL,
+    `Effective_Date` datetime NOT NULL,
+    `Website` varchar(30) DEFAULT NULL,
+    `End_Date` datetime DEFAULT NULL,
+    `Notes` text DEFAULT NULL,
+    PRIMARY KEY (`Seq_No`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
 // 2. Execute the base schema SQL file using mysqli multi_query (handles DELIMITER, PREPARE, etc.)
 echo "\n2. Executing base schema from SQL file...\n";
 if (! file_exists($sqlFile)) {
