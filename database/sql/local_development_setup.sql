@@ -1379,10 +1379,10 @@ SELECT
   '1dollar',
   'A Plus Digitizing',
   'A Plus Digitizing',
-  'aplusdigitizing.com',
-  'https://aplusdigitizing.com',
-  'contact@aplusdigitizing.com',
-  'contact@aplusdigitizing.com',
+  'aplusdigitising.com',
+  'https://aplusdigitising.com',
+  'contact@aplusdigitising.com',
+  'contact@aplusdigitising.com',
   'America/Detroit',
   'site_profile',
   1,
@@ -1406,7 +1406,7 @@ INSERT INTO `site_domains` (
 )
 SELECT
   `id`,
-  'aplusdigitizing.com',
+  'aplusdigitising.com',
   1,
   1,
   NOW(),
@@ -1416,17 +1416,17 @@ WHERE `legacy_key` = '1dollar'
   AND NOT EXISTS (
     SELECT 1
     FROM `site_domains`
-    WHERE `host` = 'aplusdigitizing.com'
+    WHERE `host` = 'aplusdigitising.com'
   );
 
 UPDATE `sites`
 SET `slug` = '1dollar',
     `name` = 'A Plus Digitizing',
     `brand_name` = 'A Plus Digitizing',
-    `primary_domain` = 'aplusdigitizing.com',
-    `website_address` = 'https://aplusdigitizing.com',
-    `support_email` = 'contact@aplusdigitizing.com',
-    `from_email` = 'contact@aplusdigitizing.com',
+    `primary_domain` = 'aplusdigitising.com',
+    `website_address` = 'https://aplusdigitising.com',
+    `support_email` = 'contact@aplusdigitising.com',
+    `from_email` = 'contact@aplusdigitising.com',
     `timezone` = 'America/Detroit',
     `pricing_strategy` = 'site_profile',
     `is_primary` = 1,
