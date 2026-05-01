@@ -9,24 +9,23 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use App\Support\PasswordManager;
-use App\Support\CustomerBalance;
 
 echo "=== CREATE CUSTOMER ===\n\n";
 
 // Customer data from screenshot
 $customerData = [
-    'user_name'     => 'elizabeth_monnin',
-    'user_email'    => 'dream4catcher61@gmail.com',
-    'first_name'    => 'elizabeth',
-    'last_name'     => 'monnin',
-    'company'       => 'triplemllc',
+    'user_name'     => 'demond_thompson',
+    'user_email'    => 'sales@targetbahamas.com',
+    'first_name'    => 'Demond',
+    'last_name'     => 'Thompson',
+    'company'       => 'Target Promotions',
     'company_type'  => 'Embroiders',
-    'company_address' => '8525 hoying rd',
-    'zip_code'      => '45302',
-    'user_city'     => 'anna',
+    'company_address' => '2205 SW 57th Ave-Dept 10-',
+    'zip_code'      => '33023',
+    'user_city'     => 'West Park',
     'user_country'  => 'United States of America',
-    'user_phone'    => '937-638-9556',
-    'contact_person' => 'elizabeth monnin',
+    'user_phone'    => '305-414-5606',
+    'contact_person' => 'Demond Thompson',
     'usre_type_id'  => 1, // customer
     'is_active'     => 1,
     'website'       => '1dollar',
@@ -34,8 +33,8 @@ $customerData = [
     'date_added'    => now()->format('Y-m-d H:i:s'),
 ];
 
-$plainPassword = '12Littlegirl';
-$topupAmount   = 20.76;
+$plainPassword = '1experts';
+$topupAmount   = 19.28;
 
 echo "Creating customer: {$customerData['first_name']} {$customerData['last_name']}\n";
 echo "Email: {$customerData['user_email']}\n";
