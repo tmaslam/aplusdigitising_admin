@@ -302,8 +302,23 @@ class CustomerSiteController extends Controller
         ]);
     }
 
+    private function corsJsonResponse(array $data, int $status = 200)
+    {
+        return response()->json($data, $status)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+            ->header('Access-Control-Allow-Headers', 'Content-Type, Accept, X-Requested-With');
+    }
+
     public function sendContact(Request $request)
     {
+        if ($request->isMethod('options')) {
+            return response()->json([], 204)
+                ->header('Access-Control-Allow-Origin', '*')
+                ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+                ->header('Access-Control-Allow-Headers', 'Content-Type, Accept, X-Requested-With');
+        }
+
         /** @var SiteContext $site */
         $site = $request->attributes->get('siteContext');
         $isJson = $request->wantsJson() || $request->ajax() || $request->header('Accept') === 'application/json';
@@ -321,7 +336,7 @@ class CustomerSiteController extends Controller
         if (trim((string) ($validated['website_url'] ?? '')) !== '') {
             $msg = 'Thanks. Your message has been received.';
             return $isJson
-                ? response()->json(['success' => true, 'message' => $msg])
+                ? $this->corsJsonResponse(['success' => true, 'message' => $msg])
                 : back()->with('success', $msg);
         }
 
@@ -331,21 +346,21 @@ class CustomerSiteController extends Controller
         if (! \App\Support\MathCaptcha::verify($captchaToken, $captchaAnswer)) {
             $error = 'Incorrect CAPTCHA answer. Please try again.';
             return $isJson
-                ? response()->json(['success' => false, 'message' => $error], 422)
+                ? $this->corsJsonResponse(['success' => false, 'message' => $error], 422)
                 : back()->withErrors(['contact' => $error])->withInput();
         }
 
         if (! TurnstileVerifier::verify($request, 'public-contact')) {
             $error = 'Please complete the security verification and try again.';
             return $isJson
-                ? response()->json(['success' => false, 'message' => $error], 422)
+                ? $this->corsJsonResponse(['success' => false, 'message' => $error], 422)
                 : back()->withErrors(['contact' => $error])->withInput();
         }
 
         if (CustomerPublicRateLimit::tooManyAttempts($request, 'contact', $site->legacyKey, strtolower(trim((string) $validated['email'])), 5, 600)) {
             $error = 'Too many messages were sent from this connection. Please try again later.';
             return $isJson
-                ? response()->json(['success' => false, 'message' => $error], 429)
+                ? $this->corsJsonResponse(['success' => false, 'message' => $error], 429)
                 : back()->withErrors(['contact' => $error])->withInput();
         }
 
@@ -361,13 +376,9 @@ class CustomerSiteController extends Controller
         $sent = PortalMailer::sendHtml($recipient, $subject, $body);
 
         if ($isJson) {
-            $response = $sent
-                ? response()->json(['success' => true, 'message' => 'Thanks. Your message has been received.'])
-                : response()->json(['success' => false, 'message' => 'We could not send your message right now. Please try again or email support directly.'], 500);
-
-            return $response->header('Access-Control-Allow-Origin', '*')
-                            ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-                            ->header('Access-Control-Allow-Headers', 'Content-Type, Accept, X-Requested-With');
+            return $sent
+                ? $this->corsJsonResponse(['success' => true, 'message' => 'Thanks. Your message has been received.'])
+                : $this->corsJsonResponse(['success' => false, 'message' => 'We could not send your message right now. Please try again or email support directly.'], 500);
         }
 
         return $sent
