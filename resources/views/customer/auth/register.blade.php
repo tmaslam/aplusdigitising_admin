@@ -170,7 +170,7 @@
                     <label class="terms-row" data-form-field>
                         <input type="checkbox" name="terms" value="1" @checked(old('terms')) required>
                         <span class="terms-copy">
-                            <span class="terms-line"><span class="field-meta required" aria-hidden="true">*</span><span>I have read the <a href="https://aplusdigitising.com/terms" target="_blank" rel="noopener">Terms &amp; Conditions</a> thoroughly, and I agree.</span></span>
+                            <span class="terms-line"><span class="field-meta required" aria-hidden="true">*</span><span>I have read the <a href="https://aplusdigitizing.com/terms" target="_blank" rel="noopener">Terms &amp; Conditions</a> thoroughly, and I agree.</span></span>
                             <span class="field-error" data-field-error aria-live="polite"></span>
                         </span>
                     </label>
