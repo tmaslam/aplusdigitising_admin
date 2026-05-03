@@ -21,6 +21,16 @@ if (!isset($siteContext)) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+    (function() {
+        try {
+            var theme = localStorage.getItem('admin-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        } catch (e) {}
+    })();
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Digitizing Jobs Admin')</title>
@@ -684,6 +694,28 @@ if (!isset($siteContext)) {
             background: rgba(255,255,255,0.45);
             color: var(--muted);
         }
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 0.84rem;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        .theme-toggle:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
         @media (max-width: 1200px) {
             .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .workflow-focus-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -782,6 +814,93 @@ if (!isset($siteContext)) {
                 margin-bottom: 16px;
                 padding-bottom: 12px;
             }
+        }
+        /* Dark mode overrides */
+        [data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #0B1120;
+            --panel: #111827;
+            --panel-strong: #0F172A;
+            --ink: #F1F5F9;
+            --muted: #94A3B8;
+            --line: #334155;
+            --line-strong: #1E293B;
+            --accent: #F26522;
+            --accent-dark: #D94E0F;
+            --accent-soft: rgba(242, 101, 34, 0.15);
+            --warning: #F59E0B;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+        [data-theme="dark"] body { background: #0B1120; }
+        [data-theme="dark"] .sidebar-overlay { background: rgba(0, 0, 0, 0.65); }
+        [data-theme="dark"] .sidebar { border-right-color: #1E293B; background: #0F172A; color: #94A3B8; }
+        [data-theme="dark"] .sidebar-close { background: rgba(255,255,255,0.08); color: #94A3B8; }
+        [data-theme="dark"] .brand { background: #0F172A; border-color: #334155; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+        [data-theme="dark"] .brand:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
+        [data-theme="dark"] .brand-label { color: #F1F5F9; }
+        [data-theme="dark"] .brand p { color: rgba(255,255,255,0.55); }
+        [data-theme="dark"] .section-title { color: #64748B; }
+        [data-theme="dark"] .section-title-toggle { color: #64748B; }
+        [data-theme="dark"] .section-title-toggle:hover { color: #F26522; }
+        [data-theme="dark"] .nav-card { background: #111827; border-color: #334155; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        [data-theme="dark"] .nav-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        [data-theme="dark"] .nav-card a { color: #94A3B8; }
+        [data-theme="dark"] .nav-card a:hover,
+        [data-theme="dark"] .nav-card a.active { background: #F26522; color: #ffffff; }
+        [data-theme="dark"] .nav-card a:hover .count,
+        [data-theme="dark"] .nav-card a.active .count { color: #ffffff; }
+        [data-theme="dark"] .count { background: rgba(242, 101, 34, 0.18); color: #F26522; }
+        [data-theme="dark"] .topbar { background: #111827; border-color: #334155; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); }
+        [data-theme="dark"] .topbar h2 { color: #F1F5F9; }
+        [data-theme="dark"] .topbar p { color: #94A3B8; }
+        [data-theme="dark"] .topbar .muted { color: #64748B; }
+        [data-theme="dark"] .user-meta strong { color: #F1F5F9; }
+        [data-theme="dark"] .card { background: #111827; border-color: #334155; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); }
+        [data-theme="dark"] .card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); }
+        [data-theme="dark"] .section-head { border-bottom-color: rgba(255, 255, 255, 0.08); }
+        [data-theme="dark"] .subcard,
+        [data-theme="dark"] .content .card .card { background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.82)); border-color: rgba(255, 255, 255, 0.08); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.25); }
+        [data-theme="dark"] .stat-link:hover .stat { border-color: #475569; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25); }
+        [data-theme="dark"] .stat { background: #111827; border-color: #334155; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        [data-theme="dark"] .table-wrap { border-color: rgba(255, 255, 255, 0.08); background: rgba(17, 24, 39, 0.62); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+        [data-theme="dark"] th { background: rgba(30, 41, 59, 0.95); color: #94A3B8; }
+        [data-theme="dark"] tbody tr:nth-child(even) td { background: rgba(30, 41, 59, 0.34); }
+        [data-theme="dark"] tbody tr:hover td { background: rgba(242, 101, 34, 0.08); }
+        [data-theme="dark"] .toolbar { border-color: rgba(255, 255, 255, 0.08); background: linear-gradient(180deg, rgba(30, 41, 59, 0.82), rgba(17, 24, 39, 0.72)); }
+        [data-theme="dark"] .filter-grid { border-color: rgba(255, 255, 255, 0.08); background: linear-gradient(180deg, rgba(30, 41, 59, 0.82), rgba(17, 24, 39, 0.72)); }
+        [data-theme="dark"] input[type="text"],
+        [data-theme="dark"] input[type="email"],
+        [data-theme="dark"] input[type="password"],
+        [data-theme="dark"] input[type="number"],
+        [data-theme="dark"] input[type="search"],
+        [data-theme="dark"] input[type="date"],
+        [data-theme="dark"] input[type="datetime-local"],
+        [data-theme="dark"] input[type="file"],
+        [data-theme="dark"] select,
+        [data-theme="dark"] textarea { background: #1E293B; color: #F1F5F9; border-color: #334155; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2); }
+        [data-theme="dark"] input[type="text"]:focus,
+        [data-theme="dark"] input[type="email"]:focus,
+        [data-theme="dark"] input[type="password"]:focus,
+        [data-theme="dark"] input[type="number"]:focus,
+        [data-theme="dark"] input[type="search"]:focus,
+        [data-theme="dark"] input[type="date"]:focus,
+        [data-theme="dark"] input[type="datetime-local"]:focus,
+        [data-theme="dark"] input[type="file"]:focus,
+        [data-theme="dark"] select:focus,
+        [data-theme="dark"] textarea:focus { background: #1E293B; border-color: rgba(148, 163, 184, 0.5); box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.15); }
+        [data-theme="dark"] button,
+        [data-theme="dark"] a.button,
+        [data-theme="dark"] .button { background: #334155; color: #E2E8F0; }
+        [data-theme="dark"] button.secondary,
+        [data-theme="dark"] a.button.secondary,
+        [data-theme="dark"] .button.secondary { background: linear-gradient(180deg, rgba(30,41,59,0.92), rgba(17,24,39,0.88)); color: #F1F5F9; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); border-color: rgba(255, 255, 255, 0.1); }
+        [data-theme="dark"] .pagination a,
+        [data-theme="dark"] .pagination span { background: rgba(30, 41, 59, 0.86); border-color: #334155; color: #E2E8F0; }
+        [data-theme="dark"] .pagination a:hover { background: #1E293B; }
+        [data-theme="dark"] .alert { background: rgba(148, 163, 184, 0.12); color: #94A3B8; border-color: rgba(148, 163, 184, 0.18); }
+        [data-theme="dark"] .empty-state { border-color: rgba(255,255,255,0.1); background: rgba(17,24,39,0.45); color: #64748B; }
+        @media (max-width: 960px) {
+            [data-theme="dark"] .sidebar { border-right-color: rgba(255,255,255,0.08); box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45); }
         }
     </style>
 </head>
@@ -913,6 +1032,11 @@ if (!isset($siteContext)) {
                 <a href="{{ url('/v/logout.php') }}"><span>Log Out</span></a>
             </div>
         </div>
+
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <span id="theme-icon">🌙</span>
+            <span id="theme-label">Dark Mode</span>
+        </button>
     </aside>
 
     <main class="main">
@@ -1010,6 +1134,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 target.classList.toggle('open', isOpen);
                 window.sessionStorage.setItem(storageKey, isOpen ? 'open' : 'closed');
             });
+        });
+    })();
+
+    // Theme toggle
+    (function() {
+        var toggle = document.getElementById('theme-toggle');
+        var icon = document.getElementById('theme-icon');
+        var label = document.getElementById('theme-label');
+        if (!toggle) return;
+        function updateThemeUI() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+            if (label) label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+        }
+        updateThemeUI();
+        toggle.addEventListener('click', function() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                try { localStorage.removeItem('admin-theme'); } catch (e) {}
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                try { localStorage.setItem('admin-theme', 'dark'); } catch (e) {}
+            }
+            updateThemeUI();
         });
     })();
 

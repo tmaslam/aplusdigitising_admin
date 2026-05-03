@@ -177,6 +177,26 @@
             word-break: break-word;
         }
 
+        [data-theme="dark"] {
+            --preview-overlay-bg: rgba(0, 0, 0, 0.7);
+            --preview-modal-bg: rgba(17, 24, 39, 0.96);
+            --preview-border: rgba(51, 65, 85, 0.7);
+            --preview-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+            --preview-header-border: rgba(255, 255, 255, 0.08);
+            --preview-header-bg: rgba(17, 24, 39, 0.9);
+            --preview-meta-ink: #94A3B8;
+            --preview-toolbar-border: rgba(255, 255, 255, 0.08);
+            --preview-toolbar-bg: rgba(30, 41, 59, 0.92);
+            --preview-toolbar-ink: #E2E8F0;
+            --preview-button-border: rgba(255, 255, 255, 0.08);
+            --preview-button-bg: rgba(255, 255, 255, 0.08);
+            --preview-button-ink: #E2E8F0;
+            --preview-button-bg-hover: rgba(255, 255, 255, 0.14);
+            --preview-body-bg: linear-gradient(180deg, rgba(11, 17, 32, 0.94), rgba(15, 23, 42, 0.9));
+            --preview-frame-border: rgba(255, 255, 255, 0.08);
+            --preview-image-wrap-bg: rgba(17, 24, 39, 0.88);
+        }
+
         @media (max-width: 720px) {
             .preview-modal {
                 inset: 14px;

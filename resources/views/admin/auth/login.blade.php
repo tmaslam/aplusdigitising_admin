@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+    (function() {
+        try {
+            var theme = localStorage.getItem('admin-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        } catch (e) {}
+    })();
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Digitizing Jobs Admin Login</title>
@@ -132,6 +142,65 @@
             .shell { grid-template-columns: 1fr; }
             .hero, .panel { padding: 26px; }
         }
+        .theme-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 50;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.78);
+            color: var(--ink);
+            font-weight: 700;
+            font-size: 0.84rem;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            backdrop-filter: blur(8px);
+        }
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.95);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        /* Dark mode overrides */
+        [data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #0B1120;
+            --ink: #F1F5F9;
+            --muted: #94A3B8;
+            --accent: #F26522;
+            --accent-dark: #D94E0F;
+            --line: rgba(255, 255, 255, 0.12);
+            --line-strong: rgba(255, 255, 255, 0.18);
+            --shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+        }
+        [data-theme="dark"] body {
+            background:
+                radial-gradient(circle at top left, rgba(242, 101, 34, 0.12), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(148, 163, 184, 0.08), transparent 24%),
+                linear-gradient(180deg, #0f172a 0%, #0b1120 100%);
+            color: var(--ink);
+        }
+        [data-theme="dark"] .shell { background: rgba(17, 24, 39, 0.56); border-color: rgba(51, 65, 85, 0.5); }
+        [data-theme="dark"] .hero { background: linear-gradient(160deg, rgba(30, 41, 59, 0.55), rgba(30, 41, 59, 0.14)); }
+        [data-theme="dark"] .hero span { background: rgba(242, 101, 34, 0.12); color: #F26522; }
+        [data-theme="dark"] .hero h1 { color: #F1F5F9; }
+        [data-theme="dark"] .hero p { color: #94A3B8; }
+        [data-theme="dark"] .panel { background: rgba(17, 24, 39, 0.75); }
+        [data-theme="dark"] .card { background: #111827; border-color: #334155; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25); }
+        [data-theme="dark"] h2 { color: #F1F5F9; }
+        [data-theme="dark"] .link-btn { background: rgba(30, 41, 59, 0.78); border-color: #334155; color: #E2E8F0; }
+        [data-theme="dark"] .link-btn:hover { background: #1E293B; }
+        [data-theme="dark"] input { background: #1E293B; color: #F1F5F9; border-color: #334155; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2); }
+        [data-theme="dark"] input:focus { background: #1E293B; border-color: rgba(148, 163, 184, 0.5); box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.15); }
+        [data-theme="dark"] .alert { background: rgba(148, 163, 184, 0.12); color: #94A3B8; border-color: rgba(148, 163, 184, 0.18); }
+        [data-theme="dark"] .theme-toggle { background: rgba(17, 24, 39, 0.78); border-color: #334155; color: #E2E8F0; }
+        [data-theme="dark"] .theme-toggle:hover { background: #1E293B; border-color: var(--accent); color: var(--accent); }
         @media (max-width: 640px) {
             body { padding: 16px; }
             .shell { border-radius: 24px; }
@@ -145,6 +214,32 @@
     </style>
 </head>
 <body>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <span id="theme-icon">🌙</span>
+    </button>
+    <script>
+    (function() {
+        var toggle = document.getElementById('theme-toggle');
+        var icon = document.getElementById('theme-icon');
+        if (!toggle) return;
+        function updateThemeUI() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+        }
+        updateThemeUI();
+        toggle.addEventListener('click', function() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                try { localStorage.removeItem('admin-theme'); } catch (e) {}
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                try { localStorage.setItem('admin-theme', 'dark'); } catch (e) {}
+            }
+            updateThemeUI();
+        });
+    })();
+    </script>
 <div class="shell">
     <section class="hero">
         <span>Secure Admin Access</span>
