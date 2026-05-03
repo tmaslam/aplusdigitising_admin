@@ -143,6 +143,8 @@ Route::middleware('detect.site')->group(function () use ($adminPrefix, $internal
     Route::get('/'.$internalPortalPath, [AuthLandingController::class, 'show']);
     Route::get('/'.$internalPortalPath.'/index.php', [AuthLandingController::class, 'show']);
 
+    Route::get('/sign-up', [CustomerRegistrationController::class, 'show']);
+    Route::post('/sign-up', [CustomerRegistrationController::class, 'register']);
     Route::get('/sign-up.php', [CustomerRegistrationController::class, 'show']);
     Route::post('/sign-up.php', [CustomerRegistrationController::class, 'register']);
     Route::get('/payment-success.php', [CustomerRegistrationController::class, 'paymentSuccess']);
