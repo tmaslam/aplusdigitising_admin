@@ -106,7 +106,19 @@
                             <textarea id="contact-message" name="message" class="form-textarea" required>{{ old('message') }}</textarea>
                         </div>
 
-                        @include('shared.turnstile')
+                        <div class="form-group">
+                            <label class="form-label" for="captcha-answer">Security Verification *</label>
+                            <p style="margin-bottom:8px;font-weight:600;color:#17212a;">{{ $captcha['question'] }}</p>
+                            <input type="hidden" name="captcha_token" value="{{ $captcha['token'] }}">
+                            <input id="captcha-answer" type="text" name="captcha_answer" class="form-input" placeholder="Enter the answer" required>
+                        </div>
+
+                        @if (\App\Support\TurnstileVerifier::enabled())
+                            <div class="form-group">
+                                <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+                                <div class="cf-turnstile" data-sitekey="{{ \App\Support\TurnstileVerifier::siteKey() }}"></div>
+                            </div>
+                        @endif
 
                         <button type="submit" class="button primary button-block">Send Message</button>
                     </form>

@@ -273,7 +273,19 @@ class CustomerSiteController extends Controller
     {
         return view('public.contact', [
             'site' => $request->attributes->get('siteContext'),
+            'captcha' => \App\Support\MathCaptcha::generate(),
         ]);
+    }
+
+    public function contactConfig(Request $request)
+    {
+        return response()->json([
+            'turnstile_enabled' => TurnstileVerifier::enabled(),
+            'turnstile_site_key' => TurnstileVerifier::siteKey(),
+            'captcha' => \App\Support\MathCaptcha::generate(),
+        ])->header('Access-Control-Allow-Origin', '*')
+          ->header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+          ->header('Access-Control-Allow-Headers', 'Content-Type, Accept');
     }
 
     public function privacyPolicy(Request $request)
@@ -294,6 +306,7 @@ class CustomerSiteController extends Controller
     {
         /** @var SiteContext $site */
         $site = $request->attributes->get('siteContext');
+        $isJson = $request->wantsJson() || $request->ajax() || $request->header('Accept') === 'application/json';
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:150'],
@@ -306,18 +319,37 @@ class CustomerSiteController extends Controller
         ]);
 
         if (trim((string) ($validated['website_url'] ?? '')) !== '') {
-            return back()->with('success', 'Thanks. Your message has been received.');
+            $msg = 'Thanks. Your message has been received.';
+            return $isJson
+                ? response()->json(['success' => true, 'message' => $msg])
+                : back()->with('success', $msg);
+        }
+
+        $captchaToken = trim((string) $request->input('captcha_token', ''));
+        $captchaAnswer = trim((string) $request->input('captcha_answer', ''));
+
+        if (! \App\Support\MathCaptcha::verify($captchaToken, $captchaAnswer)) {
+            $error = 'Incorrect CAPTCHA answer. Please try again.';
+            return $isJson
+                ? response()->json(['success' => false, 'message' => $error], 422)
+                : back()->withErrors(['contact' => $error])->withInput();
         }
 
         if (! TurnstileVerifier::verify($request, 'public-contact')) {
-            return back()->withErrors(['contact' => 'Please complete the security verification and try again.'])->withInput();
+            $error = 'Please complete the security verification and try again.';
+            return $isJson
+                ? response()->json(['success' => false, 'message' => $error], 422)
+                : back()->withErrors(['contact' => $error])->withInput();
         }
 
         if (CustomerPublicRateLimit::tooManyAttempts($request, 'contact', $site->legacyKey, strtolower(trim((string) $validated['email'])), 5, 600)) {
-            return back()->withErrors(['contact' => 'Too many messages were sent from this connection. Please try again later.'])->withInput();
+            $error = 'Too many messages were sent from this connection. Please try again later.';
+            return $isJson
+                ? response()->json(['success' => false, 'message' => $error], 429)
+                : back()->withErrors(['contact' => $error])->withInput();
         }
 
-        $recipient = (string) config('mail.admin_alert_address', $site->supportEmail);
+        $recipient = 'aplusdigitizing@gmail.com';
         $subject = '['.$site->displayLabel().'] '.trim((string) $validated['subject']);
         $body = view('customer.emails.contact-message', [
             'siteContext' => $site,
@@ -327,6 +359,16 @@ class CustomerSiteController extends Controller
         ])->render();
 
         $sent = PortalMailer::sendHtml($recipient, $subject, $body);
+
+        if ($isJson) {
+            $response = $sent
+                ? response()->json(['success' => true, 'message' => 'Thanks. Your message has been received.'])
+                : response()->json(['success' => false, 'message' => 'We could not send your message right now. Please try again or email support directly.'], 500);
+
+            return $response->header('Access-Control-Allow-Origin', '*')
+                            ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+                            ->header('Access-Control-Allow-Headers', 'Content-Type, Accept, X-Requested-With');
+        }
 
         return $sent
             ? back()->with('success', 'Thanks. Your message has been received.')

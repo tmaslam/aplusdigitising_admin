@@ -42,8 +42,8 @@ class AdminSiteOfferController extends Controller
             ->with(['customer', 'promotion', 'redeemedOrder'])
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->input('status')))
             ->when($request->filled('offer_id'), fn ($q) => $q->where('site_promotion_id', (int) $request->input('offer_id')))
-            ->when($request->filled('date_from'), fn ($q) => $q->whereDate('created_at', '>=', $request->input('date_from')))
-            ->when($request->filled('date_to'), fn ($q) => $q->whereDate('created_at', '<=', $request->input('date_to')))
+            ->when($request->filled('date_from'), fn ($q) => $q->whereDate('created_at', '>=', \Carbon\Carbon::parse($request->input('date_from'))->format('Y-m-d')))
+            ->when($request->filled('date_to'), fn ($q) => $q->whereDate('created_at', '<=', \Carbon\Carbon::parse($request->input('date_to'))->format('Y-m-d')))
             ->orderByDesc('created_at');
 
         $offers = Schema::hasTable('site_promotions')

@@ -32,6 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'successpay-paypal.php',
             'payment-notification.php',
             'webhooks/stripe',
+            'api/contact',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

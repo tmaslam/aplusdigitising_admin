@@ -58,7 +58,7 @@ table {
                     </tr>
                     <tr>
                         <td style="padding:28px;line-height:1.65;font-size:14px;color:#17212a;background:#ffffff;border:1px solid #d9dee5;border-top:0;font-family:Arial,Helvetica,sans-serif;">
-                            {!! $content !!}
+                            {!! strip_tags($content, '<p><br><strong><b><em><i><a><ul><ol><li><h1><h2><h3><h4><h5><h6><table><tr><td><th><tbody><thead><div><span><img><pre><code><blockquote><hr>') !!
                         </td>
                     </tr>
                     <tr>

@@ -91,7 +91,8 @@ if (file_exists($artisanPath) && file_exists($envPath)) {
     foreach ($commands as $cmd => $desc) {
         $output = [];
         $returnCode = 0;
-        @exec("{$phpBin} {$artisanPath} {$cmd} 2>&1", $output, $returnCode);
+        $escapedCmd = escapeshellcmd("{$phpBin} {$artisanPath} {$cmd}");
+        @exec($escapedCmd . " 2>&1", $output, $returnCode);
         $success = ($returnCode === 0);
         $results[] = logResult("{$desc}: " . implode(' ', array_slice($output, 0, 2)), $success);
     }
@@ -99,7 +100,8 @@ if (file_exists($artisanPath) && file_exists($envPath)) {
     // Optional: rebuild view cache
     $output = [];
     $returnCode = 0;
-    @exec("{$phpBin} {$artisanPath} view:cache 2>&1", $output, $returnCode);
+    $escapedCacheCmd = escapeshellcmd("{$phpBin} {$artisanPath} view:cache");
+    @exec($escapedCacheCmd . " 2>&1", $output, $returnCode);
     $results[] = logResult("Rebuild view cache: " . implode(' ', array_slice($output, 0, 2)), $returnCode === 0);
 } else {
     $results[] = logResult("Skipping artisan commands (artisan or .env missing)", false);
