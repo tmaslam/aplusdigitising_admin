@@ -68,8 +68,10 @@ Route::middleware('detect.site')->group(function () use ($adminPrefix, $internal
     Route::match(['get', 'post'], '/instant-payment-paypal.php', [CustomerPaymentController::class, 'instantPaymentLanding']);
     Route::get('/contact-us.php', [CustomerSiteController::class, 'contact']);
     Route::post('/contact-us.php', [CustomerSiteController::class, 'sendContact']);
-    Route::get('/api/contact-config', [CustomerSiteController::class, 'contactConfig']);
-    Route::match(['get', 'post', 'options'], '/api/contact', [CustomerSiteController::class, 'sendContact']);
+    Route::middleware('api.cors')->group(function () {
+        Route::get('/api/contact-config', [CustomerSiteController::class, 'contactConfig']);
+        Route::match(['get', 'post', 'options'], '/api/contact', [CustomerSiteController::class, 'sendContact']);
+    });
     Route::get('/simulate-2checkout/{transaction}/checkout', [CustomerPaymentController::class, 'showTwocheckoutSimulator'])->middleware('customer.auth');
     Route::match(['get', 'post'], '/simulate-2checkout/{transaction}', [CustomerPaymentController::class, 'simulateTwocheckout'])->middleware('customer.auth');
     Route::get('/dashboard.php', [CustomerPortalController::class, 'dashboard'])->middleware('customer.auth');

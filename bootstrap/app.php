@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApiCors;
 use App\Http\Middleware\DetectSite;
 use App\Http\Middleware\EnsureAdminAuthenticated;
 use App\Http\Middleware\EnsureCustomerAuthenticated;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            'api.cors' => ApiCors::class,
             'detect.site' => DetectSite::class,
             'admin.auth' => EnsureAdminAuthenticated::class,
             'customer.auth' => EnsureCustomerAuthenticated::class,
