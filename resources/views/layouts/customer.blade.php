@@ -489,15 +489,19 @@
         }
 
         /* New Order = green (matches admin team Unlock button) */
-        .customer-action.primary.new-order {
-            background: linear-gradient(135deg, #22C55E, #16A34A);
-            box-shadow: 0 12px 24px rgba(34, 197, 94, 0.18);
+        .customer-action.primary.new-order,
+        body.front-theme .customer-nav-actions > .customer-action-menu:nth-child(1) .customer-action.primary {
+            background: linear-gradient(135deg, #22C55E, #16A34A) !important;
+            box-shadow: 0 12px 24px rgba(34, 197, 94, 0.18) !important;
+            color: #fff !important;
         }
 
         /* Add Funds = blue */
-        .customer-action.primary.add-funds {
-            background: linear-gradient(135deg, #2563EB, #1D4ED8);
-            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+        .customer-action.primary.add-funds,
+        body.front-theme .customer-nav-actions > .customer-action-menu:nth-child(2) .customer-action.primary {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8) !important;
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18) !important;
+            color: #fff !important;
         }
 
         .customer-action.secondary {
@@ -2175,7 +2179,7 @@
         [data-theme="dark"] body.front-theme .action-card strong,
         [data-theme="dark"] body.front-theme .activity-card strong { color: #F1F5F9 !important; }
     </style>
-    <link rel="stylesheet" href="{{ url('/css/front-theme-overrides.css') }}?v=2">
+    <link rel="stylesheet" href="{{ url('/css/front-theme-overrides.css') }}?v=3">
 </head>
 <body class="front-theme customer-portal-theme">
     @php
@@ -2383,7 +2387,10 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-                    @if ($errors->any())
+                    @if (session('error'))
+                        <div class="alert alert-error">{{ session('error') }}</div>
+                    @endif
+                    @if (isset($errors) && $errors->any())
                         <div class="alert alert-error">{{ $errors->first() }}</div>
                     @endif
                 </div>
