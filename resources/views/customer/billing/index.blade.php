@@ -77,6 +77,16 @@
                             <td data-label="Amount">${{ number_format((float) preg_replace('/[^0-9.\-]/', '', (string) $billing->amount), 2) }}</td>
                             <td data-label="Status"><span class="status warning">Payment Due</span></td>
                             <td data-label="Action">
+                                @php
+                                    $invoiceAmount = (float) preg_replace('/[^0-9.\-]/', '', (string) $billing->amount);
+                                    $canPayFromBalance = ($availableBalance + $depositBalance) >= $invoiceAmount && $invoiceAmount > 0;
+                                @endphp
+                                @if ($canPayFromBalance)
+                                    <form method="post" action="/view-billing.php/{{ $billing->bill_id }}/balance-pay" style="display:inline-block;margin-bottom:6px;">
+                                        @csrf
+                                        <button type="submit" class="button success" style="width:auto;padding:6px 14px;">Approve for Payment</button>
+                                    </form>
+                                @endif
                                 <form method="post" action="/view-billing.php/{{ $billing->bill_id }}/pay">
                                     @csrf
                                     @include('customer.payments.provider-buttons', [
