@@ -20,7 +20,15 @@ if (!isset($siteContext)) {
 @endphp
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
+    <script>
+        (function() {
+            var theme = localStorage.getItem('admin-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'APlus Team Portal')</title>
@@ -484,6 +492,165 @@ if (!isset($siteContext)) {
                 padding-bottom: 12px;
             }
         }
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 18px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.06);
+            background: rgba(0,0,0,0.04);
+            color: #475569;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .theme-toggle:hover {
+            background: rgba(0,0,0,0.08);
+        }
+        [data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #0B1120;
+            --panel: #111827;
+            --ink: #F1F5F9;
+            --muted: #94A3B8;
+            --line: rgba(255,255,255,0.06);
+            --line-strong: rgba(255,255,255,0.1);
+            --accent: #94A3B8;
+            --accent-dark: #64748b;
+            --accent-soft: #1E293B;
+            --alert: #94A3B8;
+            --shadow: 0 4px 20px rgba(0,0,0,0.35);
+        }
+        [data-theme="dark"] body {
+            background: #0B1120;
+            color: var(--ink);
+        }
+        [data-theme="dark"] .sidebar {
+            background: #0F172A;
+            color: #94A3B8;
+            border-right-color: rgba(255,255,255,0.06);
+        }
+        [data-theme="dark"] .sidebar-overlay {
+            background: rgba(0,0,0,0.7);
+        }
+        [data-theme="dark"] .sidebar-close {
+            background: rgba(255,255,255,0.08);
+            color: #94A3B8;
+        }
+        [data-theme="dark"] .brand {
+            background-color: #1E293B;
+        }
+        [data-theme="dark"] .brand-label {
+            color: #F1F5F9;
+        }
+        [data-theme="dark"] .brand p {
+            color: #94A3B8;
+        }
+        [data-theme="dark"] .section-title {
+            color: #94A3B8;
+        }
+        [data-theme="dark"] .nav-card {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.06);
+        }
+        [data-theme="dark"] .nav-card a {
+            color: #94A3B8;
+        }
+        [data-theme="dark"] .nav-card a:hover,
+        [data-theme="dark"] .nav-card a.active {
+            background: #334155;
+            color: #F1F5F9;
+        }
+        [data-theme="dark"] .count {
+            background: rgba(148,163,184,0.15);
+            color: #94A3B8;
+        }
+        [data-theme="dark"] .topbar {
+            background: #0F172A;
+            border-color: rgba(255,255,255,0.06);
+        }
+        [data-theme="dark"] .card {
+            background: var(--panel);
+            border-color: rgba(255,255,255,0.06);
+        }
+        [data-theme="dark"] .section-head {
+            border-bottom-color: rgba(255,255,255,0.06);
+        }
+        [data-theme="dark"] .subcard,
+        [data-theme="dark"] .content .card .card {
+            background: #1E293B;
+            border-color: rgba(255,255,255,0.06);
+            box-shadow: 0 14px 32px rgba(0,0,0,0.25);
+        }
+        [data-theme="dark"] .stat {
+            background: #1E293B;
+            border-color: var(--line);
+        }
+        [data-theme="dark"] .table-wrap {
+            border-color: rgba(255,255,255,0.06);
+            background: #0F172A;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+        [data-theme="dark"] th {
+            background: #1E293B;
+        }
+        [data-theme="dark"] tbody tr:nth-child(even) td {
+            background: rgba(255,255,255,0.03);
+        }
+        [data-theme="dark"] tbody tr:hover td {
+            background: rgba(148,163,184,0.08);
+        }
+        [data-theme="dark"] .badge {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+        [data-theme="dark"] .toolbar {
+            background: #1E293B;
+            border-color: rgba(255,255,255,0.06);
+        }
+        [data-theme="dark"] input[type="text"],
+        [data-theme="dark"] input[type="email"],
+        [data-theme="dark"] input[type="password"],
+        [data-theme="dark"] input[type="number"],
+        [data-theme="dark"] input[type="file"],
+        [data-theme="dark"] select,
+        [data-theme="dark"] textarea {
+            background: #1E293B;
+            color: var(--ink);
+            border-color: var(--line-strong);
+        }
+        [data-theme="dark"] input:focus,
+        [data-theme="dark"] select:focus,
+        [data-theme="dark"] textarea:focus {
+            border-color: rgba(148,163,184,0.58);
+            box-shadow: 0 0 0 4px rgba(148,163,184,0.12);
+        }
+        [data-theme="dark"] button {
+            color: #F1F5F9;
+        }
+        [data-theme="dark"] .alert {
+            background: rgba(148,163,184,0.1);
+            color: #94A3B8;
+            border-color: rgba(148,163,184,0.2);
+        }
+        [data-theme="dark"] .empty-state {
+            border-color: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            color: var(--muted);
+        }
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(255,255,255,0.06);
+            color: #94A3B8;
+            border-color: rgba(255,255,255,0.08);
+        }
+        [data-theme="dark"] .theme-toggle:hover {
+            background: rgba(255,255,255,0.1);
+        }
     </style>
 </head>
 <body>
@@ -531,6 +698,11 @@ if (!isset($siteContext)) {
         <div class="nav-card">
             <a href="{{ url('/team/logout.php') }}"><span>Log Out</span></a>
         </div>
+
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <span id="themeIcon">🌙</span>
+            <span id="themeLabel">Dark</span>
+        </button>
     </aside>
 
     <main class="main">
@@ -634,6 +806,26 @@ document.addEventListener('DOMContentLoaded', function () {
         const eventName = element.tagName === 'FORM' ? 'submit' : 'click';
         element.addEventListener(eventName, persistSidebarScroll);
     });
+
+    // Theme toggle
+    var themeBtn = document.getElementById('themeToggle');
+    var themeIcon = document.getElementById('themeIcon');
+    var themeLabel = document.getElementById('themeLabel');
+    function updateThemeUI() {
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (themeIcon) themeIcon.textContent = isDark ? '☀️' : '🌙';
+        if (themeLabel) themeLabel.textContent = isDark ? 'Light' : 'Dark';
+    }
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function () {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            var next = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('admin-theme', next);
+            updateThemeUI();
+        });
+    }
+    updateThemeUI();
 });
 </script>
 @include('shared.file-preview-script')

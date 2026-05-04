@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
+    <script>
+        (function() {
+            var theme = localStorage.getItem('admin-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>APlus Team Portal</title>
@@ -81,9 +89,78 @@
             .panel { border-radius: 22px; padding: 20px; }
             h1 { font-size: 1.75rem; }
         }
+        .theme-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 50;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.06);
+            background: rgba(0,0,0,0.04);
+            color: #475569;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .theme-toggle:hover {
+            background: rgba(0,0,0,0.08);
+        }
+        [data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #0B1120;
+            --panel: #111827;
+            --ink: #F1F5F9;
+            --muted: #94A3B8;
+            --line: rgba(255,255,255,0.08);
+            --accent: #2dd4bf;
+            --accent-dark: #14b8a6;
+            --shadow: 0 24px 60px rgba(0,0,0,0.45);
+        }
+        [data-theme="dark"] body {
+            background:
+                radial-gradient(circle at top left, rgba(45,212,191,0.12), transparent 32%),
+                radial-gradient(circle at bottom right, rgba(20,184,166,0.1), transparent 26%),
+                linear-gradient(180deg, #0B1120 0%, #111827 100%);
+            color: var(--ink);
+        }
+        [data-theme="dark"] .panel {
+            background: var(--panel);
+            border-color: rgba(51,65,85,0.5);
+        }
+        [data-theme="dark"] input {
+            background: #1E293B;
+            color: var(--ink);
+            border-color: var(--line);
+        }
+        [data-theme="dark"] input:focus {
+            border-color: rgba(45,212,191,0.58);
+            box-shadow: 0 0 0 4px rgba(45,212,191,0.12);
+        }
+        [data-theme="dark"] .alert {
+            background: rgba(45,212,191,0.12);
+            border-color: rgba(45,212,191,0.2);
+            color: #2dd4bf;
+        }
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.08);
+            color: #94A3B8;
+        }
+        [data-theme="dark"] .theme-toggle:hover {
+            background: rgba(255,255,255,0.1);
+        }
     </style>
 </head>
 <body>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span id="themeIcon">🌙</span>
+    </button>
     <form class="panel" method="post" action="{{ url('/team/login') }}">
         @csrf
         <img src="{{ url($siteContext->logoPath()) }}" alt="{{ $siteContext->displayLabel() }}" style="max-width: 180px; width: 100%; height: auto; margin-bottom: 10px; display: block;">
@@ -110,5 +187,25 @@
         @include('shared.turnstile')
         <button type="submit">Sign In</button>
     </form>
+    <script>
+    (function() {
+        var themeBtn = document.getElementById('themeToggle');
+        var themeIcon = document.getElementById('themeIcon');
+        function updateThemeUI() {
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (themeIcon) themeIcon.textContent = isDark ? '☀️' : '🌙';
+        }
+        if (themeBtn) {
+            themeBtn.addEventListener('click', function () {
+                var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                var next = isDark ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('admin-theme', next);
+                updateThemeUI();
+            });
+        }
+        updateThemeUI();
+    })();
+    </script>
 </body>
 </html>
