@@ -311,53 +311,55 @@ Route::middleware('admin.auth')->group(function () use ($adminPrefix) {
     Route::post('/v/show-all-blogs/{blog}/delete', [AdminToolsController::class, 'deleteBlog']);
 });
 
-Route::get('/team', [TeamAuthController::class, 'showLogin']);
-Route::get('/team/index.php', [TeamAuthController::class, 'showLogin']);
-Route::post('/team/login', [TeamAuthController::class, 'login']);
-Route::get('/team/logout.php', [TeamAuthController::class, 'logout']);
+Route::middleware('detect.site')->group(function () {
+    Route::get('/team', [TeamAuthController::class, 'showLogin']);
+    Route::get('/team/index.php', [TeamAuthController::class, 'showLogin']);
+    Route::post('/team/login', [TeamAuthController::class, 'login']);
+    Route::get('/team/logout.php', [TeamAuthController::class, 'logout']);
 
-Route::middleware('team.auth')->group(function () {
-    Route::get('/team/welcome.php', [TeamDashboardController::class, 'index']);
-    Route::get('/team/queues/{queue}', [TeamOrdersController::class, 'queue']);
-    Route::get('/team/under-process-orders.php', [TeamOrdersController::class, 'underProcess']);
-    Route::post('/team/orders/{order}/working', [TeamOrdersController::class, 'saveWorking']);
-    Route::get('/team/disapproved-orders.php', [TeamOrdersController::class, 'compatibilityQueueRedirect'])->defaults('queue', 'disapproved-orders');
-    Route::get('/team/view-quotes.php', [TeamOrdersController::class, 'compatibilityQueueRedirect'])->defaults('queue', 'quotes');
-    Route::get('/team/under-process-quick-orders.php', [TeamOrdersController::class, 'compatibilityQueueRedirect'])->defaults('queue', 'quick-quotes');
+    Route::middleware('team.auth')->group(function () {
+        Route::get('/team/welcome.php', [TeamDashboardController::class, 'index']);
+        Route::get('/team/queues/{queue}', [TeamOrdersController::class, 'queue']);
+        Route::get('/team/under-process-orders.php', [TeamOrdersController::class, 'underProcess']);
+        Route::post('/team/orders/{order}/working', [TeamOrdersController::class, 'saveWorking']);
+        Route::get('/team/disapproved-orders.php', [TeamOrdersController::class, 'compatibilityQueueRedirect'])->defaults('queue', 'disapproved-orders');
+        Route::get('/team/view-quotes.php', [TeamOrdersController::class, 'compatibilityQueueRedirect'])->defaults('queue', 'quotes');
+        Route::get('/team/under-process-quick-orders.php', [TeamOrdersController::class, 'compatibilityQueueRedirect'])->defaults('queue', 'quick-quotes');
 
-    Route::get('/team/view-order-detail.php', [TeamOrderDetailController::class, 'show']);
-    Route::get('/team/orders/{order}/detail/{mode?}', [TeamOrderDetailController::class, 'showByRoute']);
-    Route::post('/team/order-detail/comments', [TeamOrderDetailController::class, 'saveComment']);
-    Route::post('/team/team-comments/{comment}/delete', [TeamOrderDetailController::class, 'deleteComment']);
-    Route::post('/team/order-detail/upload', [TeamOrderDetailController::class, 'uploadAttachment']);
-    Route::get('/team/attachments/{attachment}/download', [TeamOrderDetailController::class, 'downloadAttachment']);
-    Route::get('/team/attachments/{attachment}/preview', [TeamOrderDetailController::class, 'previewAttachment']);
-    Route::get('/team/attachments/{attachment}/preview/raw', [TeamOrderDetailController::class, 'previewAttachment'])->defaults('raw', 1);
-    Route::post('/team/attachments/{attachment}/delete', [TeamOrderDetailController::class, 'deleteAttachment']);
-    Route::get('/team/team_get_design_info_file.php', [TeamDesignInfoController::class, 'download']);
-    Route::post('/team/order-detail/complete', [TeamOrderDetailController::class, 'complete']);
+        Route::get('/team/view-order-detail.php', [TeamOrderDetailController::class, 'show']);
+        Route::get('/team/orders/{order}/detail/{mode?}', [TeamOrderDetailController::class, 'showByRoute']);
+        Route::post('/team/order-detail/comments', [TeamOrderDetailController::class, 'saveComment']);
+        Route::post('/team/team-comments/{comment}/delete', [TeamOrderDetailController::class, 'deleteComment']);
+        Route::post('/team/order-detail/upload', [TeamOrderDetailController::class, 'uploadAttachment']);
+        Route::get('/team/attachments/{attachment}/download', [TeamOrderDetailController::class, 'downloadAttachment']);
+        Route::get('/team/attachments/{attachment}/preview', [TeamOrderDetailController::class, 'previewAttachment']);
+        Route::get('/team/attachments/{attachment}/preview/raw', [TeamOrderDetailController::class, 'previewAttachment'])->defaults('raw', 1);
+        Route::post('/team/attachments/{attachment}/delete', [TeamOrderDetailController::class, 'deleteAttachment']);
+        Route::get('/team/team_get_design_info_file.php', [TeamDesignInfoController::class, 'download']);
+        Route::post('/team/order-detail/complete', [TeamOrderDetailController::class, 'complete']);
 
-    Route::get('/team/view-order-quick-detail.php', [TeamQuickQuoteController::class, 'show']);
-    Route::get('/team/quick-quotes/{order}/detail', [TeamQuickQuoteController::class, 'showByRoute']);
-    Route::post('/team/quick-order/comments', [TeamQuickQuoteController::class, 'saveComment']);
-    Route::post('/team/quick-comments/{comment}/delete', [TeamQuickQuoteController::class, 'deleteComment']);
-    Route::post('/team/quick-order/upload', [TeamQuickQuoteController::class, 'uploadAttachment']);
-    Route::get('/team/quick-attachments/{attachment}/download', [TeamQuickQuoteController::class, 'downloadAttachment']);
-    Route::get('/team/quick-attachments/{attachment}/preview', [TeamQuickQuoteController::class, 'previewAttachment']);
-    Route::get('/team/quick-attachments/{attachment}/preview/raw', [TeamQuickQuoteController::class, 'previewAttachment'])->defaults('raw', 1);
-    Route::post('/team/quick-attachments/{attachment}/delete', [TeamQuickQuoteController::class, 'deleteAttachment']);
-    Route::post('/team/quick-order/complete', [TeamQuickQuoteController::class, 'complete']);
-});
+        Route::get('/team/view-order-quick-detail.php', [TeamQuickQuoteController::class, 'show']);
+        Route::get('/team/quick-quotes/{order}/detail', [TeamQuickQuoteController::class, 'showByRoute']);
+        Route::post('/team/quick-order/comments', [TeamQuickQuoteController::class, 'saveComment']);
+        Route::post('/team/quick-comments/{comment}/delete', [TeamQuickQuoteController::class, 'deleteComment']);
+        Route::post('/team/quick-order/upload', [TeamQuickQuoteController::class, 'uploadAttachment']);
+        Route::get('/team/quick-attachments/{attachment}/download', [TeamQuickQuoteController::class, 'downloadAttachment']);
+        Route::get('/team/quick-attachments/{attachment}/preview', [TeamQuickQuoteController::class, 'previewAttachment']);
+        Route::get('/team/quick-attachments/{attachment}/preview/raw', [TeamQuickQuoteController::class, 'previewAttachment'])->defaults('raw', 1);
+        Route::post('/team/quick-attachments/{attachment}/delete', [TeamQuickQuoteController::class, 'deleteAttachment']);
+        Route::post('/team/quick-order/complete', [TeamQuickQuoteController::class, 'complete']);
+    });
 
-Route::middleware(['team.auth', 'supervisor.auth'])->group(function () {
-    Route::match(['get', 'post'], '/team/manage-team.php', [TeamSupervisorController::class, 'members']);
-    Route::get('/team/team-member-detail.php', [TeamSupervisorController::class, 'memberDetail']);
-    Route::get('/team/review-queue.php', [TeamSupervisorController::class, 'reviewQueue']);
-    Route::get('/team/create-team.php', [TeamSupervisorController::class, 'memberForm']);
-    Route::post('/team/create-team.php', [TeamSupervisorController::class, 'memberSave']);
-    Route::get('/team/assign-order.php', [TeamSupervisorController::class, 'assignForm']);
-    Route::post('/team/assign-order.php', [TeamSupervisorController::class, 'assignSave']);
-    Route::post('/team/review-order.php', [TeamSupervisorController::class, 'markReviewed']);
+    Route::middleware(['team.auth', 'supervisor.auth'])->group(function () {
+        Route::match(['get', 'post'], '/team/manage-team.php', [TeamSupervisorController::class, 'members']);
+        Route::get('/team/team-member-detail.php', [TeamSupervisorController::class, 'memberDetail']);
+        Route::get('/team/review-queue.php', [TeamSupervisorController::class, 'reviewQueue']);
+        Route::get('/team/create-team.php', [TeamSupervisorController::class, 'memberForm']);
+        Route::post('/team/create-team.php', [TeamSupervisorController::class, 'memberSave']);
+        Route::get('/team/assign-order.php', [TeamSupervisorController::class, 'assignForm']);
+        Route::post('/team/assign-order.php', [TeamSupervisorController::class, 'assignSave']);
+        Route::post('/team/review-order.php', [TeamSupervisorController::class, 'markReviewed']);
+    });
 });
 
 Route::get('/uploads/{path}', [UploadController::class, 'show'])->where('path', '.*');
