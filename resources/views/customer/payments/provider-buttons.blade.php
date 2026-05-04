@@ -11,9 +11,4 @@
             </button>
         @endforeach
     </div>
-@else
-    <div class="content-note">
-        <strong>Payment setup pending:</strong>
-        No hosted payment provider is configured for this environment yet.
-    </div>
 @endif
