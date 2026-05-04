@@ -108,7 +108,7 @@
 
                         <div class="form-group">
                             <label class="form-label" for="captcha-answer">Security Verification *</label>
-                            <p style="margin-bottom:8px;font-weight:600;color:#17212a;">{{ $captcha['question'] }}</p>
+                            <p class="captcha-question">{{ $captcha['question'] }}</p>
                             <input type="hidden" name="captcha_token" value="{{ $captcha['token'] }}">
                             <input id="captcha-answer" type="text" name="captcha_answer" class="form-input" placeholder="Enter the answer" required>
                         </div>

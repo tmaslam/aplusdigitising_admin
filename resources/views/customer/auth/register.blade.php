@@ -7,7 +7,11 @@
 
 @section('content')
     <div class="container guest-shell">
-        <section class="panel form-panel auth-panel">
+        <section class="panel form-panel auth-panel" style="position: relative;">
+            <button type="button" class="theme-toggle theme-toggle-corner" aria-label="Toggle dark mode" style="position:absolute; top:16px; right:16px; z-index:10;">
+                <span class="theme-toggle-light">🌙</span>
+                <span class="theme-toggle-dark">☀️</span>
+            </button>
             <h2>Member Sign Up</h2>
             <p class="muted">Complete the signup form below to create your customer account.</p>
 
