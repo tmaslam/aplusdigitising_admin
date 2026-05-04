@@ -17,9 +17,36 @@ class OrderAutomation
             return;
         }
 
+        self::syncPendingOrderLimit($customer);
         self::autoApproveByPaymentTerms($customer, $site);
         self::enforcePendingApprovalLimit($customer, $site, $submissionTriggered);
         self::enforceCreditLimitExposure($customer, $site);
+    }
+
+    public static function resolvePendingOrderLimit(AdminUser $customer): int
+    {
+        $creditLimit = (float) ($customer->customer_approval_limit ?? 0);
+        $packageType = strtolower(trim((string) ($customer->package_type ?? '')));
+
+        if ($packageType === 'starter' || $creditLimit < 100) {
+            return 3;
+        }
+
+        if ($creditLimit >= 200) {
+            return 5;
+        }
+
+        return 3;
+    }
+
+    private static function syncPendingOrderLimit(AdminUser $customer): void
+    {
+        $calculatedLimit = self::resolvePendingOrderLimit($customer);
+        $currentLimit = (int) ($customer->customer_pending_order_limit ?? 0);
+
+        if (($currentLimit === 0 || $currentLimit === 3 || $currentLimit === 5) && $currentLimit !== $calculatedLimit) {
+            $customer->forceFill(['customer_pending_order_limit' => $calculatedLimit])->save();
+        }
     }
 
     public static function syncSite(string $legacyWebsite, int $limit = 100): void

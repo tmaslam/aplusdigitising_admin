@@ -9,6 +9,7 @@ use App\Support\AdminReferenceData;
 use App\Support\CustomerApprovalQueue;
 use App\Support\CustomerPricing;
 use App\Support\PasswordManager;
+use App\Support\OrderAutomation;
 use App\Support\SignupOfferService;
 use App\Support\SiteContext;
 use App\Support\SiteResolver;
@@ -96,6 +97,10 @@ class AdminPeopleController extends Controller
             'ref_code_other' => '',
             'exist_customer' => '1',
         ], CustomerPricing::sitePricingPayload($site), $this->legacyRegistrationDefaults($site), PasswordManager::payload((string) $validated['user_psw'])));
+
+        $customer->forceFill([
+            'customer_pending_order_limit' => OrderAutomation::resolvePendingOrderLimit($customer),
+        ])->save();
 
         return redirect(url('/v/customer_list.php'))
             ->with('success', 'Customer account created successfully. Customer ID: '.$customer->user_id);

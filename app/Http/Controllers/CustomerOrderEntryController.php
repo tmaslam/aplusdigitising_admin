@@ -561,6 +561,9 @@ class CustomerOrderEntryController extends Controller
         if ($totalFunds <= 0.0001) {
             $canPlace = false;
             $warning = 'Your account balance is insufficient to place new orders or quotes. Please add funds to your account before continuing.';
+        } elseif ($totalFunds < $pendingAmount) {
+            $canPlace = false;
+            $warning = 'Your available funds (US$'.number_format($totalFunds, 2).') are insufficient to cover your pending orders (US$'.number_format($pendingAmount, 2).'). Please add funds before placing new work.';
         } elseif ($creditLimit > 0 && $pendingAmount >= $creditLimit) {
             $canPlace = false;
             $warning = "You have exceeded your credit limit of US$".number_format($creditLimit, 2).". Please clear billing or contact support to continue.";

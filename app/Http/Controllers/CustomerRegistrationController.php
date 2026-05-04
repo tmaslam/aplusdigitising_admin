@@ -9,6 +9,7 @@ use App\Support\CustomerPricing;
 use App\Support\CustomerRememberLogin;
 use App\Support\CustomerPublicRateLimit;
 use App\Support\EmailValidation;
+use App\Support\OrderAutomation;
 use App\Support\PasswordManager;
 use App\Support\PortalMailer;
 use App\Support\SecurityAudit;
@@ -151,6 +152,10 @@ class CustomerRegistrationController extends Controller
             'ref_code_other' => $referralSource,
             'exist_customer' => '0',
         ], CustomerPricing::sitePricingPayload($site), $this->legacyRegistrationDefaults($site), PasswordManager::payload((string) $validated['user_psw'])));
+
+        $customer->forceFill([
+            'customer_pending_order_limit' => OrderAutomation::resolvePendingOrderLimit($customer),
+        ])->save();
 
         $request->session()->forget([
             'admin_user_id',

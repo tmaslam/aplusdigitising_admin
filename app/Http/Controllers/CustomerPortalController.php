@@ -21,6 +21,7 @@ use App\Support\OrderAutomation;
 use App\Support\OrderWorkflowMetaManager;
 use App\Support\PortalMailer;
 use App\Support\SecurityAudit;
+use App\Support\BulkZipDownload;
 use App\Support\SharedUploads;
 use App\Support\SiteContext;
 use App\Support\SignupOfferService;
@@ -308,6 +309,51 @@ class CustomerPortalController extends Controller
             'isDefaultRange' => $isDefaultRange,
             'sort'           => $sortColumn,
             'dir'            => $sortDir,
+        ]);
+    }
+
+    public function downloadAllFiles(Request $request)
+    {
+        $customer = $this->customer($request);
+        $site = $this->site($request);
+
+        $dateFrom = trim((string) $request->input('date_from', ''));
+        $dateTo   = trim((string) $request->input('date_to', ''));
+
+        if ($request->isMethod('post')) {
+            $query = $this->paidOrdersQuery($customer, $site);
+
+            if ($dateFrom !== '') {
+                $query->whereDate('completion_date', '>=', $dateFrom);
+            }
+            if ($dateTo !== '') {
+                $query->whereDate('completion_date', '<=', $dateTo);
+            }
+
+            $orders = $query->orderBy('completion_date', 'desc')->get();
+
+            $attachments = new \Illuminate\Database\Eloquent\Collection();
+            foreach ($orders as $order) {
+                $source = CustomerAttachmentAccess::sourceAttachments($order);
+                $released = CustomerAttachmentAccess::releasedAttachments($order);
+                $attachments = $attachments->merge($source)->merge($released);
+            }
+
+            $attachments = CustomerAttachmentAccess::uniqueDisplayAttachments($attachments);
+
+            $zipName = 'my-files-' . ($dateFrom ?: 'all') . '-to-' . ($dateTo ?: 'all');
+
+            return BulkZipDownload::build(
+                $attachments,
+                $zipName,
+                fn (Attachment $a) => 'Order-' . $a->order_id . '/' . ($a->file_name ?: basename((string) $a->file_name_with_date))
+            );
+        }
+
+        return view('customer.download-all-files', [
+            'pageTitle' => 'Download All Files',
+            'dateFrom'  => $dateFrom,
+            'dateTo'    => $dateTo,
         ]);
     }
 
@@ -876,10 +922,20 @@ class CustomerPortalController extends Controller
         $creditLimit = $this->money($customer->customer_approval_limit);
         $pendingLimit = max(0, (int) $customer->customer_pending_order_limit);
 
+        $availableBalance = CustomerBalance::available((int) $customer->user_id, $site->legacyKey);
+        $depositBalance = CustomerBalance::deposit($customer->topup);
+        $totalFunds = $availableBalance + $depositBalance;
+
         $warning = null;
         $canPlace = true;
 
-        if ($creditLimit > 0 && $pendingAmount >= $creditLimit) {
+        if ($totalFunds <= 0.0001) {
+            $canPlace = false;
+            $warning = 'Your account balance is insufficient to place new orders or quotes. Please add funds to your account before continuing.';
+        } elseif ($totalFunds < $pendingAmount) {
+            $canPlace = false;
+            $warning = 'Your available funds (US$'.number_format($totalFunds, 2).') are insufficient to cover your pending orders (US$'.number_format($pendingAmount, 2).'). Please add funds before placing new work.';
+        } elseif ($creditLimit > 0 && $pendingAmount >= $creditLimit) {
             $canPlace = false;
             $warning = 'You have exceeded your credit limit of US$'.number_format($creditLimit, 2).'. Please clear billing or contact support to continue.';
         } elseif ($pendingLimit > 0 && $pendingOrders >= $pendingLimit) {
