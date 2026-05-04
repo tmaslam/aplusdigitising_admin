@@ -124,12 +124,17 @@ class SystemEmailTemplates
 
         $template = self::template($site, $key);
         if ($template) {
-            return [
-                'subject' => self::replaceTokens((string) $template->subject, $tokens),
-                'body' => self::replaceTokens((string) $template->body, $tokens),
-                'template_name' => (string) $template->template_name,
-                'from_template' => true,
-            ];
+            $subject = self::replaceTokens((string) $template->subject, $tokens);
+            $body = self::replaceTokens((string) $template->body, $tokens);
+
+            if (trim($body) !== '') {
+                return [
+                    'subject' => $subject,
+                    'body' => $body,
+                    'template_name' => (string) $template->template_name,
+                    'from_template' => true,
+                ];
+            }
         }
 
         $default = $fallback($tokens);
