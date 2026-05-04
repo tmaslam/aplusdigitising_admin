@@ -13,8 +13,8 @@
             </div>
             <div style="display:flex;gap:12px;flex-wrap:wrap;">
                 <a class="button ghost" href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}">Download Order List</a>
-                <a class="button secondary" href="/new-order.php">Start Digitizing Order</a>
-                <a class="button secondary" href="/vector-order.php">Start Vector Order</a>
+                <a class="button secondary" href="{{ url('/new-order.php') }}">Start Digitizing Order</a>
+                <a class="button secondary" href="{{ url('/vector-order.php') }}">Start Vector Order</a>
             </div>
         </div>
 

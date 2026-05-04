@@ -510,7 +510,7 @@
 
         <header class="marketing-header">
             <div class="container marketing-header-shell">
-                <a href="/login.php" class="marketing-brand">
+                <a href="{{ url('/login.php') }}" class="marketing-brand">
                     <img class="site-logo" src="{{ $legacyAssetBase }}{{ $siteContext->logoPath() }}" alt="{{ $siteContext->displayLabel() }}">
                 </a>
 
@@ -518,13 +518,13 @@
 
                 <div class="marketing-actions">
                     @if (session()->has('customer_user_id'))
-                        <a class="button secondary marketing-action-button" href="/dashboard.php">Dashboard</a>
-                        <a class="button secondary marketing-action-button" href="/logout.php">Logout</a>
-                        <a class="button primary marketing-action-button" href="/quote.php">Get Quote</a>
+                        <a class="button secondary marketing-action-button" href="{{ url('/dashboard.php') }}">Dashboard</a>
+                        <a class="button secondary marketing-action-button" href="{{ url('/logout.php') }}">Logout</a>
+                        <a class="button primary marketing-action-button" href="{{ url('/quote.php') }}">Get Quote</a>
                     @else
-                        <a class="button secondary marketing-action-button" href="/login.php">Login</a>
-                        <a class="button secondary marketing-action-button" href="/sign-up.php">Sign Up</a>
-                        <a class="button primary marketing-action-button" href="/sign-up.php">Get Quote</a>
+                        <a class="button secondary marketing-action-button" href="{{ url('/login.php') }}">Login</a>
+                        <a class="button secondary marketing-action-button" href="{{ url('/sign-up.php') }}">Sign Up</a>
+                        <a class="button primary marketing-action-button" href="{{ url('/sign-up.php') }}">Get Quote</a>
                     @endif
                 </div>
 
@@ -592,7 +592,7 @@
                             @endif
                         </ul>
                         <div class="footer-cta-group">
-                            <a class="button secondary footer-button" href="/login.php">Login</a>
+                            <a class="button secondary footer-button" href="{{ url('/login.php') }}">Login</a>
                             <a class="button primary footer-button" href="{{ session()->has('customer_user_id') ? '/quote.php' : '/sign-up.php' }}">Get Quote</a>
                         </div>
                     </div>
@@ -605,8 +605,8 @@
                     <div class="footer-bottom" style="margin-top:0;padding-top:0;">
                         <p>&copy; {{ date('Y') }} A Plus Digitizing. All rights reserved.</p>
                         <div class="footer-bottom-links">
-                            <a href="/login.php">Login</a>
-                            <a href="/sign-up.php">Sign Up</a>
+                            <a href="{{ url('/login.php') }}">Login</a>
+                            <a href="{{ url('/sign-up.php') }}">Sign Up</a>
                         </div>
                     </div>
                 </div>

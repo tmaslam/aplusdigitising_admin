@@ -37,7 +37,7 @@
                             <div>
                                 <strong style="font-size:1.1rem; color:{{ $isCurrent ? 'var(--brand-dark)' : 'inherit' }}">{{ $plan['name'] }}</strong>
                                 <div style="color:{{ $isCurrent ? 'var(--brand-dark)' : 'var(--muted)' }}; font-size:0.9rem; margin-top:4px; font-weight:{{ $isCurrent ? '600' : '400' }}">${{ $plan['amount'] }} / month</div>
-                                <a href="/price-plan.php" style="color:var(--brand); font-size:0.85rem; text-decoration:underline;">see benefits</a>
+                                <a href="{{ url('/price-plan.php') }}" style="color:var(--brand); font-size:0.85rem; text-decoration:underline;">see benefits</a>
                             </div>
                             <button type="submit" class="button primary" @disabled(! $canSelect)>
                                 {{ $buttonLabel }}

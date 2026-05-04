@@ -62,7 +62,7 @@
 
                     <div class="hero-buttons">
                         <a href="{{ $ctaUrl }}" class="button primary">Get Your Free Quote</a>
-                        <a href="/our-services.php" class="button secondary">Explore Our Services</a>
+                        <a href="{{ url('/our-services.php') }}" class="button secondary">Explore Our Services</a>
                     </div>
 
                     <div class="hero-features">
@@ -262,7 +262,7 @@
                 </div>
 
                 <div class="welcome-offer-actions">
-                    <a class="button primary" href="/sign-up.php">Claim This Offer</a>
+                    <a class="button primary" href="{{ url('/sign-up.php') }}">Claim This Offer</a>
                     <button type="button" class="button secondary" data-welcome-offer-close>Maybe Later</button>
                 </div>
             </div>

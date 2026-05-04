@@ -25,7 +25,7 @@
             </label>
             <div class="field-actions">
                 <button type="submit">Filter</button>
-                <a class="button secondary" href="/view-invoices.php">Reset</a>
+                <a class="button secondary" href="{{ url('/view-invoices.php') }}">Reset</a>
             </div>
             <div class="field-hint">
                 @if (! empty($usingDefaultRange))

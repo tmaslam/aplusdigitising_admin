@@ -184,7 +184,7 @@
 
                 <div class="actions">
                     <button type="submit" id="register-btn">Register</button>
-                    <a class="button secondary" href="/login.php">Already Have An Account?</a>
+                    <a class="button secondary" href="{{ url('/login.php') }}">Already Have An Account?</a>
                 </div>
             </form>
 

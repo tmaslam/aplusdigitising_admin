@@ -13,8 +13,8 @@
             </div>
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                 <a class="button ghost" href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}">Download Quote List</a>
-                <a class="button secondary" href="/quote.php">Start Digitizing Quote</a>
-                <a class="button secondary" href="/vector-quote.php">Start Vector Quote</a>
+                <a class="button secondary" href="{{ url('/quote.php') }}">Start Digitizing Quote</a>
+                <a class="button secondary" href="{{ url('/vector-quote.php') }}">Start Vector Quote</a>
             </div>
         </div>
 

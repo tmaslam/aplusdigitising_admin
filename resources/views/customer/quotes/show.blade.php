@@ -262,7 +262,7 @@
                             aria-expanded="{{ $errors->has('reason_code') || $errors->has('reason_text') || $errors->has('target_amount') ? 'true' : 'false' }}"
                         >Reject Quote</button>
                     @endif
-                    <a class="button secondary" href="/view-quotes.php">Back To Quotes</a>
+                    <a class="button secondary" href="{{ url('/view-quotes.php') }}">Back To Quotes</a>
                 </div>
             </form>
         @endif

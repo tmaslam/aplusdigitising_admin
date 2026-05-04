@@ -72,7 +72,7 @@
                     'buttonPrefix' => 'Continue With',
                 ])
             </form>
-            <a class="button secondary" href="/logout.php">Log Out</a>
+            <a class="button secondary" href="{{ url('/logout.php') }}">Log Out</a>
         </div>
     </section>
 

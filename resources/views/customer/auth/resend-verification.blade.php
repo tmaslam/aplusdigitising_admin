@@ -39,7 +39,7 @@
 
                 <div class="actions">
                     <button type="submit">Send Verification Email</button>
-                    <a class="button secondary" href="/login.php">Back To Login</a>
+                    <a class="button secondary" href="{{ url('/login.php') }}">Back To Login</a>
                 </div>
             </form>
         </section>

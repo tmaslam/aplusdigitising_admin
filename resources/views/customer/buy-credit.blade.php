@@ -51,7 +51,7 @@
                 </div>
 
                 <button type="submit" class="button primary">Proceed to Payment</button>
-                <a href="/dashboard.php" class="button secondary" style="margin-left:8px;">Cancel</a>
+                <a href="{{ url('/dashboard.php') }}" class="button secondary" style="margin-left:8px;">Cancel</a>
             </form>
         </section>
     </div>

@@ -24,7 +24,7 @@
             >
             <button type="submit">Search</button>
             @if ($search !== '')
-                <a class="button secondary" href="/view-archive-orders.php">Clear</a>
+                <a class="button secondary" href="{{ url('/view-archive-orders.php') }}">Clear</a>
             @endif
         </form>
 

@@ -40,7 +40,7 @@
 
                 <div class="actions">
                     <button type="submit">Send Reset Link</button>
-                    <a class="button secondary" href="/login.php">Back to Login</a>
+                    <a class="button secondary" href="{{ url('/login.php') }}">Back to Login</a>
                 </div>
             </form>
         </section>

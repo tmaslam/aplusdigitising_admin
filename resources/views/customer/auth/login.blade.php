@@ -47,14 +47,14 @@
 
                 <div class="actions">
                     <button type="submit">Sign In</button>
-                    <a class="button secondary" href="/sign-up.php">Create Account</a>
+                    <a class="button secondary" href="{{ url('/sign-up.php') }}">Create Account</a>
                 </div>
             </form>
 
             <p class="muted" style="margin-top:16px;">
-                <a href="/forget-password.php">Forgot your password?</a><br>
-                <a href="/resend-verification.php">Need a new verification email?</a><br>
-                Need help? <a href="/contact-us.php">Contact Us</a>.
+                <a href="{{ url('/forget-password.php') }}">Forgot your password?</a><br>
+                <a href="{{ url('/resend-verification.php') }}">Need a new verification email?</a><br>
+                Need help? <a href="{{ url('/contact-us.php') }}">Contact Us</a>.
             </p>
         </section>
     </div>

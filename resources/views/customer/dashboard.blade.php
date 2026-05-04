@@ -39,19 +39,19 @@
         </div>
 
         <div class="portal-stat-grid">
-            <a class="metric-link" href="/view-orders.php">
+            <a class="metric-link" href="{{ url('/view-orders.php') }}">
                 <article class="portal-stat">
                     <span>My Orders</span>
                     <strong>{{ $metrics['orders'] }}</strong>
                 </article>
             </a>
-            <a class="metric-link" href="/view-quotes.php">
+            <a class="metric-link" href="{{ url('/view-quotes.php') }}">
                 <article class="portal-stat">
                     <span>My Quotes</span>
                     <strong>{{ $metrics['quotes'] }}</strong>
                 </article>
             </a>
-            <a class="metric-link" href="/view-billing.php">
+            <a class="metric-link" href="{{ url('/view-billing.php') }}">
                 <article class="portal-stat">
                     <span>Payment Due</span>
                     <strong>${{ number_format($metrics['billing_total'], 2) }}</strong>
@@ -79,22 +79,22 @@
         </div>
 
         <div class="action-grid">
-            <a class="action-card action-card-primary" href="/new-order.php">
+            <a class="action-card action-card-primary" href="{{ url('/new-order.php') }}">
                 <span>Digitizing</span>
                 <strong>Place New Order</strong>
                 <p>Upload artwork and start a standard digitizing request.</p>
             </a>
-            <a class="action-card" href="/quote.php">
+            <a class="action-card" href="{{ url('/quote.php') }}">
                 <span>Quote</span>
                 <strong>Digitizing Quote</strong>
                 <p>Ask for digitizing pricing first before placing a new order.</p>
             </a>
-            <a class="action-card" href="/vector-order.php">
+            <a class="action-card" href="{{ url('/vector-order.php') }}">
                 <span>Vector</span>
                 <strong>Place Vector Order</strong>
                 <p>Start a vector-only job with the existing vector order flow.</p>
             </a>
-            <a class="action-card" href="/vector-quote.php">
+            <a class="action-card" href="{{ url('/vector-quote.php') }}">
                 <span>Vector Quote</span>
                 <strong>Request Vector Quote</strong>
                 <p>Ask for vector pricing first before placing a vector order.</p>
@@ -161,7 +161,7 @@
                                 <span class="status warning">{{ $metrics['billing_count'] }} due</span>
                             </div>
                             <div class="file-actions">
-                                <a class="button secondary" href="/view-billing.php">Open Billing</a>
+                                <a class="button secondary" href="{{ url('/view-billing.php') }}">Open Billing</a>
                             </div>
                         </div>
                     @endif

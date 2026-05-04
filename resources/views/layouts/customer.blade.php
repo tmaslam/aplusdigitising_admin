@@ -2182,18 +2182,18 @@
         $currentPath = request()->path();
         $customerName = request()->attributes->get('customerUser')?->display_name ?? session('customer_user_name');
         $customerNav = [
-            ['label' => 'Dashboard', 'href' => '/dashboard.php', 'match' => ['dashboard.php']],
-            ['label' => 'Orders', 'href' => '/view-orders.php', 'match' => ['new-order.php', 'vector-order.php', 'view-orders.php', 'view-order-detail.php', 'edit-order.php', 'disapprove-order.php', 'download.php', 'preview.php']],
-            ['label' => 'Quotes', 'href' => '/view-quotes.php', 'match' => ['quote.php', 'vector_quote.php', 'vector-quote.php', 'digitizing_quote.php', 'digitizing-quote.php', 'view-quotes.php', 'view-quote-detail.php', 'edit-quote.php']],
-            ['label' => 'Billing', 'href' => '/view-billing.php', 'match' => ['view-billing.php', 'payment.php', 'payment-proceed.php', 'successpay.php', 'referral-invoice.php']],
-            ['label' => 'Paid Orders', 'href' => '/view-archive-orders.php', 'match' => ['view-paid-orders.php', 'view-archive-orders.php']],
-            ['label' => 'Invoices', 'href' => '/view-invoices.php', 'match' => ['view-invoices.php', 'view-invoice-detail.php']],
+            ['label' => 'Dashboard', 'href' => url('/dashboard.php'), 'match' => ['dashboard.php']],
+            ['label' => 'Orders', 'href' => url('/view-orders.php'), 'match' => ['new-order.php', 'vector-order.php', 'view-orders.php', 'view-order-detail.php', 'edit-order.php', 'disapprove-order.php', 'download.php', 'preview.php']],
+            ['label' => 'Quotes', 'href' => url('/view-quotes.php'), 'match' => ['quote.php', 'vector_quote.php', 'vector-quote.php', 'digitizing_quote.php', 'digitizing-quote.php', 'view-quotes.php', 'view-quote-detail.php', 'edit-quote.php']],
+            ['label' => 'Billing', 'href' => url('/view-billing.php'), 'match' => ['view-billing.php', 'payment.php', 'payment-proceed.php', 'successpay.php', 'referral-invoice.php']],
+            ['label' => 'Paid Orders', 'href' => url('/view-archive-orders.php'), 'match' => ['view-paid-orders.php', 'view-archive-orders.php']],
+            ['label' => 'Invoices', 'href' => url('/view-invoices.php'), 'match' => ['view-invoices.php', 'view-invoice-detail.php']],
         ];
         $customerStartLinks = [
-            ['label' => 'Digitizing Order', 'href' => '/new-order.php', 'description' => 'Start a regular embroidery digitizing order.'],
-            ['label' => 'Vector Order', 'href' => '/vector-order.php', 'description' => 'Submit a vector-only order directly.'],
-            ['label' => 'Digitizing Quote', 'href' => '/quote.php', 'description' => 'Get digitizing pricing first before placing the order.'],
-            ['label' => 'Vector Quote', 'href' => '/vector-quote.php', 'description' => 'Request vector pricing first before placing the order.'],
+            ['label' => 'Digitizing Order', 'href' => url('/new-order.php'), 'description' => 'Start a regular embroidery digitizing order.'],
+            ['label' => 'Vector Order', 'href' => url('/vector-order.php'), 'description' => 'Submit a vector-only order directly.'],
+            ['label' => 'Digitizing Quote', 'href' => url('/quote.php'), 'description' => 'Get digitizing pricing first before placing the order.'],
+            ['label' => 'Vector Quote', 'href' => url('/vector-quote.php'), 'description' => 'Request vector pricing first before placing the order.'],
         ];
     @endphp
 
@@ -2207,8 +2207,8 @@
                             <strong>{{ $customerName ?: 'Customer' }}</strong>
                         </div>
                         <div class="account-chip-actions">
-                            <a class="account-chip-link" href="/my-profile.php">My Profile</a>
-                            <a class="account-chip-link" href="/logout.php">Logout</a>
+                            <a class="account-chip-link" href="{{ url('/my-profile.php') }}">My Profile</a>
+                            <a class="account-chip-link" href="{{ url('/logout.php') }}">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -2217,7 +2217,7 @@
 
         <header class="site-header">
             <div class="container nav-shell">
-                <a class="brand" href="/login.php">
+                <a class="brand" href="{{ url('/login.php') }}">
                     <img src="{{ $legacyAssetBase }}{{ $siteContext->logoPath() }}" alt="{{ $siteContext->displayLabel() }}">
                 </a>
 
@@ -2360,7 +2360,7 @@
                                             <button type="submit" @disabled(! $canSelectPlan)>
                                                 <strong>{{ $plan['name'] }} ${{ $plan['amount'] }}/Month</strong>
                                                 <span>{{ $plan['designs'] }}</span>
-                                                <a href="/price-plan.php" class="benefits-link" onclick="event.stopPropagation();">see benefits</a>
+                                                <a href="{{ url('/price-plan.php') }}" class="benefits-link" onclick="event.stopPropagation();">see benefits</a>
                                             </button>
                                         </form>
                                     @endforeach
