@@ -184,6 +184,52 @@ class CustomerPaymentController extends Controller
         return $this->startCheckout($request, $site, $customer, collect([$billing]), 'single_invoice');
     }
 
+    public function payFromBalance(Request $request, Billing $billing)
+    {
+        $customer = $this->customer($request);
+        $site = $this->site($request);
+
+        $billing = Billing::query()
+            ->active()
+            ->with('order')
+            ->where('bill_id', $billing->bill_id)
+            ->where('user_id', $customer->user_id)
+            ->where('approved', 'yes')
+            ->where('payment', 'no')
+            ->where(function ($query) use ($site) {
+                $query->where('website', $site->legacyKey)
+                    ->orWhereNull('website')
+                    ->orWhere('website', '')
+                    ->orWhereHas('order', function ($orderQuery) use ($site) {
+                        $orderQuery->forWebsite($site->legacyKey);
+                    });
+            })
+            ->first();
+
+        if (! $billing) {
+            return redirect('/view-invoices.php')->with('success', 'This invoice is already settled and available in your invoice history.');
+        }
+
+        $invoiceAmount = (float) ($billing->order?->total_amount ?: $billing->amount);
+        $availableBalance = CustomerBalance::available((int) $customer->user_id, $site->legacyKey);
+        $depositBalance = CustomerBalance::deposit($customer->topup);
+        $totalFunds = $availableBalance + $depositBalance;
+
+        if ($totalFunds < $invoiceAmount) {
+            return redirect('/view-billing.php')->withErrors([
+                'payment' => 'Insufficient funds. Your available balance is US$'.number_format($totalFunds, 2).' but this invoice requires US$'.number_format($invoiceAmount, 2).'. Please add funds before paying.',
+            ]);
+        }
+
+        if (CustomerBalance::applyToBilling($billing, 'customer-balance-pay')) {
+            return redirect('/view-archive-orders.php')->with('success', 'Invoice paid successfully using your available balance.');
+        }
+
+        return redirect('/view-billing.php')->withErrors([
+            'payment' => 'Unable to apply balance to this invoice. Please contact support.',
+        ]);
+    }
+
     public function handleReturn(Request $request)
     {
         $site = $this->site($request);

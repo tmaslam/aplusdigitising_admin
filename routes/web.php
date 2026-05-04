@@ -102,6 +102,7 @@ Route::middleware('detect.site')->group(function () use ($adminPrefix, $internal
     Route::get('/view-quote-detail.php', [CustomerPortalController::class, 'showQuote'])->middleware('customer.auth');
     Route::get('/view-billing.php', [CustomerPortalController::class, 'billing'])->middleware('customer.auth');
     Route::get('/view-archive-orders.php', [CustomerPortalController::class, 'archive'])->middleware('customer.auth');
+    Route::match(['get', 'post'], '/download-all-files.php', [CustomerPortalController::class, 'downloadAllFiles'])->middleware('customer.auth');
     Route::get('/view-paid-orders.php', [CustomerAccountController::class, 'paidAdvanceOrders'])->middleware('customer.auth');
     Route::get('/view-invoices.php', [CustomerAccountController::class, 'invoices'])->middleware('customer.auth');
     Route::get('/view-invoice-detail.php', [CustomerAccountController::class, 'invoiceDetail'])->middleware('customer.auth');
@@ -127,6 +128,7 @@ Route::middleware('detect.site')->group(function () use ($adminPrefix, $internal
     Route::post('/quotes/{order}/delete', [CustomerPortalController::class, 'deleteQuote'])->middleware('customer.auth');
     Route::post('/view-billing.php/pay-all', [CustomerPaymentController::class, 'startOutstanding'])->middleware('customer.auth');
     Route::post('/view-billing.php/{billing}/pay', [CustomerPaymentController::class, 'startSingle'])->middleware('customer.auth');
+    Route::post('/view-billing.php/{billing}/balance-pay', [CustomerPaymentController::class, 'payFromBalance'])->middleware('customer.auth');
     Route::get('/buy-credit.php', [CustomerPortalController::class, 'buyCredit'])->middleware('customer.auth');
     Route::post('/buy-credit.php', [CustomerPortalController::class, 'buyCredit'])->middleware('customer.auth');
     Route::get('/buy-credit-link.php', [CustomerPortalController::class, 'buyCreditLink'])->middleware('customer.auth');
@@ -309,6 +311,7 @@ Route::middleware('admin.auth')->group(function () use ($adminPrefix) {
     Route::post('/v/ordersquick-delete', [AdminToolsController::class, 'deleteQuickQuotes']);
     Route::match(['get', 'post'], '/v/show-all-blogs.php', [AdminToolsController::class, 'blogs']);
     Route::post('/v/show-all-blogs/{blog}/delete', [AdminToolsController::class, 'deleteBlog']);
+    Route::match(['get', 'post'], '/v/download-backup.php', [AdminToolsController::class, 'downloadBackup']);
 });
 
 Route::middleware('detect.site')->group(function () {
