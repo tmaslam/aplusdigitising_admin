@@ -54,7 +54,7 @@
             <p class="muted" style="margin-top:16px;">
                 <a href="{{ url('/forget-password.php') }}">Forgot your password?</a><br>
                 <a href="{{ url('/resend-verification.php') }}">Need a new verification email?</a><br>
-                Need help? <a href="{{ url('/contact-us.php') }}">Contact Us</a>.
+                Need help? <a href="https://aplusdigitizing.com/contact" target="_blank" rel="noopener">Contact Us</a>.
             </p>
         </section>
     </div>
