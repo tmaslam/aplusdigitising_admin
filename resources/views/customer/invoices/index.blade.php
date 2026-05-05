@@ -11,7 +11,7 @@
                 <h3>Invoice History</h3>
                 <p>Each transaction groups the paid billing rows that were settled together.</p>
             </div>
-            <a class="button ghost" href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}">Download Invoice List</a>
+
         </div>
 
         <form method="get" action="/view-invoices.php" class="invoice-filterbar">
