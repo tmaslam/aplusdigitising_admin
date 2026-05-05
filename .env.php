@@ -1,7 +1,7 @@
 APP_NAME="APLUS Digitizing (Local)"
 APP_ENV=local
 APP_KEY=base64:dDF9RxNCFK8UM2ohlV2fVbdNCTskz+XhJ7UNazaByf0=
-APP_DEBUG=true
+APP_DEBUG=false
 APP_URL=http://127.0.0.1:8000
 
 APP_TIMEZONE=UTC
@@ -40,13 +40,13 @@ SESSION_SAME_SITE=lax
 
 # ========================
 
-MAIL_MAILER=log
-MAIL_HOST=127.0.0.1
-MAIL_PORT=1025
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_FROM_ADDRESS="[test@example.com](mailto:test@example.com)"
-MAIL_FROM_NAME="Laravel Local"
+MAIL_MAILER=smtp
+MAIL_HOST=mail.digitizingzone.com
+MAIL_PORT=587
+MAIL_USERNAME=support@digitizingzone.com
+MAIL_PASSWORD=Support@!23
+MAIL_FROM_ADDRESS="noreply@1dollardigitizing.com"
+MAIL_FROM_NAME="A Plus Digitizing"
 
 # ========================
 
@@ -82,8 +82,10 @@ PRIMARY_SITE_KEY="1dollar"
 PRIMARY_SITE_LEGACY_KEY="1dollar"
 PRIMARY_SITE_HOST="localhost"
 
-SITE_SUPPORT_EMAIL="[test@example.com](mailto:test@example.com)"
-SITE_FROM_EMAIL="[test@example.com](mailto:test@example.com)"
-ADMIN_ALERT_EMAIL="[test@example.com](mailto:test@example.com)"
+SITE_SUPPORT_EMAIL="noreply@1dollardigitizing.com"
+SITE_FROM_EMAIL="noreply@1dollardigitizing.com"
+ADMIN_ALERT_EMAIL="aplusdigitizing@gmail.com"
 
 SITE_COMPANY_ADDRESS="Local Development Environment"
+
+MAIL_SCHEME=

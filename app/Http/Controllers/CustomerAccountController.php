@@ -225,9 +225,9 @@ class CustomerAccountController extends Controller
 
             $pdf = InvoicePdf::render([
                 'title' => 'Invoice '.$transactionId,
-                'site_label' => str_replace('Digitizing', 'Digitising', $site->displayLabel()),
+                'site_label' => $site->displayLabel(),
                 'site_address' => $site->companyAddress,
-                'support_email' => $site->supportEmail,
+                'support_email' => 'support@aplusdigitizing.com',
                 'customer_name' => ucwords(strtolower((string) $customer->display_name)),
                 'customer_address' => $customerAddress,
                 'customer_phone' => $customerPhone,
@@ -254,7 +254,7 @@ class CustomerAccountController extends Controller
 
             $safeTransId = preg_replace('/[^A-Za-z0-9\-]+/', '-', trim($transactionId, "- \t\n\r\0\x0B"));
             $invoiceFileName = sprintf(
-                'aplus-digitising-invoice-%s.pdf',
+                'aplus-digitizing-invoice-%s.pdf',
                 $safeTransId
             );
 

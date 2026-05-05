@@ -1023,6 +1023,7 @@ if (!isset($siteContext)) {
                 <a href="{{ url('/v/offer-claims.php') }}" class="{{ request()->is('v/offer-claims.php') || request()->is('v/site-offers/*/claims') ? 'active' : '' }}"><span>Offer Claims</span></a>
                 <a href="{{ url('/v/transaction-history.php') }}" class="{{ request()->is('v/transaction-history.php') || request()->is('v/pay-now.php') ? 'active' : '' }}"><span>Transactions</span></a>
                 <a href="{{ url('/v/customer-payment-inventory.php') }}" class="{{ request()->is('v/customer-payment-inventory.php') ? 'active' : '' }}"><span>Customer Payment Inventory</span></a>
+                <a href="{{ url('/v/download-backup.php') }}" class="{{ request()->is('v/download-backup.php') ? 'active' : '' }}"><span>Download Backup</span></a>
             </div>
         </div>
 
@@ -1068,6 +1069,9 @@ if (!isset($siteContext)) {
             @endif
             @if (session('success'))
                 <div class="alert">{{ session('success') }}</div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-error">{{ session('error') }}</div>
             @endif
             @yield('content')
         </section>

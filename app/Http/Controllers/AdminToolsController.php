@@ -17,6 +17,8 @@ use App\Models\SecurityAuditEvent;
 use App\Models\Site;
 use App\Support\AdminNavigation;
 use App\Support\ApprovedBillingSync;
+use App\Support\BulkZipDownload;
+use App\Support\CustomerAttachmentAccess;
 use App\Support\CustomerBalance;
 use App\Support\PortalMailer;
 use App\Support\SecurityAlertSummary;
@@ -1613,6 +1615,56 @@ class AdminToolsController extends Controller
             'legacy_key' => $site->legacyKey,
             'label' => $site->brandName,
         ]];
+    }
+
+    public function downloadBackup(Request $request)
+    {
+        $dateFrom = trim((string) $request->input('date_from', ''));
+        $dateTo   = trim((string) $request->input('date_to', ''));
+
+        if ($request->isMethod('post')) {
+            $query = Order::query()
+                ->active()
+                ->where('is_active', '1');
+
+            if ($dateFrom !== '') {
+                $query->whereDate('submit_date', '>=', $dateFrom);
+            }
+            if ($dateTo !== '') {
+                $query->whereDate('submit_date', '<=', $dateTo);
+            }
+
+            $orders = $query->orderBy('submit_date', 'desc')->get();
+
+            $attachments = new \Illuminate\Database\Eloquent\Collection();
+            foreach ($orders as $order) {
+                $orderAttachments = Attachment::query()
+                    ->where('order_id', $order->order_id)
+                    ->whereNull('end_date')
+                    ->orderBy('id')
+                    ->get();
+
+                $attachments = $attachments->merge($orderAttachments);
+            }
+
+            if (! BulkZipDownload::hasExistingFiles($attachments)) {
+                return back()->with('error', 'No files were found for the selected criteria.');
+            }
+
+            $zipName = 'backup-' . ($dateFrom ?: 'all') . '-to-' . ($dateTo ?: 'all');
+
+            return BulkZipDownload::build(
+                $attachments,
+                $zipName,
+                fn (Attachment $a) => 'Order-' . $a->order_id . '/' . ($a->file_name ?: basename((string) $a->file_name_with_date))
+            );
+        }
+
+        return view('admin.tools.download-backup', [
+            'pageTitle' => 'Download Backup',
+            'dateFrom'  => $dateFrom,
+            'dateTo'    => $dateTo,
+        ]);
     }
 
 }

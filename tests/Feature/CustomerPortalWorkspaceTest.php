@@ -1394,7 +1394,7 @@ class CustomerPortalWorkspaceTest extends TestCase
 
         $response->assertOk();
         $response->assertHeader('content-type', 'application/pdf');
-        $response->assertHeader('content-disposition', 'attachment; filename="aplus-digitising-invoice-NO-CHARGE-4010.pdf"');
+        $response->assertHeader('content-disposition', 'attachment; filename="aplus-digitizing-invoice-NO-CHARGE-4010.pdf"');
         $this->assertStringStartsWith('%PDF-', (string) $response->getContent());
     }
 
