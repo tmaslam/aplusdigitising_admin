@@ -339,8 +339,6 @@ class CustomerPortalController extends Controller
                 $attachments = $attachments->merge($source)->merge($released);
             }
 
-            $attachments = CustomerAttachmentAccess::uniqueDisplayAttachments($attachments);
-
             $zipName = 'my-files-' . ($dateFrom ?: 'all') . '-to-' . ($dateTo ?: 'all');
 
             return BulkZipDownload::build(
@@ -441,6 +439,16 @@ class CustomerPortalController extends Controller
             $this->sendAdminAlertForCustomerAction($customer, $site, $order, 'Customer Approved Order');
 
             return redirect('/view-archive-orders.php')->with('success', 'Your order has been approved and moved to paid orders.');
+        }
+
+        $availableBalance = CustomerBalance::available((int) $customer->user_id, $site->legacyKey);
+        $depositBalance = CustomerBalance::deposit($customer->topup);
+        $totalFunds = $availableBalance + $depositBalance;
+
+        if ($totalFunds < $amount) {
+            return back()->withErrors([
+                'approval' => 'Insufficient funds. Your available balance is US$'.number_format($totalFunds, 2).' but this order requires US$'.number_format($amount, 2).'. Please add funds before approving.',
+            ]);
         }
 
         $billing = Billing::query()
