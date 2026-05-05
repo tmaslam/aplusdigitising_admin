@@ -11,7 +11,11 @@
                 <h3>Paid Orders</h3>
                 <p>Orders appear here after payment is recorded or a no-charge order is approved.</p>
             </div>
-            <a class="button ghost" href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}">Download Paid Orders</a>
+            <form method="post" action="{{ url('/download-all-files.php') }}" style="display:inline-block;">
+                @csrf
+                <button type="submit" class="button primary">Download Paid Orders</button>
+            </form>
+            <a class="button ghost" href="{{ url('/download-all-files.php') }}">Download All Files</a>
         </div>
 
         <form method="get" action="/view-archive-orders.php" class="filter-bar">
