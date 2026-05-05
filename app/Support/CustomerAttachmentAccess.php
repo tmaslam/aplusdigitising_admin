@@ -156,7 +156,7 @@ class CustomerAttachmentAccess
         return in_array((string) $order->status, ['done', 'approved'], true);
     }
 
-    private static function uniqueDisplayAttachments(Collection $attachments): Collection
+    public static function uniqueDisplayAttachments(Collection $attachments): Collection
     {
         return $attachments
             ->reverse()
