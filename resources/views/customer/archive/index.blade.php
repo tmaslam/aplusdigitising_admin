@@ -15,7 +15,6 @@
                 @csrf
                 <button type="submit" class="button primary">Download Paid Orders</button>
             </form>
-            <a class="button ghost" href="{{ url('/download-all-files.php') }}">Download All Files</a>
         </div>
 
         <form method="get" action="/view-archive-orders.php" class="filter-bar">
