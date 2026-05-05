@@ -220,28 +220,31 @@ class CustomerAccountController extends Controller
                 default => ($primaryBilling && filled((string) $primaryBilling->payer_id) ? 'Stripe' : 'Online Payment'),
             };
             $customerAddress = $this->customerInvoiceAddress($customer);
-            $invoiceNumber = $items->count() === 1
-                ? '#'.(string) $items->first()->order_id
-                : '#'.preg_replace('/[^A-Za-z0-9\-]+/', '-', trim($transactionId, "- \t\n\r\0\x0B"));
+            $invoiceNumber = 'INV-'.(string) ($primaryBilling?->bill_id ?? $items->first()?->order_id ?? '0000');
+            $customerPhone = $this->formatCustomerPhone($customer);
 
             $pdf = InvoicePdf::render([
                 'title' => 'Invoice '.$transactionId,
-                'site_label' => $site->displayLabel(),
+                'site_label' => str_replace('Digitizing', 'Digitising', $site->displayLabel()),
                 'site_address' => $site->companyAddress,
                 'support_email' => $site->supportEmail,
-                'customer_name' => $customer->display_name,
+                'customer_name' => ucwords(strtolower((string) $customer->display_name)),
                 'customer_address' => $customerAddress,
-                'customer_phone' => $customer->user_phone ?: '',
+                'customer_phone' => $customerPhone,
                 'invoice_number' => $invoiceNumber,
-                'transaction_id' => $transactionId,
+                'transaction_id' => $transactionId === 'stored-funds' ? 'Account Credit Applied' : $transactionId,
                 'invoice_date' => $this->formatInvoiceHeaderDate($invoiceDate),
                 'invoice_total' => number_format($invoiceTotal, 2, '.', ''),
+                'subtotal' => number_format($invoiceTotal, 2, '.', ''),
+                'tax' => '0.00',
+                'amount_paid' => number_format($invoiceTotal, 2, '.', ''),
+                'balance_due' => '0.00',
                 'payment_method' => $paymentMethod,
                 'payment_summary' => $this->invoicePaymentSummary($paymentMethod, $transactionId),
                 'items' => $items->map(function (Billing $billing) {
                     return [
                         'description' => 'Design: '.(string) ($billing->order?->design_name ?: 'Order #'.$billing->order_id),
-                        'date' => $this->formatInvoiceLineDate((string) ($billing->order?->completion_date ?: $billing->trandtime ?: '-')),
+                        'date' => $this->formatInvoiceHeaderDate((string) ($billing->order?->completion_date ?: $billing->trandtime ?: '-')),
                         'quantity' => '1',
                         'price' => number_format((float) preg_replace('/[^0-9.\-]/', '', (string) ($billing->amount ?: $billing->order?->total_amount)), 2, '.', ''),
                         'amount' => number_format((float) preg_replace('/[^0-9.\-]/', '', (string) ($billing->amount ?: $billing->order?->total_amount)), 2, '.', ''),
@@ -249,9 +252,10 @@ class CustomerAccountController extends Controller
                 })->all(),
             ]);
 
+            $safeTransId = preg_replace('/[^A-Za-z0-9\-]+/', '-', trim($transactionId, "- \t\n\r\0\x0B"));
             $invoiceFileName = sprintf(
-                'aplus-digitizing-invoice-%s.pdf',
-                preg_replace('/[^A-Za-z0-9\-]+/', '-', trim($transactionId, "- \t\n\r\0\x0B"))
+                'aplus-digitising-invoice-%s.pdf',
+                $safeTransId
             );
 
             return response($pdf, Response::HTTP_OK, [
@@ -281,6 +285,37 @@ class CustomerAccountController extends Controller
         ], fn (?string $value) => $value !== null && trim($value) !== '');
 
         return implode("\n", $lines);
+    }
+
+    private function formatCustomerPhone(AdminUser $customer): string
+    {
+        $phone = trim((string) ($customer->user_phone ?: ''));
+        if ($phone === '') {
+            return '-';
+        }
+
+        if (str_starts_with($phone, '+')) {
+            return $phone;
+        }
+
+        $country = strtolower(trim((string) ($customer->user_country ?: '')));
+        $codes = [
+            'pakistan' => '+92',
+            'us' => '+1',
+            'usa' => '+1',
+            'united states' => '+1',
+            'uk' => '+44',
+            'united kingdom' => '+44',
+            'canada' => '+1',
+            'australia' => '+61',
+            'india' => '+91',
+            'uae' => '+971',
+            'saudi arabia' => '+966',
+        ];
+
+        $code = $codes[$country] ?? '';
+
+        return $code !== '' ? $code.' '.$phone : $phone;
     }
 
     private function formatInvoiceHeaderDate(string $value): string
@@ -317,8 +352,12 @@ class CustomerAccountController extends Controller
     {
         $transactionId = trim($transactionId);
 
-        if ($transactionId === '') {
+        if ($transactionId === '' || $transactionId === '-') {
             return 'Payment Method: '.$paymentMethod;
+        }
+
+        if ($transactionId === 'stored-funds') {
+            return 'Payment Method: Account Credit Applied';
         }
 
         return 'Payment Method: '.$paymentMethod.', Transaction ID: '.$transactionId;

@@ -21,6 +21,10 @@ class InvoicePdf
         $invoiceNumber = self::safeText((string) ($payload['invoice_number'] ?? '-'));
         $invoiceDate = self::safeText((string) ($payload['invoice_date'] ?? '-'));
         $invoiceTotal = self::safeText((string) ($payload['invoice_total'] ?? '0.00'));
+        $subtotal = self::safeText((string) ($payload['subtotal'] ?? $invoiceTotal));
+        $tax = self::safeText((string) ($payload['tax'] ?? '0.00'));
+        $amountPaid = self::safeText((string) ($payload['amount_paid'] ?? $invoiceTotal));
+        $balanceDue = self::safeText((string) ($payload['balance_due'] ?? '0.00'));
         $paymentSummary = self::safeText((string) ($payload['payment_summary'] ?? ''));
         $supportEmail = self::safeText((string) ($payload['support_email'] ?? ''));
         $items = $payload['items'] ?? [];
@@ -93,7 +97,7 @@ class InvoicePdf
         }
 
         $summaryStartY = max($y - 10, 170);
-        self::addSummaryBlock($page, $summaryStartY, $invoiceTotal, $paymentSummary, $supportEmail);
+        self::addSummaryBlock($page, $summaryStartY, $subtotal, $tax, $invoiceTotal, $amountPaid, $balanceDue, $paymentSummary, $supportEmail);
         self::addPageNumber($page, count($pages) + 1);
         $pages[] = $page;
 
@@ -188,15 +192,46 @@ class InvoicePdf
         self::addRule($page, 44, $y - 8, 551);
     }
 
-    private static function addSummaryBlock(array &$page, int $y, string $invoiceTotal, string $paymentSummary, string $supportEmail): void
+    private static function addSummaryBlock(array &$page, int $y, string $subtotal, string $tax, string $total, string $amountPaid, string $balanceDue, string $paymentSummary, string $supportEmail): void
     {
-        self::addText($page, 44, $y - 24, 'TOTAL PAID: $'.$invoiceTotal.' USD', 'F2', 13);
+        $labelX = 380;
+        $valueX = 520;
+        $lineHeight = 18;
+        $currentY = $y - 20;
+
+        self::addRule($page, $labelX - 20, $currentY + 8, 551);
+
+        self::addText($page, $labelX, $currentY, 'Subtotal:', 'F2', 10);
+        self::addText($page, $valueX, $currentY, '$'.$subtotal, 'F1', 10);
+        $currentY -= $lineHeight;
+
+        self::addText($page, $labelX, $currentY, 'Tax:', 'F2', 10);
+        self::addText($page, $valueX, $currentY, '$'.$tax, 'F1', 10);
+        $currentY -= $lineHeight;
+
+        self::addRule($page, $labelX - 20, $currentY + 4, 551);
+        self::addText($page, $labelX, $currentY, 'Total Amount:', 'F2', 10);
+        self::addText($page, $valueX, $currentY, '$'.$total, 'F1', 10);
+        $currentY -= $lineHeight;
+
+        self::addText($page, $labelX, $currentY, 'Amount Paid:', 'F2', 10);
+        self::addText($page, $valueX, $currentY, '$'.$amountPaid, 'F1', 10);
+        $currentY -= $lineHeight;
+
+        self::addText($page, $labelX, $currentY, 'Balance Due:', 'F2', 10);
+        self::addText($page, $valueX, $currentY, '$'.$balanceDue, 'F1', 10);
+        $currentY -= $lineHeight + 6;
+
         if ($paymentSummary !== '-') {
-            self::addText($page, 44, $y - 48, $paymentSummary, 'F1', 10);
+            self::addText($page, 44, $currentY, $paymentSummary, 'F1', 10);
+            $currentY -= 22;
         }
-        self::addText($page, 44, $y - 84, 'Thank you for your business!', 'F1', 10);
+
+        self::addText($page, 44, $currentY, 'Thank you for your business!', 'F1', 10);
+        $currentY -= 22;
+
         if ($supportEmail !== '-') {
-            self::addText($page, 44, $y - 110, 'For support, contact '.$supportEmail, 'F1', 10);
+            self::addText($page, 44, $currentY, 'For support, contact '.$supportEmail, 'F1', 10);
         }
     }
 
