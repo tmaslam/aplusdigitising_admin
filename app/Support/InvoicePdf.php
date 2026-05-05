@@ -199,7 +199,7 @@ class InvoicePdf
         $lineHeight = 18;
         $currentY = $y - 20;
 
-        self::addRule($page, $labelX - 20, $currentY + 8, 551);
+        self::addRule($page, $labelX - 20, $currentY + 14, 551);
 
         self::addText($page, $labelX, $currentY, 'Subtotal:', 'F2', 10);
         self::addText($page, $valueX, $currentY, '$'.$subtotal, 'F1', 10);
@@ -209,7 +209,7 @@ class InvoicePdf
         self::addText($page, $valueX, $currentY, '$'.$tax, 'F1', 10);
         $currentY -= $lineHeight;
 
-        self::addRule($page, $labelX - 20, $currentY + 4, 551);
+        self::addRule($page, $labelX - 20, $currentY + 14, 551);
         self::addText($page, $labelX, $currentY, 'Total Amount:', 'F2', 10);
         self::addText($page, $valueX, $currentY, '$'.$total, 'F1', 10);
         $currentY -= $lineHeight;
