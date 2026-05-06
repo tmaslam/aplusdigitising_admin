@@ -106,7 +106,14 @@
                         @endphp
                         <tr>
                             <td><a href="{{ $detailUrl }}" style="font-weight:700;">{{ $order->order_id }}</a></td>
-                            <td>{{ $order->work_type_label }}</td>
+                            <td>
+                                @php
+                                    $workTypeStyle = $order->work_type_label === 'Vector'
+                                        ? 'background:rgba(37,99,235,0.12);color:#1d4ed8;border:1px solid rgba(37,99,235,0.22);box-shadow:0 2px 8px rgba(37,99,235,0.18);'
+                                        : 'background:rgba(34,197,94,0.12);color:#15803d;border:1px solid rgba(34,197,94,0.22);box-shadow:0 2px 8px rgba(34,197,94,0.18);';
+                                @endphp
+                                <span class="badge" style="{{ $workTypeStyle }}">{{ $order->work_type_label }}</span>
+                            </td>
                             <td><a href="{{ url('/v/customer-detail.php?uid='.$order->user_id) }}" style="color: var(--accent);">{{ $order->customer_name }}</a></td>
                             <td>{{ $order->design_name ?: '-' }}</td>
                             @if (! $hideAssignedAndSchedule)

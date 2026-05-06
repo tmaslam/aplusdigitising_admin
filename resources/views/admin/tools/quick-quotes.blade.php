@@ -73,7 +73,14 @@
                                     <td>{{ \App\Support\LegacyDate::display($quote->completion_date) }}</td>
                                     <td>{{ $quote->status }}</td>
                                     <td>{{ $quote->assign_name }}</td>
-                                    <td>{{ $quote->order_type }}</td>
+                                    <td>
+                                        @php
+                                            $qqTypeStyle = in_array((string) $quote->order_type, ['vector', 'q-vector', 'color'], true)
+                                                ? 'background:rgba(37,99,235,0.12);color:#1d4ed8;border:1px solid rgba(37,99,235,0.22);box-shadow:0 2px 8px rgba(37,99,235,0.18);'
+                                                : 'background:rgba(34,197,94,0.12);color:#15803d;border:1px solid rgba(34,197,94,0.22);box-shadow:0 2px 8px rgba(34,197,94,0.18);';
+                                        @endphp
+                                        <span class="badge" style="{{ $qqTypeStyle }}">{{ $quote->order_type }}</span>
+                                    </td>
                                     <td><input type="checkbox" name="order_ids[]" value="{{ $quote->order_id }}" data-quick-quote-checkbox></td>
                                 </tr>
                             @endforeach
