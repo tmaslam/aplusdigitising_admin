@@ -315,6 +315,58 @@ class AdminProfileController extends Controller
             }
         }
 
+        // Handle Quick Fund Package
+        $fundPackage = trim((string) $request->input('fund_package', ''));
+        if ($fundPackage !== '') {
+            $fundPackages = [
+                'fund-1000' => ['balance' => 850.00, 'bonus' => 150.00],
+                'fund-500' => ['balance' => 450.00, 'bonus' => 50.00],
+                'fund-300' => ['balance' => 275.00, 'bonus' => 25.00],
+                'fund-100' => ['balance' => 95.00, 'bonus' => 5.00],
+            ];
+
+            if ($fundPackage === 'custom') {
+                $addBalance = (float) $request->input('custom_fund_balance', 0);
+                $addBonus = (float) $request->input('custom_fund_bonus', 0);
+            } elseif (isset($fundPackages[$fundPackage])) {
+                $addBalance = $fundPackages[$fundPackage]['balance'];
+                $addBonus = $fundPackages[$fundPackage]['bonus'];
+            } else {
+                $addBalance = 0.0;
+                $addBonus = 0.0;
+            }
+
+            if ($addBalance > 0.0001) {
+                CustomerBalance::addPaymentCredit(
+                    (int) $customer->user_id,
+                    (string) ($customer->website ?? ''),
+                    $addBalance,
+                    'admin-fund-' . now()->format('YmdHis') . '-' . $fundPackage,
+                    (string) ($request->attributes->get('adminUser')?->user_name ?: 'admin'),
+                    'Admin fund package: ' . $fundPackage
+                );
+            }
+
+            if ($addBonus > 0.0001) {
+                $currentTopup = (float) ($customer->topup ?? 0);
+                $newTopup = round($currentTopup + $addBonus, 2);
+                $customer->update([
+                    'topup' => number_format($newTopup, 2, '.', ''),
+                ]);
+            }
+
+            // Create a topup record for tracking
+            CustomerTopup::create([
+                'site_id' => $customer->site_id,
+                'user_id' => $customer->user_id,
+                'website' => (string) ($customer->website ?? ''),
+                'amount' => $addBalance,
+                'plan_option' => $fundPackage,
+                'status' => 'completed',
+                'completed_at' => now(),
+            ]);
+        }
+
         $redirectUrl = $source === 'customer-approvals'
             ? url('/v/customer-approvals.php')
             : url('/v/customer_list.php');

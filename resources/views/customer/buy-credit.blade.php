@@ -16,15 +16,15 @@
                 <div class="alert" style="margin-top:16px;">{{ $errors->first() }}</div>
             @endif
 
-            <form method="post" action="/buy-credit.php" style="margin-top:20px;">
+            <form method="post" action="{{ url('/buy-credit.php') }}" style="margin-top:20px;">
                 @csrf
                 <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
                     @php
                         $creditLabels = [
-                            10 => '$1000 ➔ $850 (Save 15%)',
-                            25 => '$500 ➔ $450 (Save 10%)',
-                            50 => '$300 ➔ $275 (Save 8%)',
-                            100 => '$100 ➔ $95 (Save 5%)',
+                            850 => '$1000 ➔ $850 (Save 15%)',
+                            450 => '$500 ➔ $450 (Save 10%)',
+                            275 => '$300 ➔ $275 (Save 8%)',
+                            95 => '$100 ➔ $95 (Save 5%)',
                         ];
                     @endphp
                     @foreach ($amounts as $amount)

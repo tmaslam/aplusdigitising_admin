@@ -19,7 +19,7 @@
                 <div class="alert">{{ $errors->first() }}</div>
             @endif
 
-            <form method="post" action="/sign-up.php" data-validate-form novalidate>
+            <form method="post" action="{{ url('/sign-up.php') }}" data-validate-form novalidate>
                 @csrf
                 <section class="form-section">
                     <div class="section-heading">
@@ -146,10 +146,11 @@
                         <span class="field-label">Select Plan <span class="field-meta required" aria-hidden="true">*</span></span>
                         <select name="plan_option" id="plan_option_select" data-start-required="subscription">
                             <option value="">Select One</option>
-                            <option value="starter" data-link="https://buy.stripe.com/7sYeVee2k9g05q86Tl6Ri03?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'starter')>Starter (10 designs/month), $120 ➔ $79.99 (Save 33%)</option>
-                            <option value="plus" data-link="https://buy.stripe.com/aFafZicYgfEo5q8gtV6Ri04?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'plus')>Plus (25 designs/month), $300 ➔ $199.99 (Save 33%)</option>
-                            <option value="pro" data-link="https://buy.stripe.com/00w4gA5vO8bW19Sb9B6Ri05?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'pro')>Pro (50 designs/month), $600 ➔ $399.99 (Save 33%)</option>
-                            <option value="enterprise" data-link="https://buy.stripe.com/7sYaEY3nGfEo6uc3H96Ri06?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'enterprise')>Enterprise (100 designs/month), $1200 ➔ $799.99 (Save 33%)</option>
+                            <option value="starter" data-link="https://buy.stripe.com/7sYeVee2k9g05q86Tl6Ri03?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'starter')>Starter (10 designs/month), $120 → $79.99 (Save 33%)</option>
+                            <option value="plus" data-link="https://buy.stripe.com/aFafZicYgfEo5q8gtV6Ri04?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'plus')>Plus (25 designs/month), $300 → $199.99 (Save 33%)</option>
+                            <option value="pro" data-link="https://buy.stripe.com/00w4gA5vO8bW19Sb9B6Ri05?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'pro')>Pro (50 designs/month), $600 → $399.99 (Save 33%)</option>
+                            <option value="enterprise" data-link="https://buy.stripe.com/7sYaEY3nGfEo6uc3H96Ri06?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'enterprise')>Enterprise (100 designs/month), $1200 → $799.99 (Save 33%)</option>
+                            <option value="custom" data-link="https://buy.stripe.com/test_aFafZicYgfEo5q8gtV6Ri04?prefilled_promo_code=APDOC" @selected(old('plan_option') === 'custom')>Custom (10 designs), $120 → $79.99 (Save 33%)</option>
                         </select>
                         <span class="field-error" data-field-error aria-live="polite"></span>
                     </div>
@@ -159,12 +160,13 @@
                         <select name="plan_option" id="credit_option_select" data-start-required="credit">
                             <option value="">Select One</option>
                             <option value="10" data-link="https://buy.stripe.com/cNi7sMbUc77S4m4b9B6Ri0c?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '10')>$12 - Promo Price: $10</option>
-                            <option value="25" data-link="https://buy.stripe.com/14A5kE3nGdwg9Gob9B6Ri0b?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '25')>$30 - Promo Price: $24</option>
-                            <option value="50" data-link="https://buy.stripe.com/bJe7sM5vOeAkaKsb9B6Ri0a?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '50')>$50 - Promo Price: $40</option>
-                            <option value="100" data-link="https://buy.stripe.com/3cIaEY1fy77SdWEelN6Ri09?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '100')>$100 - Promo Price: $80</option>
-                            <option value="300" data-link="https://buy.stripe.com/00w8wQ3nG1Ny8CkelN6Ri08?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '300')>$300 - Promo Price: $260</option>
-                            <option value="500" data-link="https://buy.stripe.com/9B614obUccsc9Go6Tl6Ri07?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '500')>$500 - Promo Price: $400</option>
-                            <option value="1000" data-link="https://buy.stripe.com/test_7sYaEY3nGfEo6uc3H96Ri06?prefilled_promo_code=APDOC" @selected(old('plan_option') === '1000')>$1000 - Promo Price: $800</option>
+                            <option value="24" data-link="https://buy.stripe.com/14A5kE3nGdwg9Gob9B6Ri0b?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '24')>$30 - Promo Price: $24</option>
+                            <option value="40" data-link="https://buy.stripe.com/bJe7sM5vOeAkaKsb9B6Ri0a?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '40')>$50 - Promo Price: $40</option>
+                            <option value="80" data-link="https://buy.stripe.com/3cIaEY1fy77SdWEelN6Ri09?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '80')>$100 - Promo Price: $80</option>
+                            <option value="260" data-link="https://buy.stripe.com/00w8wQ3nG1Ny8CkelN6Ri08?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '260')>$300 - Promo Price: $260</option>
+                            <option value="400" data-link="https://buy.stripe.com/9B614obUccsc9Go6Tl6Ri07?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '400')>$500 - Promo Price: $400</option>
+                            <option value="800" data-link="https://buy.stripe.com/test_7sYaEY3nGfEo6uc3H96Ri06?prefilled_promo_code=APDOC" @selected(old('plan_option') === '800')>$1000 - Promo Price: $800</option>
+                            <option value="1000-apdoc" data-link="https://buy.stripe.com/test_00w8wQ3nG1Ny8CkelN6Ri08?prefilled_promo_code=APDOC" @selected(old('plan_option') === '1000-apdoc')>$1200 - Promo Price: $1000</option>
                         </select>
                         <span class="field-error" data-field-error aria-live="polite"></span>
                     </div>

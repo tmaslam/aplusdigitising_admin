@@ -24,7 +24,7 @@
                     <a class="button" href="{{ url('/forget-password.php') }}">Request a New Link</a>
                 </div>
             @else
-                <form method="post" action="/reset-password.php" data-validate-form novalidate>
+                <form method="post" action="{{ url('/reset-password.php') }}" data-validate-form novalidate>
                     @csrf
                     <input type="hidden" name="selector" value="{{ $selector }}">
                     <input type="hidden" name="token" value="{{ $token }}">

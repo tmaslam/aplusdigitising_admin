@@ -1276,6 +1276,25 @@ class CustomerPaymentController extends Controller
             return response('OK');
         }
 
+        // Handle topup ID based references (e.g., from buyCreditLink)
+        if ($merchantReference !== '' && is_numeric($merchantReference) && (int) $merchantReference > 0) {
+            if (in_array($type, ['checkout.session.completed', 'checkout.session.async_payment_succeeded'], true) && $paymentStatus === 'paid') {
+                $status = $this->reconcileTopupById((int) $merchantReference, $session);
+            }
+
+            $this->logProviderEvent(
+                $site,
+                null,
+                HostedPaymentProviders::STRIPE,
+                $type,
+                $eventId,
+                $status,
+                $event
+            );
+
+            return response('OK');
+        }
+
         if ($transaction && in_array($type, ['checkout.session.completed', 'checkout.session.async_payment_succeeded'], true) && $paymentStatus === 'paid') {
             $result = $this->reconcileTransaction(
                 $transaction,
@@ -1352,6 +1371,96 @@ class CustomerPaymentController extends Controller
 
         CustomerBalance::addPaymentCredit(
             $userId,
+            $website,
+            $paidAmount,
+            'topup_' . $topup->id,
+            'customer',
+            'Credit top-up via Stripe payment link.'
+        );
+
+        if ($deposit > 0.0001) {
+            $currentDeposit = (float) ($customer->topup ?? 0);
+            $customer->update([
+                'topup' => number_format(round($currentDeposit + $deposit, 2), 2, '.', ''),
+            ]);
+        }
+
+        $customer->update([
+            'is_active' => 1,
+            'exist_customer' => '1',
+        ]);
+
+        return 'verified';
+    }
+
+    private function reconcileTopupById(int $topupId, array $session): string
+    {
+        $topup = CustomerTopup::query()
+            ->where('id', $topupId)
+            ->first();
+
+        if (!$topup) {
+            Log::warning("Stripe webhook: no topup found for numeric reference {$topupId}");
+            return 'skipped';
+        }
+
+        if ($topup->status === 'completed') {
+            Log::info("Stripe webhook: topup {$topup->id} already completed, skipping.");
+            return 'skipped';
+        }
+
+        $customer = AdminUser::query()->where('user_id', $topup->user_id)->first();
+        if (!$customer) {
+            Log::warning("Stripe webhook: no customer for topup {$topup->id} user_id {$topup->user_id}");
+            return 'skipped';
+        }
+
+        $amountTotal = (float) ($session['amount_total'] ?? 0);
+        $discountAmount = (float) ($session['total_details']['amount_discount'] ?? 0);
+        $paidAmount = round(($amountTotal - $discountAmount) / 100, 2);
+
+        $originalPrices = [
+            'starter' => 120.00,
+            'plus' => 300.00,
+            'pro' => 600.00,
+            'enterprise' => 1200.00,
+            'custom' => 120.00,
+            'custom-fund' => 1000.00,
+            'fund-1000' => 1000.00,
+            'fund-500' => 500.00,
+            'fund-300' => 300.00,
+            'fund-100' => 100.00,
+            '850' => 1000.00,
+            '450' => 500.00,
+            '275' => 300.00,
+            '95' => 100.00,
+            '10' => 12.00,
+            '24' => 30.00,
+            '40' => 50.00,
+            '80' => 100.00,
+            '260' => 300.00,
+            '400' => 500.00,
+            '800' => 1000.00,
+            '1000-apdoc' => 1200.00,
+        ];
+
+        $planOption = (string) ($topup->plan_option ?? '');
+        $originalPrice = $originalPrices[$planOption] ?? 0;
+        $deposit = round(max($originalPrice - $paidAmount, 0), 2);
+
+        $website = trim((string) ($customer->website ?: config('sites.primary_legacy_key', '1dollar')));
+
+        $topup->update([
+            'status' => 'completed',
+            'total_amount' => $paidAmount,
+            'amount' => $paidAmount,
+            'deposit' => $deposit,
+            'stripe_reference' => trim((string) ($session['id'] ?? '')),
+            'paid_at' => now(),
+        ]);
+
+        CustomerBalance::addPaymentCredit(
+            $customer->user_id,
             $website,
             $paidAmount,
             'topup_' . $topup->id,

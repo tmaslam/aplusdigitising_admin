@@ -1152,8 +1152,8 @@ HTML;
         $legacyAmounts = [10, 25, 50, 100];
         $dashboardAmounts = [850, 450, 275, 95];
 
-        $isLegacy = in_array($amount, $legacyAmounts, true);
-        $isDashboard = in_array($amount, $dashboardAmounts, true);
+        $isLegacy = in_array($amount, array_map('floatval', $legacyAmounts), true);
+        $isDashboard = in_array($amount, array_map('floatval', $dashboardAmounts), true);
         $isTest = $planOption === 'dash-test';
         $isCustom = $planOption === 'dash-custom';
 
@@ -1165,7 +1165,7 @@ HTML;
         ];
 
         $dashboardLinks = [
-            850 => ['url' => 'https://buy.stripe.com/9B66oI5vO77Sf0I7Xp6Ri0d', 'coupon' => 'AFAPLUS15'],
+            850 => ['url' => 'https://buy.stripe.com/test_7sYaEY3nGfEo6uc3H96Ri06', 'coupon' => 'AFAPLUS150'],
             450 => ['url' => 'https://buy.stripe.com/5kQ00k4rK2RCbOw7Xp6Ri0e', 'coupon' => 'AFAPLUS10'],
             275 => ['url' => 'https://buy.stripe.com/9B64gAf6o2RC9GocdF6Ri0f', 'coupon' => 'AFAPLUS8'],
             95  => ['url' => 'https://buy.stripe.com/fZu7sM8I09g03i04Ld6Ri0g', 'coupon' => 'AFAPLUS5'],
@@ -1228,8 +1228,8 @@ HTML;
         if ($request->isMethod('post')) {
             $amount = (float) $request->input('amount', 0);
             $planOption = $request->input('plan_option');
-            $isLegacy = in_array($amount, $legacyAmounts, true);
-            $isDashboard = in_array($amount, $dashboardAmounts, true);
+            $isLegacy = in_array($amount, array_map('floatval', $legacyAmounts), true);
+            $isDashboard = in_array($amount, array_map('floatval', $dashboardAmounts), true);
             $isTest = $planOption === 'dash-test';
             $isCustom = $planOption === 'dash-custom' || $request->input('amount') === 'custom';
 
@@ -1271,7 +1271,7 @@ HTML;
 
         return view('customer.buy-credit', [
             'pageTitle' => 'Buy Credit',
-            'amounts' => $legacyAmounts,
+            'amounts' => $dashboardAmounts,
             'creditBonuses' => $creditBonuses,
         ]);
     }
@@ -1286,12 +1286,12 @@ HTML;
 
         $legacyAmounts = [10, 25, 50, 100];
         $dashboardAmounts = [850, 450, 275, 95];
-        $isLegacy = in_array($amount, $legacyAmounts, true);
-        $isDashboard = in_array($amount, $dashboardAmounts, true);
+        $isLegacy = in_array($amount, array_map('floatval', $legacyAmounts), true);
+        $isDashboard = in_array($amount, array_map('floatval', $dashboardAmounts), true);
         $isTest = $planOption === 'dash-test';
 
         if (! $isLegacy && ! $isDashboard && ! $isTest) {
-            return redirect('/dashboard.php')->withErrors(['credit' => 'Please select a valid credit amount.']);
+            return redirect(url('/dashboard.php'))->withErrors(['credit' => 'Please select a valid credit amount.']);
         }
 
         $topupAmount = $amount;
@@ -1381,6 +1381,35 @@ HTML;
             799.99 => 'Enterprise',
         ];
 
+        // First, look for completed topups by plan_option (most accurate)
+        $latestTopupByPlan = CustomerTopup::query()
+            ->where('user_id', $customer->user_id)
+            ->where('status', 'completed')
+            ->whereIn('plan_option', ['starter', 'plus', 'pro', 'enterprise', 'custom'])
+            ->orderByDesc('completed_at')
+            ->first();
+
+        if ($latestTopupByPlan) {
+            $planLabel = match ((string) $latestTopupByPlan->plan_option) {
+                'starter' => 'Starter',
+                'plus' => 'Plus',
+                'pro' => 'Pro',
+                'enterprise' => 'Enterprise',
+                'custom' => 'Custom',
+                'custom-fund' => 'Custom Fund',
+                'custom-fund' => 'Custom Fund',
+                default => 'Subscription',
+            };
+            $completedAt = $latestTopupByPlan->completed_at;
+            $nextPaymentDate = $completedAt ? $completedAt->copy()->addMonth() : null;
+
+            return [
+                'plan_name' => $planLabel,
+                'next_payment_date' => $nextPaymentDate?->toDateString() ?? '-',
+            ];
+        }
+
+        // Fallback: look for completed topups by subscription amounts
         $latestTopup = CustomerTopup::query()
             ->where('user_id', $customer->user_id)
             ->where('status', 'completed')
@@ -1388,16 +1417,37 @@ HTML;
             ->orderByDesc('completed_at')
             ->first();
 
-        if (! $latestTopup) {
-            return null;
+        if ($latestTopup) {
+            $completedAt = $latestTopup->completed_at;
+            $nextPaymentDate = $completedAt ? $completedAt->copy()->addMonth() : null;
+
+            return [
+                'plan_name' => $planNames[(int) $latestTopup->amount] ?? 'Unknown',
+                'next_payment_date' => $nextPaymentDate?->toDateString() ?? '-',
+            ];
         }
 
-        $completedAt = $latestTopup->completed_at;
-        $nextPaymentDate = $completedAt ? $completedAt->copy()->addMonth() : null;
+        // Fallback: check if customer has a plan_option saved during registration
+        // but topup hasn't been completed yet (e.g., payment pending or not processed)
+        $savedPlan = trim((string) ($customer->plan_option ?? ''));
+        if ($savedPlan !== '') {
+            $planLabel = match ($savedPlan) {
+                'starter' => 'Starter',
+                'plus' => 'Plus',
+                'pro' => 'Pro',
+                'enterprise' => 'Enterprise',
+                'custom' => 'Custom',
+                default => null,
+            };
 
-        return [
-            'plan_name' => $planNames[(int) $latestTopup->amount] ?? 'Unknown',
-            'next_payment_date' => $nextPaymentDate?->toDateString() ?? '-',
-        ];
+            if ($planLabel) {
+                return [
+                    'plan_name' => $planLabel . ' (pending activation)',
+                    'next_payment_date' => '-',
+                ];
+            }
+        }
+
+        return null;
     }
 }

@@ -47,7 +47,7 @@ class CustomerRegistrationController extends Controller
 
         $site = $this->site($request);
 
-        if (CustomerPublicRateLimit::tooManyAttempts($request, 'signup', $site->legacyKey, 'registration', 5, 1800)) {
+        if (CustomerPublicRateLimit::tooManyAttempts($request, 'signup', $site->legacyKey, 'registration', 100, 1800)) {
             return back()->withErrors(['signup' => 'Too many signup attempts from this connection. Please try again later.'])->withInput();
         }
 
@@ -147,6 +147,7 @@ class CustomerRegistrationController extends Controller
             'userip_addrs' => $ipAddress,
             'user_term' => 'dc',
             'package_type' => (string) $validated['package_type'],
+            'plan_option' => (string) ($validated['plan_option'] ?? ''),
             'real_user' => '1',
             'ref_code' => $refCode,
             'ref_code_other' => $referralSource,
@@ -178,14 +179,17 @@ class CustomerRegistrationController extends Controller
             'plus' => 199.99,
             'pro' => 399.99,
             'enterprise' => 799.99,
+            'custom' => 79.99,
+            'custom-fund' => 850.00,
             'test-subscription' => 10,
             '10' => 10,
-            '25' => 25,
-            '50' => 50,
-            '100' => 100,
-            '300' => 300,
-            '500' => 500,
-            '1000' => 800,
+            '24' => 24,
+            '40' => 40,
+            '80' => 80,
+            '260' => 260,
+            '400' => 400,
+            '800' => 800,
+            '1000-apdoc' => 1000,
         ];
 
         $paymentLinks = [
@@ -193,23 +197,27 @@ class CustomerRegistrationController extends Controller
             'plus' => 'https://buy.stripe.com/aFafZicYgfEo5q8gtV6Ri04',
             'pro' => 'https://buy.stripe.com/00w4gA5vO8bW19Sb9B6Ri05',
             'enterprise' => 'https://buy.stripe.com/7sYaEY3nGfEo6uc3H96Ri06',
+            'custom' => 'https://buy.stripe.com/test_aFafZicYgfEo5q8gtV6Ri04',
+            'custom-fund' => 'https://buy.stripe.com/test_7sYaEY3nGfEo6uc3H96Ri06',
             'test-subscription' => 'https://buy.stripe.com/test_aFafZicYgfEo5q8gtV6Ri04',
             '10' => 'https://buy.stripe.com/cNi7sMbUc77S4m4b9B6Ri0c',
-            '25' => 'https://buy.stripe.com/14A5kE3nGdwg9Gob9B6Ri0b',
-            '50' => 'https://buy.stripe.com/bJe7sM5vOeAkaKsb9B6Ri0a',
-            '100' => 'https://buy.stripe.com/3cIaEY1fy77SdWEelN6Ri09',
-            '300' => 'https://buy.stripe.com/00w8wQ3nG1Ny8CkelN6Ri08',
-            '500' => 'https://buy.stripe.com/9B614obUccsc9Go6Tl6Ri07',
-            '1000' => 'https://buy.stripe.com/test_7sYaEY3nGfEo6uc3H96Ri06',
+            '24' => 'https://buy.stripe.com/14A5kE3nGdwg9Gob9B6Ri0b',
+            '40' => 'https://buy.stripe.com/bJe7sM5vOeAkaKsb9B6Ri0a',
+            '80' => 'https://buy.stripe.com/3cIaEY1fy77SdWEelN6Ri09',
+            '260' => 'https://buy.stripe.com/00w8wQ3nG1Ny8CkelN6Ri08',
+            '400' => 'https://buy.stripe.com/9B614obUccsc9Go6Tl6Ri07',
+            '800' => 'https://buy.stripe.com/test_7sYaEY3nGfEo6uc3H96Ri06',
+            '1000-apdoc' => 'https://buy.stripe.com/test_00w8wQ3nG1Ny8CkelN6Ri08',
         ];
-
-        $apdocOptions = ['test-subscription', '1000'];
 
         $planOption = $validated['plan_option'] ?? '';
         $amount = $planAmounts[$planOption] ?? 0;
         $basePaymentUrl = $paymentLinks[$planOption] ?? '';
 
-        if ($amount > 0 && $basePaymentUrl !== '') {
+        $hasPaymentUrl = $basePaymentUrl !== '';
+        $isCustom = $planOption === 'custom';
+
+        if (($amount > 0 || $isCustom) && $hasPaymentUrl) {
             $topup = CustomerTopup::create([
                 'site_id' => $site->id,
                 'user_id' => $customer->user_id,
@@ -219,7 +227,14 @@ class CustomerRegistrationController extends Controller
                 'status' => 'pending',
             ]);
 
-            $promoCode = in_array($planOption, $apdocOptions, true) ? 'APDOC' : 'WELAPLUS1';
+            $promoCodes = [
+                'custom' => 'APDOC',
+                'test-subscription' => 'APDOC',
+                '800' => 'APDOC',
+                '1000-apdoc' => 'APDOC',
+                'custom-fund' => 'AFAPLUS150',
+            ];
+            $promoCode = $promoCodes[$planOption] ?? 'WELAPLUS1';
             $paymentUrl = $basePaymentUrl . '?prefilled_promo_code=' . $promoCode;
             $paymentUrl .= '&client_reference_id=' . $topup->id;
             $paymentUrl .= '&prefilled_email=' . urlencode($email);
@@ -227,13 +242,28 @@ class CustomerRegistrationController extends Controller
             return redirect()->away($paymentUrl);
         }
 
-        return redirect('/dashboard.php');
+        return redirect(url('/dashboard.php'));
     }
 
     public function paymentSuccess(Request $request)
     {
         $site = $this->site($request);
         $customerId = (int) $request->session()->get('customer_user_id', 0);
+        $pendingTopup = null;
+
+        // Stripe returns client_reference_id in the URL after payment.
+        // Use it to find the topup directly — this is more reliable than session.
+        $topupId = (int) $request->query('client_reference_id', 0);
+        if ($topupId > 0) {
+            $pendingTopup = CustomerTopup::query()
+                ->where('id', $topupId)
+                ->where('status', 'pending')
+                ->first();
+
+            if ($pendingTopup) {
+                $customerId = (int) $pendingTopup->user_id;
+            }
+        }
 
         if ($customerId <= 0) {
             $rememberedCustomer = CustomerRememberLogin::restore($request, $site);
@@ -253,8 +283,8 @@ class CustomerRegistrationController extends Controller
                     ->customers()
                     ->forWebsite($site->legacyKey)
                     ->where('userip_addrs', $ipAddress)
-                    ->where('is_active', 1)
                     ->where('date_added', '>=', now()->subMinutes(30)->format('Y-m-d H:i:s'))
+                    ->orderByRaw('is_active ASC')
                     ->orderByDesc('user_id')
                     ->first();
 
@@ -272,86 +302,152 @@ class CustomerRegistrationController extends Controller
             }
         }
 
-        if ($customerId > 0) {
+        $alreadyCompletedTopup = null;
+
+        if ($customerId > 0 && ! $pendingTopup) {
             $pendingTopup = CustomerTopup::query()
                 ->where('user_id', $customerId)
                 ->where('status', 'pending')
-                ->where('created_at', '>=', now()->subMinutes(30))
+                ->where('created_at', '>=', now()->subHours(24))
                 ->orderByDesc('id')
                 ->first();
 
-            if ($pendingTopup) {
-                $pendingTopup->update([
-                    'status' => 'completed',
-                    'completed_at' => now(),
-                ]);
+            // If no pending topup, check if a recent one was already completed by webhook
+            if (! $pendingTopup) {
+                $alreadyCompletedTopup = CustomerTopup::query()
+                    ->where('user_id', $customerId)
+                    ->where('status', 'completed')
+                    ->where('created_at', '>=', now()->subHours(24))
+                    ->orderByDesc('id')
+                    ->first();
+            }
+        }
 
+        if ($alreadyCompletedTopup) {
+            $topupAmount = (float) $alreadyCompletedTopup->amount;
+            $bonus = (float) ($alreadyCompletedTopup->deposit ?? 0);
+
+            if ($topupAmount > 0.0001) {
+                $message = '$' . number_format($topupAmount, 2) . ' has been added to your available balance.';
+                if ($bonus > 0.0001) {
+                    $message .= ' Bonus of $' . number_format($bonus, 2) . ' has been added to your advance deposit.';
+                }
+            } else {
+                $message = 'Your payment has been received. Your account is now active.';
+            }
+
+            return redirect(url('/dashboard.php'))->with('success', $message);
+        }
+
+        if ($pendingTopup) {
+            $pendingTopup->update([
+                'status' => 'completed',
+                'completed_at' => now(),
+            ]);
+
+            $topupAmount = (float) $pendingTopup->amount;
+
+            if ($topupAmount > 0.0001) {
                 CustomerBalance::addPaymentCredit(
                     $pendingTopup->user_id,
                     $pendingTopup->website,
-                    (float) $pendingTopup->amount,
+                    $topupAmount,
                     'topup_' . $pendingTopup->id,
                     'customer',
                     'Credit top-up via Stripe payment link.'
                 );
+            }
 
-                $subscriptionAmounts = [79.99, 199.99, 399.99, 799.99];
-                $isSubscription = in_array((float) $pendingTopup->amount, $subscriptionAmounts, true);
+            $subscriptionPlans = ['starter', 'plus', 'pro', 'enterprise', 'custom', 'custom-fund', 'fund-1000', 'fund-500', 'fund-300', 'fund-100', '850', '450', '275', '95', '10', '24', '40', '80', '260', '400', '800', '1000-apdoc'];
+            $isSubscription = in_array((string) ($pendingTopup->plan_option ?? ''), $subscriptionPlans, true);
 
-                $completedCount = CustomerTopup::query()
-                    ->where('user_id', $pendingTopup->user_id)
-                    ->where('status', 'completed')
-                    ->count();
-                $isFirstPayment = $completedCount === 1;
+            $completedCount = CustomerTopup::query()
+                ->where('user_id', $pendingTopup->user_id)
+                ->where('status', 'completed')
+                ->count();
+            $isFirstPayment = $completedCount === 1;
 
-                if ($isFirstPayment && $isSubscription) {
-                    $bonus = round((float) $pendingTopup->amount * 0.50, 2);
-                } elseif ($isFirstPayment) {
-                    $bonus = $this->calculateSignupBonus(
-                        (float) $pendingTopup->amount,
-                        (string) ($pendingTopup->plan_option ?? '')
-                    );
-                } else {
-                    $bonus = 0.0;
-                }
-
+            if ($isFirstPayment && $isSubscription) {
+                $originalPrices = [
+                    'starter' => 120.00,
+                    'plus' => 300.00,
+                    'pro' => 600.00,
+                    'enterprise' => 1200.00,
+                    'custom' => 120.00,
+                    'custom-fund' => 1000.00,
+                    'fund-1000' => 1000.00,
+                    'fund-500' => 500.00,
+                    'fund-300' => 300.00,
+                    'fund-100' => 100.00,
+                    '850' => 1000.00,
+                    '450' => 500.00,
+                    '275' => 300.00,
+                    '95' => 100.00,
+                    '10' => 12.00,
+                    '24' => 30.00,
+                    '40' => 50.00,
+                    '80' => 100.00,
+                    '260' => 300.00,
+                    '400' => 500.00,
+                    '800' => 1000.00,
+                    '1000-apdoc' => 1200.00,
+                ];
+                $planOption = (string) ($pendingTopup->plan_option ?? '');
+                $originalPrice = $originalPrices[$planOption] ?? 0;
+                $bonus = round(max($originalPrice - $topupAmount, 0), 2);
+            } elseif ($isFirstPayment) {
+                $bonus = $this->calculateSignupBonus(
+                    $topupAmount,
+                    (string) ($pendingTopup->plan_option ?? '')
+                );
                 $fixedDeposit = $this->calculateFixedDepositBonus(
-                    (float) $pendingTopup->amount,
+                    $topupAmount,
                     (string) ($pendingTopup->plan_option ?? '')
                 );
                 $bonus = $bonus + $fixedDeposit;
+            } else {
+                $bonus = $this->calculateFixedDepositBonus(
+                    $topupAmount,
+                    (string) ($pendingTopup->plan_option ?? '')
+                );
+            }
 
-                if ($bonus > 0.0001) {
-                    $customer = AdminUser::query()->where('user_id', $pendingTopup->user_id)->first();
-                    if ($customer) {
-                        $currentTopup = (float) ($customer->topup ?? 0);
-                        $newTopup = round($currentTopup + $bonus, 2);
-                        $customer->update([
-                            'topup' => number_format($newTopup, 2, '.', ''),
-                        ]);
-                    }
-                }
-
+            if ($bonus > 0.0001) {
                 $customer = AdminUser::query()->where('user_id', $pendingTopup->user_id)->first();
                 if ($customer) {
+                    $currentTopup = (float) ($customer->topup ?? 0);
+                    $newTopup = round($currentTopup + $bonus, 2);
                     $customer->update([
-                        'is_active' => 1,
-                        'exist_customer' => '1',
+                        'topup' => number_format($newTopup, 2, '.', ''),
                     ]);
                 }
+            }
 
-                $message = '$' . number_format((float) $pendingTopup->amount, 2) . ' has been added to your available balance.';
+            $customer = AdminUser::query()->where('user_id', $pendingTopup->user_id)->first();
+            if ($customer) {
+                $customer->update([
+                    'is_active' => 1,
+                    'exist_customer' => '1',
+                ]);
+            }
+
+            if ($topupAmount > 0.0001) {
+                $message = '$' . number_format($topupAmount, 2) . ' has been added to your available balance.';
                 if ($bonus > 0.0001) {
                     $message .= ' Bonus of $' . number_format($bonus, 2) . ' has been added to your advance deposit.';
                 }
-
-                return redirect('/dashboard.php')->with('success', $message);
+            } else {
+                $message = 'Your payment has been received. Your account is now active.';
             }
 
-            return redirect('/dashboard.php');
+            return redirect(url('/dashboard.php'))->with('success', $message);
         }
 
-        return redirect('/login.php');
+        if ($customerId > 0) {
+            return redirect(url('/dashboard.php'));
+        }
+
+        return redirect(url('/login.php'));
     }
 
     public function activate(Request $request)
@@ -411,7 +507,7 @@ class CustomerRegistrationController extends Controller
                 'customer_site_key' => $site->legacyKey,
             ]);
 
-            return redirect('/member-offer.php')->with('success', 'Your email has been verified. Please complete the secure welcome-offer payment to finish activating this customer account.');
+            return redirect(url('/member-offer.php'))->with('success', 'Your email has been verified. Please complete the secure welcome-offer payment to finish activating this customer account.');
         }
 
         $customer->update([
@@ -625,30 +721,29 @@ class CustomerRegistrationController extends Controller
 
     private function calculateSignupBonus(float $amount, string $planOption): float
     {
-        $percentage = match ($planOption) {
-            'starter' => 0.0,
-            'plus' => 0.0,
-            'pro' => 0.0,
-            'enterprise' => 0.0,
-            '10' => 0.20,
-            '25' => 0.20,
-            '50' => 0.14,
-            '100' => 0.10,
-            '300' => 0.15,
-            '500' => 0.20,
+        $bonus = match ($planOption) {
+            'starter', 'plus', 'pro', 'enterprise' => 0.0,
+            '10' => 2.0,
+            '24' => 6.0,
+            '40' => 10.0,
+            '80' => 20.0,
+            '260' => 40.0,
+            '400' => 100.0,
+            '800' => 200.0,
+            '1000-apdoc' => 200.0,
             default => 0.0,
         };
 
-        return $percentage > 0 ? round($amount * $percentage, 2) : 0.0;
+        return $bonus;
     }
 
     private function calculateFixedDepositBonus(float $amount, string $planOption): float
     {
         return match ($planOption) {
-            'dash-1000' => 150.0,
-            'dash-500' => 50.0,
-            'dash-300' => 25.0,
-            'dash-100' => 5.0,
+            'dash-1000', 'fund-1000', '850' => 150.0,
+            'dash-500', 'fund-500', '450' => 50.0,
+            'dash-300', 'fund-300', '275' => 25.0,
+            'dash-100', 'fund-100', '95' => 5.0,
             'dash-test' => 150.0,
             default => 0.0,
         };

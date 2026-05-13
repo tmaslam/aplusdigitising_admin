@@ -2300,28 +2300,26 @@
                                     @endforeach
                                 </div>
                             </details>
-                            @php
-                                $dashCustomer = request()->attributes->get('customerUser');
-                                $dashUserId = $dashCustomer ? $dashCustomer->user_id : 0;
-                                $dashEmail = $dashCustomer ? urlencode($dashCustomer->user_email) : '';
-                                $dashFundOptions = [
-                                    ['label' => '$1000 → $850', 'save' => 'Save 15%', 'url' => 'https://buy.stripe.com/9B66oI5vO77Sf0I7Xp6Ri0d?prefilled_promo_code=AFAPLUS15'],
-                                    ['label' => '$500 → $450', 'save' => 'Save 10%', 'url' => 'https://buy.stripe.com/5kQ00k4rK2RCbOw7Xp6Ri0e?prefilled_promo_code=AFAPLUS10'],
-                                    ['label' => '$300 → $275', 'save' => 'Save 8%', 'url' => 'https://buy.stripe.com/9B64gAf6o2RC9GocdF6Ri0f?prefilled_promo_code=AFAPLUS8'],
-                                    ['label' => '$100 → $95', 'save' => 'Save 5%', 'url' => 'https://buy.stripe.com/fZu7sM8I09g03i04Ld6Ri0g?prefilled_promo_code=AFAPLUS5'],
-                                ];
-                                $customFundUrl = 'https://buy.stripe.com/3cs6pT2hTc6sa8E5kl';
-                            @endphp
                             <details class="customer-action-menu">
                                 <summary class="customer-action primary add-funds">Add Funds</summary>
                                 <div class="customer-action-list">
-                                    @foreach ($dashFundOptions as $option)
-                                        <a href="{{ $option['url'] }}&client_reference_id=user_{{ $dashUserId }}&prefilled_email={{ $dashEmail }}" target="_blank" rel="noopener">
-                                            <strong>{{ $option['label'] }}</strong>
-                                            <span style="color:{{ $siteContext->cssPrimaryColor() }};">{{ $option['save'] }}</span>
-                                        </a>
-                                    @endforeach
-                                    <a href="{{ $customFundUrl }}?client_reference_id=user_{{ $dashUserId }}&prefilled_email={{ $dashEmail }}" target="_blank" rel="noopener">
+                                    <a href="{{ url('/buy-credit-link.php?amount=850&plan_option=fund-1000') }}">
+                                        <strong>$1000 → $850</strong>
+                                        <span style="color:{{ $siteContext->cssPrimaryColor() }};">Save 15%</span>
+                                    </a>
+                                    <a href="{{ url('/buy-credit-link.php?amount=450&plan_option=fund-500') }}">
+                                        <strong>$500 → $450</strong>
+                                        <span style="color:{{ $siteContext->cssPrimaryColor() }};">Save 10%</span>
+                                    </a>
+                                    <a href="{{ url('/buy-credit-link.php?amount=275&plan_option=fund-300') }}">
+                                        <strong>$300 → $275</strong>
+                                        <span style="color:{{ $siteContext->cssPrimaryColor() }};">Save 8%</span>
+                                    </a>
+                                    <a href="{{ url('/buy-credit-link.php?amount=95&plan_option=fund-100') }}">
+                                        <strong>$100 → $95</strong>
+                                        <span style="color:{{ $siteContext->cssPrimaryColor() }};">Save 5%</span>
+                                    </a>
+                                    <a href="{{ url('/buy-credit.php') }}">
                                         <strong>Custom Amount</strong>
                                         <span style="color:{{ $siteContext->cssPrimaryColor() }}">No savings</span>
                                     </a>
