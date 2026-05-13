@@ -165,7 +165,6 @@
                             <option value="260" data-link="https://buy.stripe.com/00w8wQ3nG1Ny8CkelN6Ri08?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '260')>$300 - Promo Price: $260</option>
                             <option value="400" data-link="https://buy.stripe.com/9B614obUccsc9Go6Tl6Ri07?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === '400')>$500 - Promo Price: $400</option>
                             <option value="800" data-link="https://buy.stripe.com/test_7sYaEY3nGfEo6uc3H96Ri06?prefilled_promo_code=APDOC" @selected(old('plan_option') === '800')>$1000 - Promo Price: $800</option>
-                            <option value="1000-apdoc" data-link="https://buy.stripe.com/test_00w8wQ3nG1Ny8CkelN6Ri08?prefilled_promo_code=APDOC" @selected(old('plan_option') === '1000-apdoc')>$1200 - Promo Price: $1000</option>
                         </select>
                         <span class="field-error" data-field-error aria-live="polite"></span>
                     </div>
