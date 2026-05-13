@@ -1165,7 +1165,7 @@ HTML;
         ];
 
         $dashboardLinks = [
-            850 => ['url' => 'https://buy.stripe.com/test_7sYaEY3nGfEo6uc3H96Ri06', 'coupon' => 'AFAPLUS150'],
+            850 => ['url' => 'https://buy.stripe.com/9B66oI5vO77Sf0I7Xp6Ri0d', 'coupon' => 'AFAPLUS15'],
             450 => ['url' => 'https://buy.stripe.com/5kQ00k4rK2RCbOw7Xp6Ri0e', 'coupon' => 'AFAPLUS10'],
             275 => ['url' => 'https://buy.stripe.com/9B64gAf6o2RC9GocdF6Ri0f', 'coupon' => 'AFAPLUS8'],
             95  => ['url' => 'https://buy.stripe.com/fZu7sM8I09g03i04Ld6Ri0g', 'coupon' => 'AFAPLUS5'],
