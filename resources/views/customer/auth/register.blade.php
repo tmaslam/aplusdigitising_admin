@@ -150,7 +150,6 @@
                             <option value="plus" data-link="https://buy.stripe.com/aFafZicYgfEo5q8gtV6Ri04?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'plus')>Plus (25 designs/month), $300 → $199.99 (Save 33%)</option>
                             <option value="pro" data-link="https://buy.stripe.com/00w4gA5vO8bW19Sb9B6Ri05?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'pro')>Pro (50 designs/month), $600 → $399.99 (Save 33%)</option>
                             <option value="enterprise" data-link="https://buy.stripe.com/7sYaEY3nGfEo6uc3H96Ri06?prefilled_promo_code=WELAPLUS1" @selected(old('plan_option') === 'enterprise')>Enterprise (100 designs/month), $1200 → $799.99 (Save 33%)</option>
-                            <option value="custom" data-link="https://buy.stripe.com/test_aFafZicYgfEo5q8gtV6Ri04?prefilled_promo_code=APDOC" @selected(old('plan_option') === 'custom')>Custom (10 designs), $120 → $79.99 (Save 33%)</option>
                         </select>
                         <span class="field-error" data-field-error aria-live="polite"></span>
                     </div>
