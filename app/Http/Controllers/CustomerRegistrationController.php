@@ -101,22 +101,23 @@ class CustomerRegistrationController extends Controller
             return back()->withErrors(['signup' => 'You are already registered on this website. Please log in or contact support if you need help.'])->withInput();
         }
 
-        $existingIp = AdminUser::query()
-            ->customers()
-            ->active()
-            ->forWebsite($site->legacyKey)
-            ->where('userip_addrs', $ipAddress)
-            ->exists();
+        // IP-based signup block temporarily disabled for testing
+        // $existingIp = AdminUser::query()
+        //     ->customers()
+        //     ->active()
+        //     ->forWebsite($site->legacyKey)
+        //     ->where('userip_addrs', $ipAddress)
+        //     ->exists();
 
-        if ($existingIp) {
-            SecurityAudit::record($request, 'auth.signup_blocked', 'Signup blocked because an active account already exists from the same IP for this site.', [
-                'site_legacy_key' => $site->legacyKey,
-                'signup_email' => $email,
-                'signup_username' => $username,
-            ], 'notice');
+        // if ($existingIp) {
+        //     SecurityAudit::record($request, 'auth.signup_blocked', 'Signup blocked because an active account already exists from the same IP for this site.', [
+        //         'site_legacy_key' => $site->legacyKey,
+        //         'signup_email' => $email,
+        //         'signup_username' => $username,
+        //     ], 'notice');
 
-            return back()->withErrors(['signup' => 'We are unable to process your registration at this time. If you need assistance, please contact our support team.'])->withInput();
-        }
+        //     return back()->withErrors(['signup' => 'We are unable to process your registration at this time. If you need assistance, please contact our support team.'])->withInput();
+        // }
 
         $referralSource = trim((string) (($validated['refralcode'] ?? '') ?: ($validated['refraloptions'] ?? '')));
         $now = now()->format('Y-m-d H:i:s');
